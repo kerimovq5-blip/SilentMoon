@@ -19,7 +19,7 @@ final class GetStartedController: UIViewController {
     weak var coordinator: AuthCoordinator?
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .colorIndigo
         view.addSubview(frameImageGroup)
         
         frameImageGroup

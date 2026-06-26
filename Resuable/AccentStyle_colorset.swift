@@ -27,6 +27,8 @@ enum AssetColors : String{
     case lightGray = "LightGray"
     case errorColor = "ErrorColor"
     case wrongColor = "WrongColor"
+    case colorIndigo = "ColorIndigo"
+    
     var color : UIColor {
         return UIColor(named: self.rawValue) ?? .clear
         
