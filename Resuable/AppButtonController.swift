@@ -31,7 +31,10 @@ final class AppButton: UIView{
         font : UIFont? = AppStyle.AppFonts.body,
         ImagePosition : ImagePosition = .leading,
         imageTintColor : UIColor? = nil,
-        borderColor: AssetColors? = nil
+        borderColor: AssetColors? = nil,
+        attributed : NSMutableAttributedString? = nil,
+        
+        
     ) {
         super.init(frame: .zero)
         

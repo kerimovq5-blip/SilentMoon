@@ -97,14 +97,58 @@ final class SingUpViewController : UIViewController {
     }()
    
     private lazy var getStartedButton: AppButton = {
-        let button = AppButton(title: "SIGN UP")
+        let button = AppButton(title: "GET STARTED")
         button.onTap = { [weak self] in
             self?.didTapGetStarted()
         }
         return button
     }()
     
-   
+    
+    
+    private lazy var privacyLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        
+        let attributedText = NSMutableAttributedString(
+            string: "I have read the ",
+            attributes: [
+                .foregroundColor: AssetColors.textSecondary.color,
+                .font: AppStyle.AppFonts.body
+            ]
+        )
+        
+        attributedText.append(NSAttributedString(
+            string: "Privacy Policy",
+            attributes: [
+                .foregroundColor: AssetColors.accent.color,
+                .font: AppStyle.AppFonts.title.withSize(16)
+            ]
+        ))
+        
+        label.attributedText = attributedText
+        return label
+    }()
+    private lazy var privacyCheckbox: UIButton = {
+        let button = UIButton(type: .custom)
+        
+        button.setImage(UIImage(named: "privacyCheckbox"), for: .normal)
+        button.setImage(UIImage(systemName: "checkmark.square.fill"), for: .selected)
+        button.tintColor = AssetColors.accent.color
+        button.addTarget(self, action: #selector(checkboxTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var stackView: UIStackView = {
+        let stacksView = UIStackView(
+            arrangedSubviews: [ privacyLabel ,privacyCheckbox]
+        )
+        stacksView.axis = .horizontal
+        stacksView.spacing = 50
+        stacksView.alignment = .center
+        stacksView.distribution = .fill
+        return stacksView
+    }()
     
     override func viewDidLoad() {
        
@@ -118,7 +162,8 @@ final class SingUpViewController : UIViewController {
             accountTextField,
             emailTextField,
             passWordTextField,
-            getStartedButton
+            getStartedButton,
+            stackView
         )
         createLabel
             .top(view.safeAreaLayoutGuide.topAnchor , 20 ).0
@@ -154,11 +199,17 @@ final class SingUpViewController : UIViewController {
             .leading(view.leadingAnchor, 20).0
             .trailing(view.trailingAnchor, -20).0
             .height(65)
+        stackView
+            .top(passWordTextField.bottomAnchor , 20).0
+            .leading(view.leadingAnchor , 20).0
+            .trailing(view.trailingAnchor, -20).0
+            .height(40)
         getStartedButton
             .bottom(view.safeAreaLayoutGuide.bottomAnchor , -30).0
             .leading(view.leadingAnchor , 20).0
             .trailing(view.trailingAnchor, -20).0
             .height(65)
+        
     }
     @objc private func didTapGetStarted() {
         coordinator?.getStarted()
@@ -189,5 +240,9 @@ final class SingUpViewController : UIViewController {
         
         let alphaValue = isPasswordVisible ? 1.0 : 0.5
         eyeVector.alpha = alphaValue
+    }
+    
+    @objc private func checkboxTapped() {
+        privacyCheckbox.isSelected.toggle()
     }
 }
