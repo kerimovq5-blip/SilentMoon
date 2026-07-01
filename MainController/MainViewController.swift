@@ -2,21 +2,22 @@ import UIKit
 
 final class ViewController: UIViewController {
     weak var coordinator: AuthCoordinator?
-    
+
     private lazy var silentMoonFrame: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "SilentMoonFrame")
         imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
         return imageView
     }()
-    
+
     private lazy var silentMoonView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "SilentMoon")
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
-    
+
     private lazy var labelView: UILabel = {
         let label = UILabel()
         let attributed = NSMutableAttributedString(
@@ -27,7 +28,7 @@ final class ViewController: UIViewController {
             ]
         )
         attributed.append(NSAttributedString(
-            string: "\n\nThousands of people are using Silent Moon\nfor smalls meditation",
+            string: "\n\nThousands of people are using Silent Moon\nfor daily meditation",
             attributes: [
                 .foregroundColor: AssetColors.textSecondary.color,
                 .font: AppStyle.AppFonts.body
@@ -38,15 +39,15 @@ final class ViewController: UIViewController {
         label.numberOfLines = 0
         return label
     }()
-    
+
     private lazy var signUpButton: AppButton = {
         let button = AppButton(title: "SIGN UP")
         button.onTap = { [weak self] in
-            self?.signUpTapped()
+            self?.coordinator?.showSignUp()
         }
         return button
     }()
-    
+
     private lazy var logInButton: UIButton = {
         let button = UIButton()
         let attributed = NSMutableAttributedString(
@@ -67,14 +68,13 @@ final class ViewController: UIViewController {
         button.addTarget(self, action: #selector(logInTapped), for: .touchUpInside)
         return button
     }()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupHierarchy()
         setupLayout()
     }
-    
-    
+
     private func setupHierarchy() {
         view.backgroundColor = .white
         view.addSubviews(
@@ -85,48 +85,45 @@ final class ViewController: UIViewController {
             logInButton
         )
     }
-    
+
     private func setupLayout() {
-        
-        
+
         silentMoonFrame
             .top(view.topAnchor).0
             .leading(view.leadingAnchor).0
-            .trailing(view.trailingAnchor).0
-            .height(view.frame.height * 0.55)
-        
+            .trailing(view.trailingAnchor)
+
+        silentMoonFrame.heightAnchor.constraint(
+            equalTo: view.heightAnchor,
+            multiplier: WelcomeLayout.frameHeightMultiplier
+        ).isActive = true
+
         silentMoonView
-            .top(silentMoonFrame.topAnchor, 160).0
-            .leading(silentMoonFrame.leadingAnchor, 40).0
-            .trailing(silentMoonFrame.trailingAnchor, -40).0
-            .height(242)
-        
+            .top(silentMoonFrame.topAnchor, WelcomeLayout.silentMoonTopInset).0
+            .leading(silentMoonFrame.leadingAnchor, WelcomeLayout.silentMoonHorizontalInset).0
+            .trailing(silentMoonFrame.trailingAnchor, -WelcomeLayout.silentMoonHorizontalInset).0
+            .height(WelcomeLayout.silentMoonHeight)
+
         labelView
-            .top(silentMoonFrame.bottomAnchor, 20).0
-            .leading(view.leadingAnchor, 40).0
-            .trailing(view.trailingAnchor, -40).0
-            .height(102)
-        
+            .top(silentMoonFrame.bottomAnchor, WelcomeLayout.labelTopSpacing).0
+            .leading(view.leadingAnchor, WelcomeLayout.labelHorizontalInset).0
+            .trailing(view.trailingAnchor, -WelcomeLayout.labelHorizontalInset).0
+            .height(WelcomeLayout.labelHeight)
+
         signUpButton
-            .top(labelView.bottomAnchor, 40).0
-            .leading(view.leadingAnchor, 20).0
-            .trailing(view.trailingAnchor, -20).0
-            .height(60)
-        
+            .top(labelView.bottomAnchor, WelcomeLayout.signUpTopSpacing).0
+            .leading(view.leadingAnchor, WelcomeLayout.horizontalInset).0
+            .trailing(view.trailingAnchor, -WelcomeLayout.horizontalInset).0
+            .height(WelcomeLayout.signUpHeight)
+
         logInButton
-            .top(signUpButton.bottomAnchor, 17).0
-            .leading(view.leadingAnchor, 20).0
-            .trailing(view.trailingAnchor, -20).0
-            .height(40)
+            .top(signUpButton.bottomAnchor, WelcomeLayout.logInTopSpacing).0
+            .leading(view.leadingAnchor, WelcomeLayout.horizontalInset).0
+            .trailing(view.trailingAnchor, -WelcomeLayout.horizontalInset).0
+            .height(WelcomeLayout.logInHeight)
     }
-    
-    
-    @objc private func signUpTapped() {
-        
-        coordinator?.showSignUp()
-    }
+
     @objc private func logInTapped() {
-        
         coordinator?.showLogin()
     }
 }

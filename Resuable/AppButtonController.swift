@@ -45,6 +45,7 @@ final class AppButton: UIView{
             mainButton.layer.borderColor = UIColor().assetColor(borderColor).cgColor
                     mainButton.layer.borderWidth = 1
                 }
+        
         if let image = image {
           
             

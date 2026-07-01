@@ -9,6 +9,15 @@ import UIKit
 
 final class GetStartedController: UIViewController {
     weak var coordinator: AuthCoordinator?
+    private lazy var meditateLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Explore the app, Find some peace of mind to prepare for meditation."
+        label.font = .systemFont(ofSize: 16, weight: .regular)
+        label.textColor = .white
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        return label
+    }()
 
     private lazy var frameImageGroup : UIImageView = {
         let imageView = UIImageView()
@@ -34,8 +43,13 @@ final class GetStartedController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
        view.backgroundColor = .colorIndigo
-        view.addSubviews(frameImageGroup , getStartedButton)
+        view.addSubviews(meditateLabel , frameImageGroup , getStartedButton)
         
+        meditateLabel
+            .bottom(frameImageGroup.topAnchor ,-20).0
+            .leading(view.leadingAnchor, 30).0
+            .trailing(view.trailingAnchor, -30).0
+            .height(102)
         frameImageGroup
             .bottom(view.bottomAnchor).0
             .leading(view.leadingAnchor).0

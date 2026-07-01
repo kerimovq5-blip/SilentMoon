@@ -49,13 +49,7 @@ enum AppStyle {
         static let body = UIFont.systemFont(ofSize: 16, weight: .regular)
         
     }
-    enum AppSpacing {
-        static let xsmall: CGFloat = 4
-        static let small: CGFloat = 8
-        static let medium: CGFloat = 16
-        static let large: CGFloat = 24
-        static let xlarge: CGFloat = 32
-    }
+    
     enum AppRaduis {
         static let buttonRadius: CGFloat = 30
         static let buttonRadiusSmall: CGFloat = 15

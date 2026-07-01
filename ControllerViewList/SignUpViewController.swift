@@ -72,7 +72,6 @@ final class SingUpViewController : UIViewController {
             backgroundColor: .lightGray,
             titleColor : .buttonTitle,
             
-            
         )
         return textField
     }()
