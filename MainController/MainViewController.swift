@@ -2,7 +2,33 @@ import UIKit
 
 final class ViewController: UIViewController {
     weak var coordinator: AuthCoordinator?
+    private lazy var SilentMoonlogoLabel: UILabel = {
+        let label = UILabel()
 
+        let silent = NSAttributedString(
+            string: "silent ",
+            attributes: [.font: AppStyle.AppFonts.title]
+        )
+
+        let attachment = NSTextAttachment()
+        attachment.image = UIImage(named: "SilentMoonLogo")
+        attachment.bounds = CGRect(x: 0, y: -6, width: 30, height: 30)
+        let logo = NSAttributedString(attachment: attachment)
+
+        let moon = NSAttributedString(
+            string: " moon",
+            attributes: [.font: AppStyle.AppFonts.title]
+        )
+
+        let full = NSMutableAttributedString()
+        full.append(silent)
+        full.append(logo)
+        full.append(moon)
+
+        label.attributedText = full
+        label.textAlignment = .center
+        return label
+    }()
     private lazy var silentMoonFrame: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "SilentMoonFrame")
@@ -78,6 +104,7 @@ final class ViewController: UIViewController {
     private func setupHierarchy() {
         view.backgroundColor = .white
         view.addSubviews(
+            SilentMoonlogoLabel,
             silentMoonFrame,
             silentMoonView,
             labelView,
@@ -87,6 +114,11 @@ final class ViewController: UIViewController {
     }
 
     private func setupLayout() {
+        SilentMoonlogoLabel
+            .top(view.safeAreaLayoutGuide.topAnchor).0
+            .centerX(view.centerXAnchor).0
+            .height(50)
+        
 
         silentMoonFrame
             .top(view.topAnchor).0

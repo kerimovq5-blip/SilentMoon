@@ -10,6 +10,7 @@ import CoreGraphics
 enum GetStartedLayout {
     static let horizontalInset: CGFloat = 20
     static let labelHorizontalInset: CGFloat = 30
+    static let labelBottomSpacing1: CGFloat = 60
     static let labelBottomSpacing: CGFloat = 20
     static let labelHeight: CGFloat = 102
 

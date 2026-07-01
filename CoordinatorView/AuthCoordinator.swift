@@ -27,8 +27,14 @@ final class AuthCoordinator: Coordinator {
         navigationController.pushViewController(controller, animated: true)
     }
     
-    func getStarted() {
+    func getStarted(name : String) {
         let controller = GetStartedController()
+        controller.userName = name
+        controller.coordinator = self
+        navigationController.pushViewController(controller , animated: true)
+    }
+    func showTopics() {
+        let controller = ChooseTopicViewController()
         controller.coordinator = self
         navigationController.pushViewController(controller, animated: true)
     }

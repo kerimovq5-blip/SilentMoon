@@ -54,6 +54,11 @@ final class SignUpViewController: UIViewController {
             
         )
     }()
+    private lazy var emailCheckButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        return button
+    }()
 
     private lazy var emailTextField: AppTextFieldController = {
         AppTextFieldController(
@@ -214,7 +219,7 @@ final class SignUpViewController: UIViewController {
               return
           }
           emailTextField.layer.borderColor = UIColor.clear.cgColor
-          coordinator?.getStarted()
+        coordinator?.getStarted(name : accountTextField.text)
       }
    
       @objc private func togglePasswordVisibility() {
@@ -227,7 +232,23 @@ final class SignUpViewController: UIViewController {
           privacyCheckbox.isSelected.toggle()
       }
    
-      
+    @objc private func emailChanged() {
+        let email = emailTextField.text
+        guard !email.isEmpty else {
+            emailCheckButton.setImage(nil, for: .normal)
+            emailTextField.layer.borderColor = AssetColors.lightGray.color.cgColor
+            return
+        }
+        if isValidEmail(email) {
+            emailCheckButton.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+            emailCheckButton.tintColor = .systemGreen
+            emailTextField.layer.borderColor = AssetColors.lightGray.color.cgColor
+        } else {
+            emailCheckButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
+            emailCheckButton.tintColor = AssetColors.errorColor.color
+            emailTextField.layer.borderColor = AssetColors.errorColor.color.cgColor
+        }
+    }
    
       private func isValidEmail(_ email: String) -> Bool {
           let pattern = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"

@@ -122,7 +122,7 @@ final class LogInViewController: UIViewController {
         return button
     }()
     
-   
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -209,7 +209,7 @@ final class LogInViewController: UIViewController {
         emailTextField.textField.rightViewMode = .always
     }
     
-   
+    
     
     private func logInTapped() {
         guard isValidEmail(emailTextField.text) else {
@@ -225,7 +225,20 @@ final class LogInViewController: UIViewController {
     }
     
     @objc private func forgotPasswordTapped() {
-       
+        
+    }
+    
+    @objc private func togglePasswordVisibility() {
+        isPasswordVisible.toggle()
+        passwordTextField.textField.isSecureTextEntry = !isPasswordVisible
+        eyeButton.alpha = isPasswordVisible ? 1.0 : 0.5
+    }
+    
+    
+    
+    private func isValidEmail(_ email: String) -> Bool {
+        let pattern = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        return NSPredicate(format: "SELF MATCHES %@", pattern).evaluate(with: email)
     }
     
     @objc private func emailChanged() {
@@ -246,16 +259,9 @@ final class LogInViewController: UIViewController {
         }
     }
     
-    @objc private func togglePasswordVisibility() {
-        isPasswordVisible.toggle()
-        passwordTextField.textField.isSecureTextEntry = !isPasswordVisible
-        eyeButton.alpha = isPasswordVisible ? 1.0 : 0.5
-    }
     
     
     
-    private func isValidEmail(_ email: String) -> Bool {
-        let pattern = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-        return NSPredicate(format: "SELF MATCHES %@", pattern).evaluate(with: email)
-    }
+    
+    
 }
