@@ -1,20 +1,11 @@
-//
-//  SingInController.swift
-//  SilentMoon
-//
-//  Created by Kerimov Qehreman on 25.06.26.
-//
-
-
 import UIKit
 
-
-final class LogInViewController: UIViewController, UITextFieldDelegate {
-
-    
+final class LogInViewController: UIViewController {
     
     weak var coordinator: AuthCoordinator?
-    private var isPasswordVisible: Bool = false
+    private var isPasswordVisible = false
+    
+    
     
     private lazy var welcomeLabel: UILabel = {
         let label = UILabel()
@@ -25,247 +16,246 @@ final class LogInViewController: UIViewController, UITextFieldDelegate {
         label.numberOfLines = 0
         return label
     }()
+    
     private lazy var facebookButton: AppButton = {
-        
-        let button = AppButton(
+        AppButton(
             title: "CONTINUE WITH FACEBOOK",
             backgroundColor: .accent,
             titleColor: .buttonTitle,
             image: UIImage(named: "Vector"),
-            ImagePosition: .leading
-            
+            imagePosition: .leading
         )
-        
-        return button
     }()
     
     private lazy var googleButton: AppButton = {
-        
-        let button = AppButton(
-            
+        AppButton(
             title: "CONTINUE WITH GOOGLE",
             backgroundColor: .backgroundSecondary,
             titleColor: .textPrimary,
             image: UIImage(named: "google"),
-            ImagePosition: .leading,
+            imagePosition: .leading,
             borderColor: .textSecondary
         )
-        return button
     }()
-    private lazy var logInButton : AppButton = {
-        let button = AppButton(
-            title: "LOG IN",
-            backgroundColor: .accent,
-            titleColor: .buttonTitle,
-            image: nil,
-        )
-        return button
-    }()
+    
     private lazy var chooseLabel: UILabel = {
         let label = UILabel()
         label.text = "OR LOG IN WITH EMAIL"
-        label.font = AppStyle.AppFonts.title.withSize(16)
+        label.font = AppStyle.AppFonts.body
         label.textColor = .textSecondary
         label.textAlignment = .center
-        label.numberOfLines = 0
         return label
     }()
     
-    private lazy var emailTextField: AppTextFieldController = {
-        let textField = AppTextFieldController(
-            placeholder :"Email address",
-            backgroundColor: .lightGray,
-            titleColor : .buttonTitle,
-            
-            
-        )
-        return textField
-        
-       
-    }()
-    
-    private lazy var nailCheckButton : UIButton = {
+    private lazy var emailCheckButton: UIButton = {
         let button = UIButton(type: .custom)
         button.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
         return button
     }()
     
-    private lazy var eyeVector : UIButton = {
-            let button = UIButton(type: .custom)
-            button.setImage(UIImage(named: "EyeVector"), for: .normal)
-            button.tintColor = AssetColors.textSecondary.color
-            button.addTarget(self, action: #selector(togglePasswordHiden), for: .touchUpInside)
-            return button
-        }()
-    private lazy var passWordTextField: AppTextFieldController = {
-        let textField = AppTextFieldController(
-            placeholder :"Password",
-            isSecure : true ,
-            backgroundColor: .lightGray,
-            image:  UIImage(named: "EyeVector"),
-            rightView: eyeVector
+    private lazy var emailTextField: AppTextFieldController = {
+        AppTextFieldController(
+            placeholder: "Email address",
+            backgroundColor: .lightGray
         )
-        return textField
     }()
+    
+    private lazy var eyeButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage(named: "EyeVector"), for: .normal)
+        button.tintColor = AssetColors.textSecondary.color
+        button.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var passwordTextField: AppTextFieldController = {
+        AppTextFieldController(
+            placeholder: "Password",
+            isSecure: true,
+            backgroundColor: .lightGray,
+            rightView: eyeButton
+        )
+    }()
+    
+    private lazy var logInButton: AppButton = {
+        let button = AppButton(
+            title: "LOG IN",
+            backgroundColor: .accent,
+            titleColor: .buttonTitle
+        )
+        button.onTap = { [weak self] in
+            self?.logInTapped()
+        }
+        return button
+    }()
+    
     private lazy var forgotLabel: UILabel = {
         let label = UILabel()
-        label.text = "Forgot  Password?"
-        label.font = AppStyle.AppFonts.title.withSize(16)
+        label.text = "Forgot Password?"
+        label.font = AppStyle.AppFonts.body
         label.textColor = .textPrimary
         label.textAlignment = .center
-        label.numberOfLines = 0
         label.isUserInteractionEnabled = true
         let gesture = UITapGestureRecognizer(target: self, action: #selector(forgotPasswordTapped))
         label.addGestureRecognizer(gesture)
-                
-                   return label
+        return label
     }()
-    private lazy var singUpButton: UIButton = {
+    
+    private lazy var signUpButton: UIButton = {
         let button = UIButton()
         let attributed = NSMutableAttributedString(
-            string: "ALREADY HAVE AN ACCOUNT? ",
+            string: "DON'T HAVE AN ACCOUNT? ",
             attributes: [
                 .foregroundColor: AssetColors.textSecondary.color,
                 .font: AppStyle.AppFonts.body
             ]
         )
         attributed.append(NSAttributedString(
-            string: "SING UP",
+            string: "SIGN UP",
             attributes: [
                 .foregroundColor: AssetColors.accent.color,
                 .font: AppStyle.AppFonts.body
             ]
         ))
         button.setAttributedTitle(attributed, for: .normal)
-        button
-            .addTarget(
-                self,
-                action: #selector(signUpTapped),
-                for: .touchUpInside
-            )
+        button.addTarget(self, action: #selector(signUpTapped), for: .touchUpInside)
         return button
     }()
     
+   
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        setupHierarchy()
+        setupLayout()
+        setupEmailValidation()
+    }
+    
+    
+    
+    private func setupHierarchy() {
         view.backgroundColor = .backgroundSecondary
-        
-        
         view.addSubviews(
-            welcomeLabel ,
-            facebookButton ,
-            googleButton ,
+            welcomeLabel,
+            facebookButton,
+            googleButton,
             chooseLabel,
             emailTextField,
-            passWordTextField,
+            passwordTextField,
             logInButton,
-            singUpButton,
-            forgotLabel)
+            forgotLabel,
+            signUpButton
+        )
+    }
+    
+    private func setupLayout() {
         welcomeLabel
-            .top(view.safeAreaLayoutGuide.topAnchor , 20 ).0
+            .top(view.safeAreaLayoutGuide.topAnchor, LogInLayout.welcomeLabelTopSpacing).0
             .centerX(view.centerXAnchor).0
-            .height(40)
+            .height(LogInLayout.welcomeLabelHeight)
         
         facebookButton
-            .top(welcomeLabel.bottomAnchor, 40).0
-            .leading(view.leadingAnchor, 20).0
-            .trailing(view.trailingAnchor, -20).0
-            .height(60)
-        googleButton
-            .top(facebookButton.bottomAnchor, 20).0
-            .leading(view.leadingAnchor, 20).0
-            .trailing(view.trailingAnchor, -20).0
-            .height(60)
-        chooseLabel
-            .top(googleButton.bottomAnchor , 30).0
-            .centerX(view.centerXAnchor).0
-            .height(30)
-        emailTextField
-            .top(chooseLabel.bottomAnchor, 30).0
-            .leading(view.leadingAnchor, 20).0
-            .trailing(view.trailingAnchor, -20).0
-            .height(65)
+            .top(welcomeLabel.bottomAnchor, LogInLayout.facebookButtonTopSpacing).0
+            .leading(view.leadingAnchor, LogInLayout.horizontalInset).0
+            .trailing(view.trailingAnchor, -LogInLayout.horizontalInset).0
+            .height(LogInLayout.buttonHeight)
         
-        passWordTextField
-            .top(emailTextField.bottomAnchor, 20).0
-            .leading(view.leadingAnchor, 20).0
-            .trailing(view.trailingAnchor, -20).0
-            .height(65)
+        googleButton
+            .top(facebookButton.bottomAnchor, LogInLayout.buttonSpacing).0
+            .leading(view.leadingAnchor, LogInLayout.horizontalInset).0
+            .trailing(view.trailingAnchor, -LogInLayout.horizontalInset).0
+            .height(LogInLayout.buttonHeight)
+        
+        chooseLabel
+            .top(googleButton.bottomAnchor, LogInLayout.chooseLabelTopSpacing).0
+            .centerX(view.centerXAnchor).0
+            .height(LogInLayout.chooseLabelHeight)
+        
+        emailTextField
+            .top(chooseLabel.bottomAnchor, LogInLayout.textFieldTopSpacing).0
+            .leading(view.leadingAnchor, LogInLayout.horizontalInset).0
+            .trailing(view.trailingAnchor, -LogInLayout.horizontalInset).0
+            .height(LogInLayout.textFieldHeight)
+        
+        passwordTextField
+            .top(emailTextField.bottomAnchor, LogInLayout.textFieldSpacing).0
+            .leading(view.leadingAnchor, LogInLayout.horizontalInset).0
+            .trailing(view.trailingAnchor, -LogInLayout.horizontalInset).0
+            .height(LogInLayout.textFieldHeight)
+        
         logInButton
-            .top(passWordTextField.bottomAnchor, 20).0
-            .leading(view.leadingAnchor, 20).0
-            .trailing(view.trailingAnchor, -20).0
-            .height(65)
+            .top(passwordTextField.bottomAnchor, LogInLayout.logInButtonTopSpacing).0
+            .leading(view.leadingAnchor, LogInLayout.horizontalInset).0
+            .trailing(view.trailingAnchor, -LogInLayout.horizontalInset).0
+            .height(LogInLayout.logInButtonHeight)
+        
         forgotLabel
-            .top(logInButton.bottomAnchor, 20).0
+            .top(logInButton.bottomAnchor, LogInLayout.forgotLabelTopSpacing).0
             .centerX(view.centerXAnchor)
-        singUpButton
+        
+        signUpButton
             .bottom(view.safeAreaLayoutGuide.bottomAnchor).0
             .centerX(view.centerXAnchor).0
-            .height(40)
-        
-        nailCheckMark ()
+            .height(LogInLayout.signUpButtonHeight)
     }
+    
+    private func setupEmailValidation() {
+        emailTextField.textField.addTarget(self, action: #selector(emailChanged), for: .editingChanged)
+        
+        let container = UIView(frame: CGRect(x: 0, y: 0, width: 45, height: 30))
+        emailCheckButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        container.addSubview(emailCheckButton)
+        emailTextField.textField.rightView = container
+        emailTextField.textField.rightViewMode = .always
+    }
+    
+   
+    
+    private func logInTapped() {
+        guard isValidEmail(emailTextField.text) else {
+            emailTextField.layer.borderColor = AssetColors.errorColor.color.cgColor
+            return
+        }
+        emailTextField.layer.borderColor = UIColor.clear.cgColor
+        coordinator?.showLogin()
+    }
+    
     @objc private func signUpTapped() {
         coordinator?.showSignUp()
     }
     
-    @objc private func forgotPasswordTapped () {
-        print ("forgot password")
+    @objc private func forgotPasswordTapped() {
+       
     }
     
-    private func isValidRegEmail(_ email : String )-> Bool {
-        let emailText  = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-        let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailText)
-        return emailPredicate.evaluate(with : email)
-    }
-    
-    private func nailCheckMark () {
-                
-        if let nailCheckMark = emailTextField.subviews.first(where: { $0 is UITextField }) as? UITextField {
-            nailCheckMark.addTarget(self, action: #selector(checkMail), for: .editingChanged)
-            
-            let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 45, height: 30))
-            nailCheckButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
-            containerView.addSubview(nailCheckButton)
-            
-            nailCheckMark.rightView = containerView
-            nailCheckMark.rightViewMode = .always
-        }
-    }
-    
-    @objc private func checkMail() {
-        let emailText = emailTextField.text
-        if emailText.isEmpty {
-            nailCheckButton.setImage(nil, for: .normal)
+    @objc private func emailChanged() {
+        let email = emailTextField.text
+        guard !email.isEmpty else {
+            emailCheckButton.setImage(nil, for: .normal)
             emailTextField.layer.borderColor = AssetColors.lightGray.color.cgColor
             return
         }
-        let isValid = isValidRegEmail(emailText)
-        emailTextField.isHidden = false
-        
-        if isValid {
-
-            nailCheckButton.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
-            nailCheckButton.tintColor = .systemGreen
-            
+        if isValidEmail(email) {
+            emailCheckButton.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+            emailCheckButton.tintColor = .systemGreen
             emailTextField.layer.borderColor = AssetColors.lightGray.color.cgColor
         } else {
-            nailCheckButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
-            nailCheckButton.tintColor = AssetColors.errorColor.color
-            
+            emailCheckButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
+            emailCheckButton.tintColor = AssetColors.errorColor.color
             emailTextField.layer.borderColor = AssetColors.errorColor.color.cgColor
         }
     }
     
-    @objc private func togglePasswordHiden() {
-        isPasswordVisible.toggle() 
-        if let textField = passWordTextField.subviews.first(where: { $0 is UITextField }) as? UITextField {
-            textField.isSecureTextEntry = !isPasswordVisible
-        }
-        let alphaValue = isPasswordVisible ? 1.0 : 0.5
-        eyeVector.alpha = alphaValue
-        
+    @objc private func togglePasswordVisibility() {
+        isPasswordVisible.toggle()
+        passwordTextField.textField.isSecureTextEntry = !isPasswordVisible
+        eyeButton.alpha = isPasswordVisible ? 1.0 : 0.5
+    }
+    
+    
+    
+    private func isValidEmail(_ email: String) -> Bool {
+        let pattern = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        return NSPredicate(format: "SELF MATCHES %@", pattern).evaluate(with: email)
     }
 }

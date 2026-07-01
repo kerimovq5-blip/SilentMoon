@@ -22,7 +22,7 @@ final class AuthCoordinator: Coordinator {
     }
     
     func showSignUp() {
-        let controller = SingUpViewController()
+        let controller = SignUpViewController()
         controller.coordinator = self
         navigationController.pushViewController(controller, animated: true)
     }
@@ -32,7 +32,12 @@ final class AuthCoordinator: Coordinator {
         controller.coordinator = self
         navigationController.pushViewController(controller, animated: true)
     }
-    
+//    func showHome() {
+//        let controller = HomeViewController()
+//        controller.coordinator = self
+//        navigationController.pushViewController(controller, animated: true)
+//    }
+//    
     func finishAuth() {
         onFlowFinished?()
     }

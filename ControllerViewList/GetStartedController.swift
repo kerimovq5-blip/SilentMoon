@@ -1,68 +1,80 @@
-//
-//  GetStartedController'.swift
-//  SilentMoon
-//
-//  Created by Kerimov Qehreman on 25.06.26.
-//
-
 import UIKit
 
 final class GetStartedController: UIViewController {
+
     weak var coordinator: AuthCoordinator?
+
     private lazy var meditateLabel: UILabel = {
         let label = UILabel()
         label.text = "Explore the app, Find some peace of mind to prepare for meditation."
-        label.font = .systemFont(ofSize: 16, weight: .regular)
+        label.font = AppStyle.AppFonts.body
         label.textColor = .white
         label.textAlignment = .center
         label.numberOfLines = 0
         return label
     }()
 
-    private lazy var frameImageGroup : UIImageView = {
+    private lazy var frameImageGroup: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "GroupFrame")
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
+
     private lazy var getStartedButton: AppButton = {
         let button = AppButton(
             title: "GET STARTED",
-            backgroundColor : .backgroundSecondary,
+            backgroundColor: .backgroundSecondary,
             titleColor: .textPrimary
-            
         )
-        
         button.onTap = { [weak self] in
-            self?.didTapGetStarted()
+            self?.getStartedTapped()
         }
         return button
     }()
-   
-   
+
+    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-       view.backgroundColor = .colorIndigo
-        view.addSubviews(meditateLabel , frameImageGroup , getStartedButton)
-        
-        meditateLabel
-            .bottom(frameImageGroup.topAnchor ,-20).0
-            .leading(view.leadingAnchor, 30).0
-            .trailing(view.trailingAnchor, -30).0
-            .height(102)
+        setupHierarchy()
+        setupLayout()
+    }
+
+   
+
+    private func setupHierarchy() {
+        view.backgroundColor = .colorIndigo
+        view.addSubviews(frameImageGroup, meditateLabel, getStartedButton)
+    }
+
+    private func setupLayout() {
         frameImageGroup
             .bottom(view.bottomAnchor).0
             .leading(view.leadingAnchor).0
             .trailing(view.trailingAnchor)
+
+        frameImageGroup.heightAnchor.constraint(
+            equalTo: view.heightAnchor,
+            multiplier: GetStartedLayout.frameHeightMultiplier
+        ).isActive = true
+
+        meditateLabel
+            .bottom(frameImageGroup.topAnchor, -GetStartedLayout.labelBottomSpacing).0
+            .leading(view.leadingAnchor, GetStartedLayout.labelHorizontalInset).0
+            .trailing(view.trailingAnchor, -GetStartedLayout.labelHorizontalInset).0
+            .height(GetStartedLayout.labelHeight)
+
         getStartedButton
-            .bottom(view.safeAreaLayoutGuide.bottomAnchor , -30).0
-            .leading(view.leadingAnchor , 20).0
-            .trailing(view.trailingAnchor, -20).0
-            .height(65)
+            .bottom(view.safeAreaLayoutGuide.bottomAnchor, GetStartedLayout.buttonBottomInset).0
+            .leading(view.leadingAnchor, GetStartedLayout.horizontalInset).0
+            .trailing(view.trailingAnchor, -GetStartedLayout.horizontalInset).0
+            .height(GetStartedLayout.buttonHeight)
     }
-    @objc private func didTapGetStarted() {
-      //  coordinator?.showLogin()
+
+   
+
+    private func getStartedTapped() {
+        // TODO: coordinator?.showHome()
     }
-    
-    
 }

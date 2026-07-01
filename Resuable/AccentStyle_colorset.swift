@@ -24,7 +24,7 @@ enum AssetColors : String{
     case textSecondary = "TextSecondary"
     case accent = "Accent"
     case buttonTitle = "ButtonTitle"
-    case lightGray = "LightGray"
+    case lightGray = "Lightgray"
     case errorColor = "ErrorColor"
     case wrongColor = "WrongColor"
     case colorIndigo = "ColorIndigo"

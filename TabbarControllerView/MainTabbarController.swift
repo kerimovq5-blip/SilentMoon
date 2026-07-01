@@ -30,7 +30,7 @@
             homeViewCotroller.view.backgroundColor = .white
             homeNavigation.viewControllers = [homeViewCotroller]
             
-            // Tab 2: Meditate
+            
             let meditateNavigation = UINavigationController()
             meditateNavigation.tabBarItem = UITabBarItem(title: "Meditate", image: UIImage(systemName: "brain"), tag: 1)
             let meditateViewController = UIViewController()

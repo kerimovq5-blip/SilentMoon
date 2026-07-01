@@ -1,78 +1,94 @@
-//
-//  AppButtonController.swift
-//  SilentMoon
-//
-//  Created by Kerimov Qehreman on 25.06.26.
-//
-
 import UIKit
 
-final class AppButton: UIView{
-    
+final class AppButton: UIView {
+
     var onTap: (() -> Void)?
-    
+
+    private enum Layout {
+        static let imageSpacing: CGFloat = 8
+        static let borderWidth: CGFloat = 1
+        static let cornerRadius = AppStyle.AppRaduis.buttonRadius
+    }
+
     private lazy var mainButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.titleLabel?.font = AppStyle.AppFonts.body
-        button.layer.cornerRadius = AppStyle.AppRaduis.buttonRadius
-        button.clipsToBounds = true
+        let button = UIButton(configuration: .plain())
         button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
-        
         return button
-        //jdhjdsjfklksd;lfkjsd;
     }()
+
     
-    
+
     init(
         title: String,
-        backgroundColor:AssetColors = .accent,
+        backgroundColor: AssetColors = .accent,
         titleColor: AssetColors = .buttonTitle,
-        image : UIImage? = nil,
-        font : UIFont? = AppStyle.AppFonts.body,
-        ImagePosition : ImagePosition = .leading,
-        imageTintColor : UIColor? = nil,
-        borderColor: AssetColors? = nil,
-        attributed : NSMutableAttributedString? = nil,
-        
-        
+        image: UIImage? = nil,
+        imagePosition: ImagePosition = .leading,
+        imageTintColor: AssetColors? = nil,
+        borderColor: AssetColors? = nil
     ) {
         super.init(frame: .zero)
-        
-        mainButton.setTitle(title, for: .normal)
-        mainButton.backgroundColor = UIColor().assetColor(backgroundColor)
-        mainButton.setTitleColor(UIColor().assetColor(titleColor), for: .normal)
-        if let borderColor = borderColor {
-            mainButton.layer.borderColor = UIColor().assetColor(borderColor).cgColor
-                    mainButton.layer.borderWidth = 1
-                }
-        
-        if let image = image {
-          
-            
-            mainButton.setImage(image, for: .normal)
-            
-            mainButton.tintColor = .systemBlue
-            mainButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 70)
-            mainButton.titleLabel?.adjustsFontSizeToFitWidth = true
-        }
+        configure(
+            title: title,
+            backgroundColor: backgroundColor,
+            titleColor: titleColor,
+            image: image,
+            imagePosition: imagePosition,
+            imageTintColor: imageTintColor,
+            borderColor: borderColor
+        )
         setupHierarchy()
         setupLayout()
     }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupHierarchy()
-        setupLayout()
-    }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+   
+
+    private func configure(
+        title: String,
+        backgroundColor: AssetColors,
+        titleColor: AssetColors,
+        image: UIImage?,
+        imagePosition: ImagePosition,
+        imageTintColor: AssetColors?,
+        borderColor: AssetColors?
+    ) {
+        var config = UIButton.Configuration.filled()
+        config.title = title
+        config.baseBackgroundColor = backgroundColor.color
+        config.baseForegroundColor = titleColor.color
+        config.background.cornerRadius = Layout.cornerRadius
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { container in
+            var c = container
+            c.font = AppStyle.AppFonts.body
+            return c
+        }
+
+        if let image = image {
+            config.image = image
+            config.imagePadding = Layout.imageSpacing
+            config.imagePlacement = imagePosition == .leading ? .leading : .trailing
+            if let tint = imageTintColor {
+                config.imageColorTransformer = UIConfigurationColorTransformer { _ in tint.color }
+            }
+        }
+
+        mainButton.configuration = config
+
+        if let borderColor = borderColor {
+            layer.borderColor = borderColor.color.cgColor
+            layer.borderWidth = Layout.borderWidth
+            layer.cornerRadius = Layout.cornerRadius
+        }
+    }
+
     private func setupHierarchy() {
         addSubviews(mainButton)
     }
-    
+
     private func setupLayout() {
         mainButton
             .top(topAnchor).0
@@ -80,15 +96,17 @@ final class AppButton: UIView{
             .trailing(trailingAnchor).0
             .bottom(bottomAnchor)
     }
-    
+
+
     @objc private func buttonTapped() {
         onTap?()
     }
-    
+
     func setTitle(_ title: String) {
-        mainButton.setTitle(title, for: .normal)
+        mainButton.configuration?.title = title
     }
-    func setIsEnabled( _ isEnabled: Bool) {
+
+    func setIsEnabled(_ isEnabled: Bool) {
         mainButton.isEnabled = isEnabled
         mainButton.alpha = isEnabled ? 1.0 : 0.5
     }

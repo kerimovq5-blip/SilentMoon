@@ -59,6 +59,11 @@
 			path = TabbarControllerView;
 			sourceTree = "<group>";
 		};
+		F2CC69792FF50B9D00A76DC5 /* LayoutFolder */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = LayoutFolder;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +80,7 @@
 		F218C9302FED5734002251F7 = {
 			isa = PBXGroup;
 			children = (
+				F2CC69792FF50B9D00A76DC5 /* LayoutFolder */,
 				F2CC69712FF3FDA000A76DC5 /* TabbarControllerView */,
 				F26071FE2FEEDE7100F5F017 /* Resuable */,
 				F26071F92FEEDE6A00F5F017 /* Utils */,
@@ -117,6 +123,7 @@
 				F26071F92FEEDE6A00F5F017 /* Utils */,
 				F26071FE2FEEDE7100F5F017 /* Resuable */,
 				F2CC69712FF3FDA000A76DC5 /* TabbarControllerView */,
+				F2CC69792FF50B9D00A76DC5 /* LayoutFolder */,
 			);
 			name = SilentMoon;
 			packageProductDependencies = (
