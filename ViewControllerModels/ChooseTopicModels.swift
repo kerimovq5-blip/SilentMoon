@@ -19,7 +19,7 @@ extension ChooseTopicModel {
         ChooseTopicModel(pageController: UIImage(named: "happiness"), title: "Increase Happiness"),
         ChooseTopicModel(pageController: UIImage(named: "anxiety"), title: "Reduce Anxiety"),
         ChooseTopicModel(pageController: UIImage(named: "growth"), title: "Personal Growth"),
-        ChooseTopicModel(pageController: UIImage(named: "sleep"), title: "Better Sleep"),
+        ChooseTopicModel(pageController: UIImage(named: "sleepy"), title: "Better Sleep"),
         ChooseTopicModel(pageController: UIImage(named: ""), title: " "),
 
         

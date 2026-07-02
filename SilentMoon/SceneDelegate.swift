@@ -19,7 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let window = UIWindow(windowScene: windowScene)
         let navigationController = UINavigationController()
         
-        // AppCoordinator yaradılır
+        
         appCoordinator = AppCoordinator(
             navigationController: navigationController,
             window: window
