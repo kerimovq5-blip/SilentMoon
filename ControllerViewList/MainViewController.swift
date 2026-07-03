@@ -1,30 +1,34 @@
 import UIKit
 
 final class ViewController: UIViewController {
-    weak var coordinator: AuthCoordinator?
-    private lazy var SilentMoonlogoLabel: UILabel = {
+    var coordinator: AuthCoordinator?
+    private let silentMoonTopInset: CGFloat = 160
+    
+    
+    private lazy var logoLabel: UILabel = {
         let label = UILabel()
-
+        
         let silent = NSAttributedString(
-            string: "silent ",
-            attributes: [.font: AppStyle.AppFonts.title]
+            string: "S i l e n t ",
+            attributes: [.font: AppStyle.AppFonts.body]
         )
-
+        
         let attachment = NSTextAttachment()
-        attachment.image = UIImage(named: "SilentMoonLogo")
+        attachment.image = UIImage(named: "logo")?
+            .withRenderingMode(.alwaysOriginal)
         attachment.bounds = CGRect(x: 0, y: -6, width: 30, height: 30)
         let logo = NSAttributedString(attachment: attachment)
-
+        
         let moon = NSAttributedString(
-            string: " moon",
-            attributes: [.font: AppStyle.AppFonts.title]
+            string: " M o o n",
+            attributes: [.font: AppStyle.AppFonts.body]
         )
-
+        
         let full = NSMutableAttributedString()
         full.append(silent)
         full.append(logo)
         full.append(moon)
-
+        
         label.attributedText = full
         label.textAlignment = .center
         return label
@@ -36,15 +40,15 @@ final class ViewController: UIViewController {
         imageView.clipsToBounds = true
         return imageView
     }()
-
+    
     private lazy var silentMoonView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "SilentMoon")
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
-
-    private lazy var labelView: UILabel = {
+    
+    private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         let attributed = NSMutableAttributedString(
             string: "We are what we do  ",
@@ -65,15 +69,13 @@ final class ViewController: UIViewController {
         label.numberOfLines = 0
         return label
     }()
-
+    
     private lazy var signUpButton: AppButton = {
         let button = AppButton(title: "SIGN UP")
-        button.onTap = { [weak self] in
-            self?.coordinator?.showSignUp()
-        }
+        button.onTap = { [weak self] in self?.coordinator?.showSignUp() }
         return button
     }()
-
+    
     private lazy var logInButton: UIButton = {
         let button = UIButton()
         let attributed = NSMutableAttributedString(
@@ -94,67 +96,66 @@ final class ViewController: UIViewController {
         button.addTarget(self, action: #selector(logInTapped), for: .touchUpInside)
         return button
     }()
-
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupHierarchy()
         setupLayout()
     }
-
+    
+    
     private func setupHierarchy() {
         view.backgroundColor = .white
-        view.addSubviews(
-            SilentMoonlogoLabel,
-            silentMoonFrame,
-            silentMoonView,
-            labelView,
-            signUpButton,
-            logInButton
-        )
+        view.addSubviews(silentMoonFrame,
+                         logoLabel,
+                         silentMoonView,
+                         descriptionLabel,
+                         signUpButton,
+                         logInButton)
     }
-
+    
     private func setupLayout() {
-        SilentMoonlogoLabel
-            .top(view.safeAreaLayoutGuide.topAnchor).0
-            .centerX(view.centerXAnchor).0
-            .height(50)
-        
-
         silentMoonFrame
             .top(view.topAnchor).0
             .leading(view.leadingAnchor).0
             .trailing(view.trailingAnchor)
-
+        
         silentMoonFrame.heightAnchor.constraint(
-            equalTo: view.heightAnchor,
-            multiplier: WelcomeLayout.frameHeightMultiplier
+            equalTo: view.heightAnchor, multiplier: 0.55
         ).isActive = true
-
+        logoLabel
+            .bottom(view.safeAreaLayoutGuide.topAnchor).0
+            .centerX(view.centerXAnchor).0
+            .height(50)
         silentMoonView
-            .top(silentMoonFrame.topAnchor, WelcomeLayout.silentMoonTopInset).0
-            .leading(silentMoonFrame.leadingAnchor, WelcomeLayout.silentMoonHorizontalInset).0
-            .trailing(silentMoonFrame.trailingAnchor, -WelcomeLayout.silentMoonHorizontalInset).0
-            .height(WelcomeLayout.silentMoonHeight)
-
-        labelView
-            .top(silentMoonFrame.bottomAnchor, WelcomeLayout.labelTopSpacing).0
-            .leading(view.leadingAnchor, WelcomeLayout.labelHorizontalInset).0
-            .trailing(view.trailingAnchor, -WelcomeLayout.labelHorizontalInset).0
-            .height(WelcomeLayout.labelHeight)
-
+            .top(silentMoonFrame.topAnchor, silentMoonTopInset).0
+            .leading(silentMoonFrame.leadingAnchor, AppLayout.xLargeSpacing.value).0
+            .trailing(silentMoonFrame.trailingAnchor, -AppLayout.xLargeSpacing.value).0
+            .height(242)
+        
+        descriptionLabel
+            .top(silentMoonFrame.bottomAnchor, AppLayout.spacing.value).0
+            .leading(view.leadingAnchor, AppLayout.xLargeSpacing.value).0
+            .trailing(view.trailingAnchor, -AppLayout.xLargeSpacing.value).0
+            .height(102)
+        
         signUpButton
-            .top(labelView.bottomAnchor, WelcomeLayout.signUpTopSpacing).0
-            .leading(view.leadingAnchor, WelcomeLayout.horizontalInset).0
-            .trailing(view.trailingAnchor, -WelcomeLayout.horizontalInset).0
-            .height(WelcomeLayout.signUpHeight)
-
+            .top(descriptionLabel.bottomAnchor, AppLayout.xLargeSpacing.value).0
+            .leading(view.leadingAnchor, AppLayout.spacing.value).0
+            .trailing(view.trailingAnchor, -AppLayout.spacing.value).0
+            .height(AppLayout.buttonHeight.value)
+        
         logInButton
-            .top(signUpButton.bottomAnchor, WelcomeLayout.logInTopSpacing).0
-            .leading(view.leadingAnchor, WelcomeLayout.horizontalInset).0
-            .trailing(view.trailingAnchor, -WelcomeLayout.horizontalInset).0
-            .height(WelcomeLayout.logInHeight)
+            .top(signUpButton.bottomAnchor, AppLayout.spacing.value).0
+            .leading(view.leadingAnchor, AppLayout.spacing.value).0
+            .trailing(view.trailingAnchor, -AppLayout.spacing.value).0
+            .height(40)
     }
-
+    
+    
+    
     @objc private func logInTapped() {
         coordinator?.showLogin()
     }

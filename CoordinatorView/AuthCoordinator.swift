@@ -1,7 +1,6 @@
 import UIKit
 
 final class AuthCoordinator: Coordinator {
-    var childCoordinators: [Coordinator] = []
     var navigationController: UINavigationController
     var onFlowFinished: (() -> Void)?
     
@@ -34,6 +33,11 @@ final class AuthCoordinator: Coordinator {
         navigationController.pushViewController(controller , animated: true)
     }
     func showTopics() {
+        let controller = ChooseTopicViewController()
+        controller.coordinator = self
+        navigationController.pushViewController(controller, animated: true)
+    }
+    func showChooseTopic() {
         let controller = ChooseTopicViewController()
         controller.coordinator = self
         navigationController.pushViewController(controller, animated: true)

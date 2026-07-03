@@ -2,12 +2,10 @@ import UIKit
 
 final class SignUpViewController: UIViewController {
 
-    weak var coordinator: AuthCoordinator?
-
+    var coordinator: AuthCoordinator?
     private var isPasswordVisible = false
 
-
-    private lazy var createLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Create your account"
         label.font = AppStyle.AppFonts.title.withSize(28)
@@ -38,7 +36,7 @@ final class SignUpViewController: UIViewController {
         )
     }()
 
-    private lazy var chooseLabel: UILabel = {
+    private lazy var dividerLabel: UILabel = {
         let label = UILabel()
         label.text = "OR SIGN UP WITH EMAIL"
         label.font = AppStyle.AppFonts.body
@@ -50,10 +48,10 @@ final class SignUpViewController: UIViewController {
     private lazy var accountTextField: AppTextFieldController = {
         AppTextFieldController(
             placeholder: "Account name",
-            backgroundColor: .lightGray,
-            
-        )
+            backgroundColor: .lightGray)
+        
     }()
+
     private lazy var emailCheckButton: UIButton = {
         let button = UIButton(type: .custom)
         button.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
@@ -63,11 +61,9 @@ final class SignUpViewController: UIViewController {
     private lazy var emailTextField: AppTextFieldController = {
         AppTextFieldController(
             placeholder: "Email address",
-            backgroundColor: .lightGray,
-           
+            backgroundColor: .lightGray
         )
     }()
-
     private lazy var eyeButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(named: "EyeVector"), for: .normal)
@@ -91,6 +87,8 @@ final class SignUpViewController: UIViewController {
         button.setImage(UIImage(systemName: "checkmark.square.fill"), for: .selected)
         button.tintColor = AssetColors.accent.color
         button.addTarget(self, action: #selector(checkboxTapped), for: .touchUpInside)
+        
+        
         return button
     }()
 
@@ -99,36 +97,27 @@ final class SignUpViewController: UIViewController {
         label.numberOfLines = 0
         let text = NSMutableAttributedString(
             string: "I have read the ",
-            attributes: [
-                .foregroundColor: AssetColors.textSecondary.color,
-                .font: AppStyle.AppFonts.body
-            ]
+            attributes: [.foregroundColor: AssetColors.textSecondary.color, .font: AppStyle.AppFonts.body]
         )
         text.append(NSAttributedString(
             string: "Privacy Policy",
-            attributes: [
-                .foregroundColor: AssetColors.accent.color,
-                .font: AppStyle.AppFonts.body
-            ]
+            attributes: [.foregroundColor: AssetColors.accent.color, .font: AppStyle.AppFonts.body]
         ))
         label.attributedText = text
         return label
     }()
 
     private lazy var privacyStackView: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [ privacyLabel , privacyCheckbox])
+        let stack = UIStackView(arrangedSubviews: [privacyLabel , privacyCheckbox])
         stack.axis = .horizontal
-        stack.spacing = SignUpLayout.privacyStackSpacing
+        stack.spacing = AppLayout.xLargeSpacing.value
         stack.alignment = .center
-        stack.distribution = .fill
         return stack
     }()
 
     private lazy var getStartedButton: AppButton = {
         let button = AppButton(title: "GET STARTED")
-        button.onTap = { [weak self] in
-            self?.getStartedTapped()
-        }
+        button.onTap = { [weak self] in self?.getStartedTapped() }
         return button
     }()
 
@@ -138,17 +127,18 @@ final class SignUpViewController: UIViewController {
         super.viewDidLoad()
         setupHierarchy()
         setupLayout()
+        setupEmailValidation()
     }
 
-    
+   
 
     private func setupHierarchy() {
         view.backgroundColor = .backgroundSecondary
         view.addSubviews(
-            createLabel,
+            titleLabel,
             facebookButton,
             googleButton,
-            chooseLabel,
+            dividerLabel,
             accountTextField,
             emailTextField,
             passwordTextField,
@@ -158,80 +148,67 @@ final class SignUpViewController: UIViewController {
     }
 
     private func setupLayout() {
-        createLabel
-            .top(view.safeAreaLayoutGuide.topAnchor, SignUpLayout.createLabelTopSpacing).0
+        titleLabel
+            .top(view.safeAreaLayoutGuide.topAnchor, AppLayout.spacing.value).0
             .centerX(view.centerXAnchor).0
-            .height(SignUpLayout.createLabelHeight)
+            .height(AppLayout.xLargeSpacing.value)
 
         facebookButton
-            .top(createLabel.bottomAnchor, SignUpLayout.facebookButtonTopSpacing).0
-            .leading(view.leadingAnchor, SignUpLayout.horizontalInset).0
-            .trailing(view.trailingAnchor, -SignUpLayout.horizontalInset).0
-            .height(SignUpLayout.buttonHeight)
+            .top(titleLabel.bottomAnchor, AppLayout.xLargeSpacing.value).0
+            .leading(view.leadingAnchor, AppLayout.spacing.value).0
+            .trailing(view.trailingAnchor, -AppLayout.spacing.value).0
+            .height(AppLayout.buttonHeight.value)
 
         googleButton
-            .top(facebookButton.bottomAnchor, SignUpLayout.buttonSpacing).0
-            .leading(view.leadingAnchor, SignUpLayout.horizontalInset).0
-            .trailing(view.trailingAnchor, -SignUpLayout.horizontalInset).0
-            .height(SignUpLayout.buttonHeight)
+            .top(facebookButton.bottomAnchor, AppLayout.spacing.value).0
+            .leading(view.leadingAnchor, AppLayout.spacing.value).0
+            .trailing(view.trailingAnchor, -AppLayout.spacing.value).0
+            .height(AppLayout.buttonHeight.value)
 
-        chooseLabel
-            .top(googleButton.bottomAnchor, SignUpLayout.chooseLabelTopSpacing).0
+        dividerLabel
+            .top(googleButton.bottomAnchor, AppLayout.largeSpacing.value).0
             .centerX(view.centerXAnchor).0
-            .height(SignUpLayout.chooseLabelHeight)
+            .height(AppLayout.largeSpacing.value)
 
         accountTextField
-            .top(chooseLabel.bottomAnchor, SignUpLayout.textFieldTopSpacing).0
-            .leading(view.leadingAnchor, SignUpLayout.horizontalInset).0
-            .trailing(view.trailingAnchor, -SignUpLayout.horizontalInset).0
-            .height(SignUpLayout.textFieldHeight)
+            .top(dividerLabel.bottomAnchor, AppLayout.largeSpacing.value).0
+            .leading(view.leadingAnchor, AppLayout.spacing.value).0
+            .trailing(view.trailingAnchor, -AppLayout.spacing.value).0
+            .height(AppLayout.textFieldHeight.value)
 
         emailTextField
-            .top(accountTextField.bottomAnchor, SignUpLayout.textFieldSpacing).0
-            .leading(view.leadingAnchor, SignUpLayout.horizontalInset).0
-            .trailing(view.trailingAnchor, -SignUpLayout.horizontalInset).0
-            .height(SignUpLayout.textFieldHeight)
+            .top(accountTextField.bottomAnchor, AppLayout.spacing.value).0
+            .leading(view.leadingAnchor, AppLayout.spacing.value).0
+            .trailing(view.trailingAnchor, -AppLayout.spacing.value).0
+            .height(AppLayout.textFieldHeight.value)
 
         passwordTextField
-            .top(emailTextField.bottomAnchor, SignUpLayout.textFieldSpacing).0
-            .leading(view.leadingAnchor, SignUpLayout.horizontalInset).0
-            .trailing(view.trailingAnchor, -SignUpLayout.horizontalInset).0
-            .height(SignUpLayout.textFieldHeight)
+            .top(emailTextField.bottomAnchor, AppLayout.spacing.value).0
+            .leading(view.leadingAnchor, AppLayout.spacing.value).0
+            .trailing(view.trailingAnchor, -AppLayout.spacing.value).0
+            .height(AppLayout.textFieldHeight.value)
 
         privacyStackView
-            .top(passwordTextField.bottomAnchor, SignUpLayout.privacyStackTopSpacing).0
-            .leading(view.leadingAnchor, SignUpLayout.horizontalInset).0
-            .trailing(view.trailingAnchor, -SignUpLayout.horizontalInset).0
-            .height(SignUpLayout.privacyStackHeight)
+            .top(passwordTextField.bottomAnchor, AppLayout.spacing.value).0
+            .leading(view.leadingAnchor, AppLayout.spacing.value).0
+            .trailing(view.trailingAnchor, -AppLayout.spacing.value).0
+            .height(AppLayout.xLargeSpacing.value)
 
         getStartedButton
-            .bottom(view.safeAreaLayoutGuide.bottomAnchor, SignUpLayout.getStartedBottomInset).0
-            .leading(view.leadingAnchor, SignUpLayout.horizontalInset).0
-            .trailing(view.trailingAnchor, -SignUpLayout.horizontalInset).0
-            .height(SignUpLayout.getStartedHeight)
+            .bottom(view.safeAreaLayoutGuide.bottomAnchor, AppLayout.bottomInset.value).0
+            .leading(view.leadingAnchor, AppLayout.spacing.value).0
+            .trailing(view.trailingAnchor, -AppLayout.spacing.value).0
+            .height(AppLayout.textFieldHeight.value)
     }
 
-    
-    private func getStartedTapped() {
-          guard privacyCheckbox.isSelected else {return}
-          guard isValidEmail(emailTextField.text) else {
-              emailTextField.layer.borderColor = AssetColors.errorColor.color.cgColor
-              return
-          }
-          emailTextField.layer.borderColor = UIColor.clear.cgColor
-        coordinator?.getStarted(name : accountTextField.text)
-      }
-   
-      @objc private func togglePasswordVisibility() {
-          isPasswordVisible.toggle()
-          passwordTextField.textField.isSecureTextEntry = !isPasswordVisible
-          eyeButton.alpha = isPasswordVisible ? 1.0 : 0.5
-      }
-   
-      @objc private func checkboxTapped() {
-          privacyCheckbox.isSelected.toggle()
-      }
-   
+    private func setupEmailValidation() {
+        emailTextField.textField.addTarget(self, action: #selector(emailChanged), for: .editingChanged)
+        let container = UIView(frame: CGRect(x: 0, y: 0, width: 45, height: 30))
+        emailCheckButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        container.addSubview(emailCheckButton)
+        emailTextField.textField.rightView = container
+        emailTextField.textField.rightViewMode = .always
+    }
     @objc private func emailChanged() {
         let email = emailTextField.text
         guard !email.isEmpty else {
@@ -249,9 +226,30 @@ final class SignUpViewController: UIViewController {
             emailTextField.layer.borderColor = AssetColors.errorColor.color.cgColor
         }
     }
-   
-      private func isValidEmail(_ email: String) -> Bool {
-          let pattern = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-          return NSPredicate(format: "SELF MATCHES %@", pattern).evaluate(with: email)
-      }
-  }
+    private func getStartedTapped() {
+        guard privacyCheckbox.isSelected else { return }
+        guard isValidEmail(emailTextField.text) else {
+            emailTextField.layer.borderColor = AssetColors.errorColor.color.cgColor
+            return
+        }
+        emailTextField.layer.borderColor = UIColor.clear.cgColor
+        coordinator?.getStarted(name: accountTextField.text)
+    }
+
+    @objc private func togglePasswordVisibility() {
+        isPasswordVisible.toggle()
+        passwordTextField.textField.isSecureTextEntry = !isPasswordVisible
+        eyeButton.alpha = isPasswordVisible ? 1.0 : 0.5
+    }
+
+    @objc private func checkboxTapped() {
+        privacyCheckbox.isSelected.toggle()
+    }
+
+    
+
+    private func isValidEmail(_ email: String) -> Bool {
+        let pattern = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        return NSPredicate(format: "SELF MATCHES %@", pattern).evaluate(with: email)
+    }
+}

@@ -2,26 +2,37 @@
 //  ChooseTopicModels.swift
 //  SilentMoon
 //
-//  Created by Kerimov Qehreman on 01.07.26.
-//
-
+//  Created by Kerimov Qehreman on 30.06.26.
 import UIKit
 
-struct ChooseTopicModel{
-    var pageController : UIImage?
-    var title : String
-    
-}
-extension ChooseTopicModel {
-    static let topics : [ChooseTopicModel] = [
-        ChooseTopicModel(pageController: UIImage(named: "stress"), title: "Reduce Stress"),
-        ChooseTopicModel(pageController: UIImage(named: "improve"), title: "Improve Performance"),
-        ChooseTopicModel(pageController: UIImage(named: "happiness"), title: "Increase Happiness"),
-        ChooseTopicModel(pageController: UIImage(named: "anxiety"), title: "Reduce Anxiety"),
-        ChooseTopicModel(pageController: UIImage(named: "growth"), title: "Personal Growth"),
-        ChooseTopicModel(pageController: UIImage(named: "sleepy"), title: "Better Sleep"),
-        ChooseTopicModel(pageController: UIImage(named: ""), title: " "),
 
-        
+enum TopicImage: String {
+    case stress      = "stress"
+    case improve     = "improve"
+    case happiness   = "happiness"
+    case anxiety     = "anxiety"
+    case growth      = "growth"
+    case sleepy      = "sleepy"
+    case mindfulness = "mindfulness"
+
+    var image: UIImage? {
+        UIImage(named: rawValue)
+    }
+}
+
+
+
+struct ChooseTopicModel {
+    let image: TopicImage
+    let title: String
+
+    static let all: [ChooseTopicModel] = [
+        ChooseTopicModel(image: .stress,      title: "Reduce Stress"),
+        ChooseTopicModel(image: .improve,     title: "Improve Performance"),
+        ChooseTopicModel(image: .happiness,   title: "Increase Happiness"),
+        ChooseTopicModel(image: .anxiety,     title: "Reduce Anxiety"),
+        ChooseTopicModel(image: .growth,      title: "Personal Growth"),
+        ChooseTopicModel(image: .sleepy,      title: "Better Sleep"),
+        ChooseTopicModel(image: .mindfulness, title: "Mindfulness")
     ]
 }

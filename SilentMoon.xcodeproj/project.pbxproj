@@ -34,11 +34,6 @@
 			path = ControllerViewList;
 			sourceTree = "<group>";
 		};
-		F26071F12FEEDE5D00F5F017 /* MainController */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = MainController;
-			sourceTree = "<group>";
-		};
 		F26071F52FEEDE6300F5F017 /* CoordinatorView */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = CoordinatorView;
@@ -57,11 +52,6 @@
 		F2CC69712FF3FDA000A76DC5 /* TabbarControllerView */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = TabbarControllerView;
-			sourceTree = "<group>";
-		};
-		F2CC69792FF50B9D00A76DC5 /* LayoutFolder */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = LayoutFolder;
 			sourceTree = "<group>";
 		};
 		F2CC6A042FF58FC500A76DC5 /* ViewControllerModels */ = {
@@ -92,12 +82,10 @@
 			children = (
 				F2CC6A082FF5903200A76DC5 /* CollectionCell */,
 				F2CC6A042FF58FC500A76DC5 /* ViewControllerModels */,
-				F2CC69792FF50B9D00A76DC5 /* LayoutFolder */,
 				F2CC69712FF3FDA000A76DC5 /* TabbarControllerView */,
 				F26071FE2FEEDE7100F5F017 /* Resuable */,
 				F26071F92FEEDE6A00F5F017 /* Utils */,
 				F26071F52FEEDE6300F5F017 /* CoordinatorView */,
-				F26071F12FEEDE5D00F5F017 /* MainController */,
 				F26071EC2FEEDE4F00F5F017 /* ControllerViewList */,
 				F218C93B2FED5734002251F7 /* SilentMoon */,
 				F218C93A2FED5734002251F7 /* Products */,
@@ -130,12 +118,10 @@
 			fileSystemSynchronizedGroups = (
 				F218C93B2FED5734002251F7 /* SilentMoon */,
 				F26071EC2FEEDE4F00F5F017 /* ControllerViewList */,
-				F26071F12FEEDE5D00F5F017 /* MainController */,
 				F26071F52FEEDE6300F5F017 /* CoordinatorView */,
 				F26071F92FEEDE6A00F5F017 /* Utils */,
 				F26071FE2FEEDE7100F5F017 /* Resuable */,
 				F2CC69712FF3FDA000A76DC5 /* TabbarControllerView */,
-				F2CC69792FF50B9D00A76DC5 /* LayoutFolder */,
 				F2CC6A042FF58FC500A76DC5 /* ViewControllerModels */,
 				F2CC6A082FF5903200A76DC5 /* CollectionCell */,
 			);

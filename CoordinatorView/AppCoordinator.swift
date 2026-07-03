@@ -12,7 +12,7 @@ final class AppCoordinator: Coordinator {
 
     var childCoordinators: [Coordinator] = []
     var navigationController: UINavigationController
-    private var window = UIWindow()
+    var window = UIWindow()
     
     init(navigationController: UINavigationController , window : UIWindow) {
         self.navigationController = navigationController
