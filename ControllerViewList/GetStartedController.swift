@@ -157,6 +157,6 @@ final class GetStartedController: UIViewController {
     }
         
     @objc private func getStartedTapped() {
-        coordinator?.showChooseTopic()
+        coordinator?.showTopics()
     }
 }

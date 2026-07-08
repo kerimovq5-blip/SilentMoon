@@ -16,7 +16,7 @@ enum TopicImage: String {
     case mindfulness = "mindfulness"
 
     var image: UIImage? {
-        UIImage(named: rawValue)
+       nil
     }
 }
 
@@ -25,14 +25,20 @@ enum TopicImage: String {
 struct ChooseTopicModel {
     let image: TopicImage
     let title: String
+    let color : UIColor?
 
     static let all: [ChooseTopicModel] = [
-        ChooseTopicModel(image: .stress,      title: "Reduce Stress"),
-        ChooseTopicModel(image: .improve,     title: "Improve Performance"),
-        ChooseTopicModel(image: .happiness,   title: "Increase Happiness"),
-        ChooseTopicModel(image: .anxiety,     title: "Reduce Anxiety"),
-        ChooseTopicModel(image: .growth,      title: "Personal Growth"),
-        ChooseTopicModel(image: .sleepy,      title: "Better Sleep"),
-        ChooseTopicModel(image: .mindfulness, title: "Mindfulness")
+        ChooseTopicModel(
+            image: .stress,
+            title: "Reduce Stress" ,
+            color : .colorIndigo
+        ),
+        ChooseTopicModel(image: .improve,     title: "Improve Performance" , color : .colorIndigo),
+        ChooseTopicModel(image: .happiness,   title: "Increase Happiness", color : .colorIndigo),
+        ChooseTopicModel(image: .anxiety,     title: "Reduce Anxiety" , color : .colorIndigo),
+        ChooseTopicModel(image: .growth,      title: "Personal Growth", color : .colorIndigo),
+        ChooseTopicModel(image: .sleepy,      title: "Better Sleep" , color : .colorIndigo),
+        ChooseTopicModel(image: .mindfulness, title: "Mindfulness" , color : .colorIndigo)
     ]
 }
+

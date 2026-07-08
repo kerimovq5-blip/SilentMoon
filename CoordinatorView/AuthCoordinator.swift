@@ -37,8 +37,9 @@ final class AuthCoordinator: Coordinator {
         controller.coordinator = self
         navigationController.pushViewController(controller, animated: true)
     }
-    func showChooseTopic() {
-        let controller = ChooseTopicViewController()
+    
+    func showReminder() {
+        let controller = ReminderViewController()
         controller.coordinator = self
         navigationController.pushViewController(controller, animated: true)
     }

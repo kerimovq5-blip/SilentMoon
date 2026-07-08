@@ -7,12 +7,17 @@
 import UIKit
 
 final class ChooseCollectionCell: UICollectionViewCell {
-
+    
+    
     private lazy var topicImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 16
+        imageView.backgroundColor = .colorIndigo
+        imageView.isUserInteractionEnabled = true
+        
+        
         return imageView
     }()
 
@@ -21,6 +26,7 @@ final class ChooseCollectionCell: UICollectionViewCell {
         label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         label.textColor = .white
         label.numberOfLines = 0
+        
         return label
     }()
 
@@ -60,8 +66,10 @@ final class ChooseCollectionCell: UICollectionViewCell {
 
     
 
-     func configure(model: ChooseTopicModel) {
-        topicImageView.image = model.image.image
-        titleLabel.text = model.title
+    func configure(model: ChooseTopicModel) {
+            topicImageView.image = model.image.image
+     titleLabel.text = model.title
     }
+    
+    
 }

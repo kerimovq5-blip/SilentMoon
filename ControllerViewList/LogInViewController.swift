@@ -55,10 +55,8 @@ final class LogInViewController: UIViewController {
         return label
     }()
 
-    private lazy var emailCheckButton: UIButton = {
-        let button = UIButton(type: .custom)
-        button.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
-        return button
+    private lazy var emailValidation: FieldValidationController = {
+        .email(fieldController: emailTextField)
     }()
 
     private lazy var emailTextField: AppTextFieldController = {
@@ -143,7 +141,7 @@ final class LogInViewController: UIViewController {
         super.viewDidLoad()
         setupHierarchy()
         setupLayout()
-        setupEmailValidation()
+        _ = emailValidation
         configureKeyboardHandling()
         let tapgesture = UITapGestureRecognizer(
             target: self, action: #selector(dismissKeyboard))
@@ -233,22 +231,9 @@ final class LogInViewController: UIViewController {
             .height(AppLayout.xLargeSpacing.value)
     }
 
-    private func setupEmailValidation() {
-        emailTextField.textField.addTarget(self, action: #selector(emailChanged), for: .editingChanged)
-        let container = UIView(frame: CGRect(x: 0, y: 0, width: 45, height: 30))
-        emailCheckButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
-        container.addSubview(emailCheckButton)
-        emailTextField.textField.rightView = container
-        emailTextField.textField.rightViewMode = .always
-    }
-
-
     private func logInTapped() {
-        guard isValidEmail(emailTextField.text) else {
-            emailTextField.layer.borderColor = AssetColors.errorColor.color.cgColor
-            return
-        }
-        emailTextField.layer.borderColor = UIColor.clear.cgColor
+        emailValidation.markSubmitAttempt()
+        guard emailValidation.isValid else { return }
         coordinator?.finishAuth()
     }
 
@@ -259,34 +244,10 @@ final class LogInViewController: UIViewController {
 //    @objc private func forgotPasswordTapped() {
 //    }
 
-    @objc private func emailChanged() {
-        let email = emailTextField.text
-        guard !email.isEmpty else {
-            emailCheckButton.setImage(nil, for: .normal)
-            emailTextField.layer.borderColor = AssetColors.lightGray.color.cgColor
-            return
-        }
-        if isValidEmail(email) {
-            emailCheckButton.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
-            emailCheckButton.tintColor = .systemGreen
-            emailTextField.layer.borderColor = AssetColors.lightGray.color.cgColor
-        } else {
-            emailCheckButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
-            emailCheckButton.tintColor = AssetColors.errorColor.color
-            emailTextField.layer.borderColor = AssetColors.errorColor.color.cgColor
-        }
-    }
-
     @objc private func togglePasswordVisibility() {
         isPasswordVisible.toggle()
         passwordTextField.textField.isSecureTextEntry = !isPasswordVisible
         eyeButton.alpha = isPasswordVisible ? 1.0 : 0.5
-    }
-
-
-    private func isValidEmail(_ email: String) -> Bool {
-        let pattern = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-        return NSPredicate(format: "SELF MATCHES %@", pattern).evaluate(with: email)
     }
 
     @objc private func keyboardWillShow(notification: NSNotification) {

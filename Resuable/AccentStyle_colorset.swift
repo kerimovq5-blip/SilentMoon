@@ -46,6 +46,7 @@ extension UIColor  {
 enum AppStyle {
     enum AppFonts {
         static let title = UIFont.systemFont(ofSize: 30, weight: .bold)
+        static let titleBold = UIFont.systemFont(ofSize: 24, weight: .bold)
         static let titleregular = UIFont.systemFont(ofSize: 28, weight: .regular)
         static let body = UIFont.systemFont(ofSize: 16, weight: .regular)
         

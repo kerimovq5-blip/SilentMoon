@@ -1,12 +1,18 @@
 import UIKit
 
 final class ChooseTopicViewController: UIViewController {
-
+    private let topicItemHeight: CGFloat = 260
+    
      var coordinator: AuthCoordinator?
     private let topics = ChooseTopicModel.all
 
-    private let topicItemHeight: CGFloat = 260
-
+    
+    private lazy var unionview :UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "Union")?.withRenderingMode(.alwaysOriginal)
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         let attributed = NSMutableAttributedString(
@@ -51,6 +57,8 @@ final class ChooseTopicViewController: UIViewController {
             ChooseCollectionCell.self,
             forCellWithReuseIdentifier: "cell"
         )
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapImage))
+        controller.addGestureRecognizer(tapGesture)
         return controller
     }()
 
@@ -69,6 +77,7 @@ final class ChooseTopicViewController: UIViewController {
         view.addSubviews(
             titleLabel,
             subtitleLabel,
+            unionview ,
            collectionView
         )
     }
@@ -85,6 +94,10 @@ final class ChooseTopicViewController: UIViewController {
                 .leading(view.leadingAnchor, AppLayout.spacing.value).0
                 .trailing(view.trailingAnchor, -AppLayout.spacing.value)
                 
+        unionview
+            .top(subtitleLabel.bottomAnchor , AppLayout.spacing.value).0
+            .leading(view.leadingAnchor).0
+            .trailing(view.trailingAnchor)
 
             collectionView
                 .top(subtitleLabel.bottomAnchor, AppLayout.largeSpacing.value).0
@@ -92,6 +105,9 @@ final class ChooseTopicViewController: UIViewController {
                 .trailing(view.trailingAnchor).0
                 .bottom(view.safeAreaLayoutGuide.bottomAnchor)
         }
+    @objc private func didTapImage() {
+        coordinator?.showReminder()
+    }
 }
 
 extension ChooseTopicViewController: UICollectionViewDataSource {
@@ -131,11 +147,7 @@ extension ChooseTopicViewController: UICollectionViewDelegateFlowLayout {
        AppLayout.spacing.value
    }
 
-   func collectionView(_ collectionView: UICollectionView,
-                       layout collectionViewLayout: UICollectionViewLayout,
-                       minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-       AppLayout.spacing.value
-   }
+  
 
    func collectionView(_ collectionView: UICollectionView,
                        layout collectionViewLayout: UICollectionViewLayout,
