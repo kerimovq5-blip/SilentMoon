@@ -25,10 +25,14 @@ final class MainTabBarCoordinator: Coordinator {
     func start() {
         
         let homeNavigation = UINavigationController()
-        homeNavigation.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), tag: 0)
+        homeNavigation.tabBarItem = UITabBarItem(
+            title: "Home",
+            image: UIImage(systemName: "house"), tag: 0)
+        
+        homeNavigation.tabBarItem.badgeColor = .systemRed
         let homeViewCotroller = UIViewController()
         homeViewCotroller.view.backgroundColor = .white
-        homeNavigation.viewControllers = [homeViewCotroller]
+        homeNavigation.viewControllers = [HomeViewController(userName: "")]
         
         
         let meditateNavigation = UINavigationController()
@@ -62,7 +66,7 @@ final class MainTabBarCoordinator: Coordinator {
             musicNavigation,
             accountNavigation
         ]
-        
+       
         
         window.rootViewController = tabBarController
         UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil, completion: nil)

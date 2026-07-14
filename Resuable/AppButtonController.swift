@@ -7,7 +7,7 @@ final class AppButton: UIView {
     private enum Layout {
         static let imageSpacing: CGFloat = 8
         static let borderWidth: CGFloat = 1
-        static let cornerRadius = AppStyle.AppRaduis.buttonRadius
+        static let cornerRadius = AppFonts.AppRaduis.buttonRadius
     }
 
     private lazy var mainButton: UIButton = {
@@ -63,7 +63,7 @@ final class AppButton: UIView {
         config.background.cornerRadius = Layout.cornerRadius
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { container in
             var c = container
-            c.font = AppStyle.AppFonts.body
+            c.font = AppFonts.body.font
             return c
         }
 

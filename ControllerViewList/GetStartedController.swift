@@ -10,7 +10,7 @@ final class GetStartedController: UIViewController {
         
         let silent = NSAttributedString(
             string: "Silent ",
-            attributes: [.font: AppStyle.AppFonts.body ,
+            attributes: [.font: AppFonts.body.font ,
                          .foregroundColor: AssetColors.buttonTitle.color]
         )
         
@@ -22,7 +22,7 @@ final class GetStartedController: UIViewController {
         
         let moon = NSAttributedString(
             string: " Moon",
-            attributes: [.font: AppStyle.AppFonts.body,
+            attributes: [.font: AppFonts.body.font,
                          .foregroundColor: AssetColors.buttonTitle.color]
         )
         
@@ -42,7 +42,7 @@ final class GetStartedController: UIViewController {
             string: "Explore the app, Find some peace of mind to prepare for meditation.",
             attributes: [
                 .foregroundColor: AssetColors.buttonTitle.color,
-                .font: AppStyle.AppFonts.body
+                .font: AppFonts.body.font
             ]
         )
         
@@ -88,14 +88,14 @@ final class GetStartedController: UIViewController {
         let hi = NSAttributedString(
             string: "Hi \(userName),\n",
             attributes: [
-                .font: AppStyle.AppFonts.title,
+                .font: AppFonts.title.font,
                 .foregroundColor: UIColor.white
             ]
         )
         let welcome = NSAttributedString(
             string: "Welcome to Silent Moon",
             attributes: [
-                .font: AppStyle.AppFonts.titleregular,
+                .font: AppFonts.titleRegular.font,
                 .foregroundColor: UIColor.white
             ]
         )

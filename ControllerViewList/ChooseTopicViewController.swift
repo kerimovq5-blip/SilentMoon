@@ -19,14 +19,14 @@ final class ChooseTopicViewController: UIViewController {
             string: "What Brings you",
             attributes: [
                 .foregroundColor: AssetColors.textPrimary.color,
-                .font: AppStyle.AppFonts.title
+                .font: AppFonts.title.font
             ]
         )
         attributed.append(NSAttributedString(
             string: "\nto Silent Moon?",
             attributes: [
                 .foregroundColor: AssetColors.textPrimary.color,
-                .font: AppStyle.AppFonts.titleregular
+                .font: AppFonts.titleRegular.font
             ]
         ))
         label.attributedText = attributed
@@ -38,7 +38,7 @@ final class ChooseTopicViewController: UIViewController {
     private lazy var subtitleLabel: UILabel = {
         let label = UILabel()
         label.text = "Choose a topic to focus on:"
-        label.font = AppStyle.AppFonts.body
+        label.font = AppFonts.body.font
         label.textColor = AssetColors.textSecondary.color
         label.textAlignment = .left
         return label

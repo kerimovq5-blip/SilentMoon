@@ -20,7 +20,7 @@ final class SignUpViewController: UIViewController {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Create your account"
-        label.font = AppStyle.AppFonts.title.withSize(28)
+        label.font = AppFonts.title.font.withSize(28)
         label.textColor = .textPrimary
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -51,7 +51,7 @@ final class SignUpViewController: UIViewController {
     private lazy var dividerLabel: UILabel = {
         let label = UILabel()
         label.text = "OR SIGN UP WITH EMAIL"
-        label.font = AppStyle.AppFonts.body
+        label.font = AppFonts.body.font
         label.textColor = .textSecondary
         label.textAlignment = .center
         return label
@@ -109,14 +109,16 @@ final class SignUpViewController: UIViewController {
         label.numberOfLines = 0
         let text = NSMutableAttributedString(
             string: "I have read the ",
-            attributes: [.foregroundColor: AssetColors.textSecondary.color, .font: AppStyle.AppFonts.body]
+            attributes: [
+                .foregroundColor: AssetColors.textSecondary.color,
+                .font: AppFonts.body.font]
         )
         text.append(
 NSAttributedString(
             string: "Privacy Policy",
             attributes: [
                 .foregroundColor: AssetColors.accent.color,
-                .font: AppStyle.AppFonts.body
+                .font: AppFonts.body.font
             ]
         )
 )

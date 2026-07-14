@@ -12,12 +12,12 @@ final class AppTextFieldController: UIView {
         static let rightContainerWidth: CGFloat = 45
         static let rightContainerHeight: CGFloat = 30
         static let rightButtonSize: CGFloat = 30
-        static let cornerRadius = AppStyle.AppRaduis.buttonRadiusSmall
+        static let cornerRadius = AppFonts.AppRaduis.buttonRadiusSmall
     }
     
     private lazy var mainTextField: UITextField = {
         let textField = UITextField()
-        textField.font = AppStyle.AppFonts.body.withSize(Layout.fontSize)
+        textField.font = AppFonts.body.font.withSize(Layout.fontSize)
         textField.layer.cornerRadius = Layout.cornerRadius
         textField.clipsToBounds = true
         return textField

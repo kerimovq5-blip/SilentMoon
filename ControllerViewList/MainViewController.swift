@@ -10,7 +10,7 @@ final class ViewController: UIViewController {
         
         let silent = NSAttributedString(
             string: "S i l e n t ",
-            attributes: [.font: AppStyle.AppFonts.body]
+            attributes: [.font: AppFonts.body.font]
         )
         
         let attachment = NSTextAttachment()
@@ -21,7 +21,7 @@ final class ViewController: UIViewController {
         
         let moon = NSAttributedString(
             string: " M o o n",
-            attributes: [.font: AppStyle.AppFonts.body]
+            attributes: [.font: AppFonts.body.font]
         )
         
         let full = NSMutableAttributedString()
@@ -54,14 +54,14 @@ final class ViewController: UIViewController {
             string: "We are what we do  ",
             attributes: [
                 .foregroundColor: AssetColors.textPrimary.color,
-                .font: AppStyle.AppFonts.title
+                .font: AppFonts.title.font
             ]
         )
         attributed.append(NSAttributedString(
             string: "\n\nThousands of people are using Silent Moon\nfor daily meditation",
             attributes: [
                 .foregroundColor: AssetColors.textSecondary.color,
-                .font: AppStyle.AppFonts.body
+                .font: AppFonts.body.font
             ]
         ))
         label.attributedText = attributed
@@ -82,14 +82,14 @@ final class ViewController: UIViewController {
             string: "ALREADY HAVE AN ACCOUNT? ",
             attributes: [
                 .foregroundColor: AssetColors.textSecondary.color,
-                .font: AppStyle.AppFonts.body
+                .font: AppFonts.body.font
             ]
         )
         attributed.append(NSAttributedString(
             string: "LOG IN",
             attributes: [
                 .foregroundColor: AssetColors.accent.color,
-                .font: AppStyle.AppFonts.body
+                .font: AppFonts.body.font
             ]
         ))
         button.setAttributedTitle(attributed, for: .normal)
@@ -113,7 +113,8 @@ final class ViewController: UIViewController {
                          silentMoonView,
                          descriptionLabel,
                          signUpButton,
-                         logInButton)
+                         logInButton
+        )
     }
     
     private func setupLayout() {

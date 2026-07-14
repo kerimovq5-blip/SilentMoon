@@ -19,7 +19,7 @@ final class LogInViewController: UIViewController {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Welcome Back!"
-        label.font = AppStyle.AppFonts.title
+        label.font = AppFonts.title.font
         label.textColor = .textPrimary
         label.textAlignment = .center
         return label
@@ -49,7 +49,7 @@ final class LogInViewController: UIViewController {
     private lazy var dividerLabel: UILabel = {
         let label = UILabel()
         label.text = "OR LOG IN WITH EMAIL"
-        label.font = AppStyle.AppFonts.body
+        label.font = AppFonts.body.font
         label.textColor = .textSecondary
         label.textAlignment = .center
         return label
@@ -96,7 +96,7 @@ final class LogInViewController: UIViewController {
     private lazy var forgotLabel: UILabel = {
         let label = UILabel()
         label.text = "Forgot Password?"
-        label.font = AppStyle.AppFonts.body
+        label.font = AppFonts.body.font
         label.textColor = .textPrimary
         label.textAlignment = .center
         label.isUserInteractionEnabled = true
@@ -107,11 +107,17 @@ final class LogInViewController: UIViewController {
         let button = UIButton()
         let attributed = NSMutableAttributedString(
             string: "DON'T HAVE AN ACCOUNT? ",
-            attributes: [.foregroundColor: AssetColors.textSecondary.color, .font: AppStyle.AppFonts.body]
+            attributes: [
+                .foregroundColor: AssetColors.textSecondary.color,
+                .font: AppFonts.body.font
+            ]
         )
         attributed.append(NSAttributedString(
             string: "SIGN UP",
-            attributes: [.foregroundColor: AssetColors.accent.color, .font: AppStyle.AppFonts.body]
+            attributes: [
+                .foregroundColor: AssetColors.accent.color,
+                .font: AppFonts.body.font
+            ]
         ))
         button.setAttributedTitle(attributed, for: .normal)
         button.addTarget(self, action: #selector(signUpTapped), for: .touchUpInside)
@@ -291,7 +297,11 @@ final class LogInViewController: UIViewController {
         else { return }
 
         let fieldFrame = activeField.convert(activeField.bounds, to: scrollView)
-        scrollView.scrollRectToVisible(fieldFrame.insetBy(dx: 0, dy: -AppLayout.spacing.value), animated: true)
+        scrollView
+            .scrollRectToVisible(
+                fieldFrame.insetBy(dx: 0, dy: -AppLayout.largeSpacing.value),
+                animated: true
+            )
     }
 
     @objc private func dismissKeyboard() {
