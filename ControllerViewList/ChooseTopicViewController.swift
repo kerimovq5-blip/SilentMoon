@@ -95,7 +95,7 @@ final class ChooseTopicViewController: UIViewController {
                 .trailing(view.trailingAnchor, -AppLayout.spacing.value)
                 
         unionview
-            .top(subtitleLabel.bottomAnchor , AppLayout.spacing.value).0
+            .top(titleLabel.bottomAnchor ).0
             .leading(view.leadingAnchor).0
             .trailing(view.trailingAnchor)
 
@@ -155,7 +155,7 @@ extension ChooseTopicViewController: UICollectionViewDelegateFlowLayout {
        UIEdgeInsets(
            top: 0,
            left: AppLayout.spacing.value,
-           bottom: 0,
+           bottom: AppLayout.spacing.value,
            right: AppLayout.spacing.value
        )
    }

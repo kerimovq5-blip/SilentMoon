@@ -76,9 +76,12 @@ final class HomeViewController: UIViewController {
         collection.showsVerticalScrollIndicator = false
         collection.dataSource = self
         collection.delegate = self
-        collection.register(CoursesCardCell.self, forCellWithReuseIdentifier: CoursesCardCell.identifier)
-        collection.register(DailyThoughtCell.self, forCellWithReuseIdentifier: DailyThoughtCell.identifier)
-        collection.register(RecomendedCell.self, forCellWithReuseIdentifier: RecomendedCell.identifier)
+        collection.register(
+            CoursesCardCell.self, forCellWithReuseIdentifier: CoursesCardCell.identifier)
+        collection.register(
+            DailyThoughtCell.self, forCellWithReuseIdentifier: DailyThoughtCell.identifier)
+        collection.register(
+            RecomendedCell.self, forCellWithReuseIdentifier: RecomendedCell.identifier)
         collection.register(
             SectionHeaderCell.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
@@ -208,12 +211,12 @@ final class HomeViewController: UIViewController {
             )
         )
         let group = NSCollectionLayoutGroup.horizontal(
-            layoutSize: NSCollectionLayoutSize(
-                widthDimension: .absolute(165),
-                heightDimension: .absolute(115)
-            ),
-            subitems: [item]
-        )
+                layoutSize: NSCollectionLayoutSize(
+                    widthDimension: .absolute(165),
+                    heightDimension: .absolute(160)
+                ),
+                subitems: [item]
+            )
         group.interItemSpacing = .fixed(AppLayout.spacing.value)
    
         let section = NSCollectionLayoutSection(group: group)
@@ -222,7 +225,7 @@ final class HomeViewController: UIViewController {
         section.contentInsets = NSDirectionalEdgeInsets(
             top: 0,
             leading: AppLayout.spacing.value,
-            bottom: AppLayout.spacing.value,
+            bottom: 0 ,
             trailing: AppLayout.spacing.value
         )
    
