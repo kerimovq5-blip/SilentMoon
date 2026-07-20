@@ -233,7 +233,7 @@ extension MeditateViewController: UICollectionViewDelegateFlowLayout {
     ) -> CGSize {
         if collectionView == sectionCollectionView {
             let collectionViewWidth = collectionView.bounds.width
-            let sectionWidth = collectionViewWidth * 0.20
+            let sectionWidth = collectionViewWidth * 0.16
             let sectionHeight : CGFloat = 100
 
             return CGSizeMake( sectionWidth, sectionHeight)
@@ -251,9 +251,11 @@ extension MeditateViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         minimumInteritemSpacingForSectionAt section: Int
     ) -> CGFloat {
-   AppLayout.spacing.value 
+   AppLayout.spacing.value
     }
-
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        AppLayout.spacing.value
+    }
    
 
     func collectionView(
