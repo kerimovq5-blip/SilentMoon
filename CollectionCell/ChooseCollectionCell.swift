@@ -71,5 +71,9 @@ final class ChooseCollectionCell: UICollectionViewCell {
      titleLabel.text = model.title
     }
     
-    
+    func configure(data: MeditateCollectionModels) {
+          topicImageView.image = data.image
+          topicImageView.backgroundColor = data.viewColor ?? .colorIndigo
+          titleLabel.text = data.title
+      }
 }

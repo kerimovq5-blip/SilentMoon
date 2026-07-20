@@ -27,6 +27,7 @@ struct DailyThoughtItem {
     let title: String
     let description: String
     let image: UIImage?
+    let backgroundColor: UIColor?
     let isSelected: Bool
 }
 
@@ -65,9 +66,10 @@ extension CoursesCardItem {
 extension DailyThoughtItem {
     static let mockData: [DailyThoughtItem] = [
         DailyThoughtItem(
-            title: "",
-            description: "",
+            title: "Daily Thought",
+            description: "Meditation • 3-10 min",
             image: nil,
+            backgroundColor: nil,
             isSelected: false
         )
     ]

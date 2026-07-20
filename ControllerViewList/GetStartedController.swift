@@ -106,6 +106,21 @@ final class GetStartedController: UIViewController {
         return label
     }
     
+    private lazy var logOutView : UIImageView = {
+        let view = UIImageView()
+        
+        
+        view.image = UIImage(named: "LogOut")
+        
+        view.contentMode = .center
+      
+        view.layer.cornerRadius = AppFonts.AppRaduis.buttonRadius
+        view.clipsToBounds = true
+        view.isUserInteractionEnabled = true
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(logOutTapped))
+        view.addGestureRecognizer(tapGesture)
+        return view
+    }()
     private func setupHierarchy() {
         view.backgroundColor = .colorIndigo
         let welcomeLabel = makeWelcomeLabel()
@@ -115,7 +130,8 @@ final class GetStartedController: UIViewController {
                 logoLabel,
                 descriptionLabel,
                 welcomeLabel,
-                getStartedButton
+                getStartedButton,
+                logOutView
             )
         
         welcomeLabel
@@ -127,11 +143,16 @@ final class GetStartedController: UIViewController {
     
     private func setupLayout() {
         
-        
         logoLabel
             .bottom(view.safeAreaLayoutGuide.topAnchor).0
             .centerX(view.centerXAnchor).0
-            .height(50)
+            .height(AppLayout.buttonHeight2.value)
+        
+        logOutView
+            .centerY(logoLabel.topAnchor , AppLayout.spacing.value).0
+            .trailing(view.trailingAnchor, -AppLayout.spacing.value).0
+            .height(AppLayout.buttonHeight.value).0
+            .width(AppLayout.buttonHeight.value)
         
         descriptionLabel
             .bottom(frameImageGroup.topAnchor , -AppLayout.largeSpacing.value).0
@@ -154,8 +175,14 @@ final class GetStartedController: UIViewController {
             .leading(view.leadingAnchor, AppLayout.spacing.value).0
             .trailing(view.trailingAnchor, -AppLayout.spacing.value).0
             .height(AppLayout.textFieldHeight.value)
-    }
         
+        
+        
+    }
+    @objc private func logOutTapped() {
+        coordinator?.backToMain()
+    }
+    
     @objc private func getStartedTapped() {
         coordinator?.showTopics()
     }

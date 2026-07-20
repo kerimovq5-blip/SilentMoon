@@ -6,7 +6,7 @@
 import UIKit
 
 final class CoursesCardCell: UICollectionViewCell {
-
+    var onStartTapped: (() -> Void)?
     static let identifier = "CoursesCardCell"
 
     private lazy var illustrationView: UIImageView = {
@@ -42,7 +42,7 @@ final class CoursesCardCell: UICollectionViewCell {
         button.titleLabel?.font = AppFonts.litletitle.font
         button.layer.cornerRadius = AppFonts.AppRaduis.buttonRadiusSmall
         button.titleLabel?.textAlignment = .center
-        button.isUserInteractionEnabled = false
+        button.addTarget(self, action: #selector(didTapStartButton), for: .touchUpInside)
         return button
     }()
 
@@ -102,6 +102,9 @@ final class CoursesCardCell: UICollectionViewCell {
             .top(titleLabel.bottomAnchor, 2).0
             .leading(contentView.leadingAnchor, AppLayout.spacing.value).0
             .trailing(contentView.trailingAnchor, -AppLayout.spacing.value)
+    }
+    @objc private func didTapStartButton() {
+        onStartTapped?()
     }
 
     func configure(with item: CoursesCardItem) {

@@ -12,6 +12,8 @@ final class DailyThoughtCell: UICollectionViewCell {
 private lazy var imageView: UIImageView = {
     let imageView = UIImageView()
     imageView.contentMode = .scaleAspectFit
+    
+    imageView.backgroundColor = .dailycolor
     return imageView
     }()
     private lazy var titleLabel: UILabel = {
@@ -37,6 +39,8 @@ private lazy var imageView: UIImageView = {
         button.isUserInteractionEnabled = false
         return button
     }()
+    
+    
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -58,7 +62,8 @@ private lazy var imageView: UIImageView = {
     private func setupHierarchy() {
         contentView.clipsToBounds = true
         contentView.layer.cornerRadius = 16
-        contentView.backgroundColor = .colorIndigo
+        
+        
         contentView.addSubviews(
             imageView ,
             titleLabel,
@@ -69,7 +74,7 @@ private lazy var imageView: UIImageView = {
     private func setupLayout() {
         imageView
             .top(contentView.topAnchor).0
-            .trailing(contentView.trailingAnchor, -AppLayout.spacing.value).0
+            .trailing(contentView.trailingAnchor).0
             .bottom(contentView.bottomAnchor).0
             .leading(contentView.leadingAnchor)
         

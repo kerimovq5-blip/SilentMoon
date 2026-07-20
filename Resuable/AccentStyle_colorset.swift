@@ -29,6 +29,8 @@ enum AssetColors : String{
     case wrongColor = "WrongColor"
     case colorIndigo = "ColorIndigo"
     case datepicker = " datePicker"
+    case dailyColor = "dailycolor"
+    case sectionColor = "SectionColor"
     
     var color : UIColor {
         return UIColor(named: self.rawValue) ?? .clear
@@ -50,6 +52,7 @@ enum AppFonts {
     case titleRegular
     case body
     case litletitle
+    case semiBold
     var font: UIFont {
         switch self {
         case .title:
@@ -62,6 +65,8 @@ enum AppFonts {
             return UIFont.systemFont(ofSize: 16, weight: .regular)
         case .litletitle:
             return UIFont.systemFont(ofSize: 12, weight: .regular)
+        case .semiBold:
+            return UIFont.systemFont(ofSize: 18, weight: .semibold)
         }
     }
 
@@ -69,6 +74,7 @@ enum AppFonts {
         static let buttonRadius: CGFloat = 30
         static let buttonRadiusSmall: CGFloat = 15
         static let buttonRadiusMedium: CGFloat = 20
+        static let buttonRadiusLarge: CGFloat = 25
     }
 
 }

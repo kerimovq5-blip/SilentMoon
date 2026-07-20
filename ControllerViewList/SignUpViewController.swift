@@ -257,9 +257,9 @@ NSAttributedString(
     }
 
     private func getStartedTapped() {
-        guard isPrivacyAccepted else { return }
-        emailValidation.markSubmitAttempt()
-        guard emailValidation.isValid else { return }
+//        guard isPrivacyAccepted else { return }
+//        emailValidation.markSubmitAttempt()
+//        guard emailValidation.isValid else { return }
         coordinator?.getStarted(name: accountTextField.text)
     }
 

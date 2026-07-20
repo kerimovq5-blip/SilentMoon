@@ -147,7 +147,7 @@ final class LogInViewController: UIViewController {
         super.viewDidLoad()
         setupHierarchy()
         setupLayout()
-        _ = emailValidation
+       // _ = emailValidation
         configureKeyboardHandling()
         let tapgesture = UITapGestureRecognizer(
             target: self, action: #selector(dismissKeyboard))
@@ -237,12 +237,14 @@ final class LogInViewController: UIViewController {
             .height(AppLayout.xLargeSpacing.value)
     }
 
-    private func logInTapped() {
-        emailValidation.markSubmitAttempt()
-        guard emailValidation.isValid else { return }
-        coordinator?.finishAuth()
+//    private func logInTapped() {
+//        emailValidation.markSubmitAttempt()
+//        guard emailValidation.isValid else { return }
+//        coordinator?.finishAuth()
+//    }
+ @objc private func logInTapped() {
+    coordinator?.finishAuth()
     }
-
     @objc private func signUpTapped() {
         coordinator?.showSignUp()
     }

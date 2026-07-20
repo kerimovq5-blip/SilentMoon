@@ -14,8 +14,6 @@ protocol ReminderCellData {
 
 final class ReminderCell: UICollectionViewCell {
 
-    
-
     private lazy var weekLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center

@@ -12,26 +12,28 @@ final class RecomendedCell: UICollectionViewCell {
 
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 16
         imageView.clipsToBounds = true
+        imageView.backgroundColor = .colorIndigo
         return imageView
     }()
 
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 15, weight: .semibold)
+        label.font = .systemFont(ofSize: 18, weight: .semibold)
         label.textColor = .textPrimary
         return label
     }()
 
     private lazy var durationLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 11, weight: .regular)
+        label.font = .systemFont(ofSize: 14, weight: .regular)
         label.textColor = .textSecondary
         label.numberOfLines = 1
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.8
+        
         return label
     }()
 
@@ -53,9 +55,7 @@ final class RecomendedCell: UICollectionViewCell {
     }
 
     private func setup() {
-        contentView.clipsToBounds = true
-        contentView.layer.cornerRadius = 16
-        contentView.backgroundColor = .colorIndigo
+        
         contentView.addSubviews(
             imageView,
             titleLabel,
@@ -65,21 +65,21 @@ final class RecomendedCell: UICollectionViewCell {
 
     private func setConstraint() {
         imageView
-            .top(contentView.topAnchor).0
-            .leading(contentView.leadingAnchor).0
-            .trailing(contentView.trailingAnchor).0
-            .height(130)
+                .top(contentView.topAnchor).0
+                .leading(contentView.leadingAnchor).0
+                .trailing(contentView.trailingAnchor).0
+                .height(120)
 
-        titleLabel
-            .top(imageView.bottomAnchor, 10).0
-            .leading(contentView.leadingAnchor, 12).0
-            .trailing(contentView.trailingAnchor, -12)
+            titleLabel
+                .top(imageView.bottomAnchor, 10).0
+                .leading(contentView.leadingAnchor, 12).0
+                .trailing(contentView.trailingAnchor, -12)
 
-        durationLabel
-            .top(titleLabel.bottomAnchor, 2).0
-            .leading(contentView.leadingAnchor, 12).0
-            .trailing(contentView.trailingAnchor, -12).0
-            .bottom(contentView.bottomAnchor, -10)
+            durationLabel
+            .top(titleLabel.bottomAnchor, 4).0
+            .leading(contentView.leadingAnchor, 2).0
+            .trailing(contentView.trailingAnchor, -2).0
+            .bottom(contentView.bottomAnchor, -4)
     }
 
     func configure(with item: RecommendedItem) {

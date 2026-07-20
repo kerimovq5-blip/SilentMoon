@@ -9,7 +9,7 @@ import UIKit
 
 final class HomeViewController: UIViewController {
     
-    weak var coordinator: MainTabBarCoordinator?
+     var coordinator: MainTabBarCoordinator?
     var userName: String = ""
     
     private let courses = CoursesCardItem.mockData
@@ -206,14 +206,14 @@ final class HomeViewController: UIViewController {
     private static func recommendedSection() -> NSCollectionLayoutSection {
         let item = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(
-                widthDimension: .absolute(165),
-                heightDimension: .absolute(115)
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .fractionalHeight(1.0)
             )
         )
         let group = NSCollectionLayoutGroup.horizontal(
                 layoutSize: NSCollectionLayoutSize(
                     widthDimension: .absolute(165),
-                    heightDimension: .absolute(160)
+                    heightDimension: .absolute(170)
                 ),
                 subitems: [item]
             )
@@ -275,6 +275,11 @@ extension HomeViewController: UICollectionViewDataSource {
                 withReuseIdentifier: CoursesCardCell.identifier, for: indexPath
             ) as? CoursesCardCell else { return UICollectionViewCell() }
             cell.configure(with: courses[indexPath.item])
+            cell.onStartTapped = { [weak self] in
+                guard let self else { return }
+                let vc = CoursesDetailViewController()
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
             return cell
    
         case .dailyThought:

@@ -82,7 +82,7 @@ final class ReminderViewController: UIViewController {
 
     private lazy var saveButton: AppButton = {
         let button = AppButton(title: "Save")
-        //button.onTap = { [weak self] in self?.coordinator?.showSignUp() }
+        button.onTap = { [weak self] in self?.saveTapped() }
         return button
     }()
     private lazy var thankslabel :UILabel = {
@@ -145,6 +145,10 @@ final class ReminderViewController: UIViewController {
             .centerX(view.centerXAnchor)
             
             
+    }
+    private func saveTapped() {
+        
+        coordinator?.finishAuth()
     }
 }
 

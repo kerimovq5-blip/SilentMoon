@@ -26,7 +26,8 @@ final class AppCoordinator: Coordinator {
     }
     private func showAuthFlow() {
             let authCoordinator = AuthCoordinator(navigationController: navigationController)
-            authCoordinator.onFlowFinished = { [weak self] in
+            authCoordinator.onFlowFinished = {
+                [weak self] in
                 guard let self else { return }
                 removeChild(authCoordinator)
                 showMainTabBarFlow()

@@ -34,18 +34,21 @@ final class MainTabBarCoordinator: Coordinator {
         homeViewCotroller.view.backgroundColor = .white
         homeNavigation.viewControllers = [HomeViewController(userName: "")]
         
-        
-        let meditateNavigation = UINavigationController()
-        meditateNavigation.tabBarItem = UITabBarItem(title: "Meditate", image: UIImage(named: "brain"), tag: 2)
-        let meditateViewController = UIViewController()
-        meditateViewController.view.backgroundColor = .lightGray
-        meditateNavigation.viewControllers = [meditateViewController]
-        
         let sleepNavigation = UINavigationController()
         sleepNavigation.tabBarItem = UITabBarItem(title: "Sleep", image: UIImage(named: "sleep"), tag: 1)
         let sleepViewController = UIViewController()
         sleepViewController.view.backgroundColor = .green
         sleepNavigation.viewControllers = [sleepViewController]
+        
+        
+        
+        let meditateNavigation = UINavigationController()
+        meditateNavigation.tabBarItem = UITabBarItem(title: "Meditate", image: UIImage(named: "brain"), tag: 2)
+        let meditateViewController = UIViewController()
+        meditateViewController.view.backgroundColor = .lightGray
+        meditateNavigation.viewControllers = [MeditateViewController()]
+        
+        
         
         let musicNavigation = UINavigationController()
         musicNavigation.tabBarItem = UITabBarItem(title: "Music", image: UIImage(named: "music"), tag: 3)
@@ -61,12 +64,12 @@ final class MainTabBarCoordinator: Coordinator {
         
         tabBarController.viewControllers = [
             homeNavigation,
-            meditateNavigation,
             sleepNavigation,
+            meditateNavigation,
             musicNavigation,
             accountNavigation
         ]
-       
+        
         
         window.rootViewController = tabBarController
         UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil, completion: nil)

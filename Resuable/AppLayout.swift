@@ -17,6 +17,7 @@ enum AppLayout: CGFloat {
     case xLargeSpacing = 40
     case textFieldHeight    = 65
     case buttonHeight       = 60
+    case buttonHeight2       = 50
     case labelHeight = 102
     case titleHeight = 110
     case leftCardHeight  = 210
