@@ -9,7 +9,7 @@ final class ViewController: UIViewController {
         let label = UILabel()
         
         let silent = NSAttributedString(
-            string: "S i l e n t ",
+            string: "Silent ",
             attributes: [.font: AppFonts.body.font]
         )
         
@@ -20,7 +20,7 @@ final class ViewController: UIViewController {
         let logo = NSAttributedString(attachment: attachment)
         
         let moon = NSAttributedString(
-            string: " M o o n",
+            string: " Moon",
             attributes: [.font: AppFonts.body.font]
         )
         

@@ -8,46 +8,54 @@
 import UIKit
 
 final class AppCoordinator: Coordinator {
-   
-
     var childCoordinators: [Coordinator] = []
-    var navigationController: UINavigationController
-    var window = UIWindow()
-    
-    init(navigationController: UINavigationController , window : UIWindow) {
-        self.navigationController = navigationController
+    private let window: UIWindow
+    private let navigationController = UINavigationController()
+
+    init(window: UIWindow) {
         self.window = window
-        
     }
+
     func start() {
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
         showAuthFlow()
     }
+
     private func showAuthFlow() {
-            let authCoordinator = AuthCoordinator(navigationController: navigationController)
-            authCoordinator.onFlowFinished = {
-                [weak self] in
-                guard let self else { return }
-                removeChild(authCoordinator)
-                showMainTabBarFlow()
-            }
-            
-            childCoordinators.append(authCoordinator)
-            authCoordinator.start()
+        let authCoordinator = AuthCoordinator(navigationController: navigationController)
+        authCoordinator.onFlowFinished = {
+            [weak self] in
+            self?.showMainTabBarFlow()
         }
 
-        private func showMainTabBarFlow() {
-            let tabBarController = UITabBarController()
-            let tabBarCoordinator = MainTabBarCoordinator(tabBarController: tabBarController, window: window)
-            childCoordinators.append(tabBarCoordinator)
-            tabBarCoordinator.start()
-        }
-    
-    private func removeChild(_ coordinator: Coordinator) {
-            childCoordinators = childCoordinators.filter { $0 !== coordinator }
-        }
-    
+        childCoordinators = [authCoordinator]
+        authCoordinator.start()
+    }
+
+    private func showMainTabBarFlow() {
+        childCoordinators.removeAll()
+
+        let tabBarController = UITabBarController()
+        let tabBarCoordinator = MainTabBarCoordinator(tabBarController: tabBarController)
+        childCoordinators = [tabBarCoordinator]
+        tabBarCoordinator.start()
+
+        setRoot(tabBarController)
+    }
+
+    private func setRoot(_ viewController: UIViewController) {
+        window.rootViewController = viewController
+        UIView.transition(
+            with: window,
+            duration: 0.3,
+            options: .transitionCrossDissolve,
+            animations: nil
+        )
+    }
 }
+     
+   
+   
 
-    
+

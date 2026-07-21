@@ -6,9 +6,6 @@
 //
 import UIKit
 
-protocol Coordinator : AnyObject {
-    
-    var navigationController: UINavigationController { get }
+protocol Coordinator: AnyObject {
     func start()
 }
-

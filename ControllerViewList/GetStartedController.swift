@@ -71,7 +71,21 @@ final class GetStartedController: UIViewController {
         return button
     }()
     
-    
+    private var logOutButton: UIBarButtonItem {
+        
+           let button = UIButton()
+
+           button.setImage(UIImage(named: "LogOut"), for: .normal)
+           button.backgroundColor = .clear
+           button.addTarget(self, action: #selector(logOutTapped), for: .touchUpInside)
+           let barItem = UIBarButtonItem(customView: button)
+           return barItem
+        
+       }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+       navigationItem.rightBarButtonItem = logOutButton
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -106,21 +120,7 @@ final class GetStartedController: UIViewController {
         return label
     }
     
-    private lazy var logOutView : UIImageView = {
-        let view = UIImageView()
-        
-        
-        view.image = UIImage(named: "LogOut")
-        
-        view.contentMode = .center
-      
-        view.layer.cornerRadius = AppFonts.AppRaduis.buttonRadius
-        view.clipsToBounds = true
-        view.isUserInteractionEnabled = true
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(logOutTapped))
-        view.addGestureRecognizer(tapGesture)
-        return view
-    }()
+   
     private func setupHierarchy() {
         view.backgroundColor = .colorIndigo
         let welcomeLabel = makeWelcomeLabel()
@@ -131,7 +131,7 @@ final class GetStartedController: UIViewController {
                 descriptionLabel,
                 welcomeLabel,
                 getStartedButton,
-                logOutView
+                
             )
         
         welcomeLabel
@@ -147,12 +147,6 @@ final class GetStartedController: UIViewController {
             .bottom(view.safeAreaLayoutGuide.topAnchor).0
             .centerX(view.centerXAnchor).0
             .height(AppLayout.buttonHeight2.value)
-        
-        logOutView
-            .centerY(logoLabel.topAnchor , AppLayout.spacing.value).0
-            .trailing(view.trailingAnchor, -AppLayout.spacing.value).0
-            .height(AppLayout.buttonHeight.value).0
-            .width(AppLayout.buttonHeight.value)
         
         descriptionLabel
             .bottom(frameImageGroup.topAnchor , -AppLayout.largeSpacing.value).0

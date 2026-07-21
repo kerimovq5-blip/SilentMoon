@@ -54,13 +54,7 @@ final class AuthCoordinator: Coordinator {
     func backToMain() {
         navigationController.popToRootViewController(animated: true)
     }
-//    func showHome(name : String) {
-//        let controller = HomeViewController()
-//        controller.coordinator = self
-//        controller.userName = name
-//        navigationController.pushViewController(controller, animated: true)
-//    }
-    
+
     func finishAuth() {
         onFlowFinished?()
     }
