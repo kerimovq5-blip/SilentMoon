@@ -29,7 +29,7 @@ final class MainTabBarCoordinator: Coordinator {
         let navigation = UINavigationController(rootViewController: HomeViewController(userName: ""))
         navigation.tabBarItem = UITabBarItem(
             title: "Home",
-            image: UIImage(systemName: "Home")?.withRenderingMode(.alwaysOriginal),
+            image: UIImage(named: "Home")?.withRenderingMode(.alwaysOriginal),
             tag: 0)
         navigation.tabBarItem.badgeColor = .systemRed
         return navigation

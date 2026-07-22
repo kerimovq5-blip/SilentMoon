@@ -45,10 +45,10 @@ final class ChooseTopicViewController: UIViewController {
     }()
     
     private lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        
-        let controller = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        let controller = UICollectionView(
+            frame: .zero,
+            collectionViewLayout: makeMasonryLayout()
+        )
         controller.backgroundColor = .clear
         controller.showsVerticalScrollIndicator = false
         controller.dataSource = self
@@ -57,8 +57,6 @@ final class ChooseTopicViewController: UIViewController {
             ChooseCollectionCell.self,
             forCellWithReuseIdentifier: "cell"
         )
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapImage))
-        controller.addGestureRecognizer(tapGesture)
         return controller
     }()
     
@@ -106,8 +104,86 @@ final class ChooseTopicViewController: UIViewController {
             .bottom(view.safeAreaLayoutGuide.bottomAnchor)
         
     }
-    @objc private func didTapImage() {
-        coordinator?.showReminder() }
+
+    
+    private func isBigCard(at index: Int) -> Bool {
+        (index % 4 == 0) || (index % 4 == 3)
+    }
+
+    private func itemHeight(at index: Int) -> CGFloat {
+        isBigCard(at: index) ? AppLayout.leftCardHeight.value : AppLayout.rightCardHeight.value
+    }
+
+    
+    private func makeMasonryLayout() -> UICollectionViewCompositionalLayout {
+        UICollectionViewCompositionalLayout { [weak self] _, _ in
+            self?.makeTopicsSection()
+        }
+    }
+
+    private func makeTopicsSection() -> NSCollectionLayoutSection {
+        let spacing = AppLayout.spacing.value
+        let itemCount = topics.count
+
+        var leftItems: [NSCollectionLayoutItem] = []
+        var rightItems: [NSCollectionLayoutItem] = []
+        var leftHeight: CGFloat = 0
+        var rightHeight: CGFloat = 0
+
+        for index in 0..<itemCount {
+            let height = itemHeight(at: index)
+            let item = NSCollectionLayoutItem(
+                layoutSize: NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1.0),
+                    heightDimension: .absolute(height)
+                )
+            )
+
+            if index % 2 == 0 {
+                leftItems.append(item)
+                leftHeight += height + (leftItems.count > 1 ? spacing : 0)
+            } else {
+                rightItems.append(item)
+                rightHeight += height + (rightItems.count > 1 ? spacing : 0)
+            }
+        }
+
+        let leftColumn = NSCollectionLayoutGroup.vertical(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(0.5),
+                heightDimension: .absolute(leftHeight)
+            ),
+            subitems: leftItems
+        )
+        leftColumn.interItemSpacing = .fixed(spacing)
+
+        let rightColumn = NSCollectionLayoutGroup.vertical(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(0.5),
+                heightDimension: .absolute(rightHeight)
+            ),
+            subitems: rightItems
+        )
+        rightColumn.interItemSpacing = .fixed(spacing)
+
+        let columnsGroup = NSCollectionLayoutGroup.horizontal(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .absolute(max(leftHeight, rightHeight))
+            ),
+            subitems: [leftColumn, rightColumn]
+        )
+        columnsGroup.interItemSpacing = .fixed(spacing)
+
+        let section = NSCollectionLayoutSection(group: columnsGroup)
+        section.contentInsets = NSDirectionalEdgeInsets(
+            top: 0,
+            leading: spacing,
+            bottom: spacing,
+            trailing: spacing
+        )
+        return section
+    }
 }
 
 extension ChooseTopicViewController: UICollectionViewDataSource {
@@ -129,32 +205,8 @@ extension ChooseTopicViewController: UICollectionViewDataSource {
     }
 }
 
-extension ChooseTopicViewController: UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let itemWidth = ((collectionView.bounds.width - AppLayout.spacing.value * 2) - AppLayout.spacing.value) / 2
-        let isLongCard = (indexPath.item % 4 == 0) || (indexPath.item % 4 == 3)
-        let itemHeight = isLongCard ? AppLayout.leftCardHeight : AppLayout.rightCardHeight
-        return CGSizeMake( itemWidth, itemHeight.value)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        AppLayout.spacing.value
-    }
-    
-    
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        insetForSectionAt section: Int) -> UIEdgeInsets {
-        UIEdgeInsets(
-            top: 0,
-            left: AppLayout.spacing.value,
-            bottom: AppLayout.spacing.value,
-            right: AppLayout.spacing.value
-        )
+extension ChooseTopicViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        coordinator?.showReminder()
     }
 }
