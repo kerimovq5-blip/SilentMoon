@@ -221,13 +221,13 @@ final class CoursesDetailViewController: UIViewController {
             .trailing(view.trailingAnchor).0
             .height(1)
 
-        let (_, underlineLeading) = tabUnderlineView
-            .leading(tabStackView.leadingAnchor)
-        tabLineleading = underlineLeading
-        tabUnderlineView
-            .top(tabSeparatorLine.topAnchor).0
-            .height(2).0
-            .width(tabStackView.widthAnchor, multiplier: 1.0 / CGFloat(VoiceTab.allCases.count))
+//        let (_, underlineLeading) = tabUnderlineView
+//            .leading(tabStackView.leadingAnchor)
+//        tabLineleading = underlineLeading
+//        tabUnderlineView
+//            .top(tabSeparatorLine.topAnchor).0
+//            .height(2).0
+//            .width(tabStackView.widthAnchor)
 
         scrollView
             .top(tabSeparatorLine.bottomAnchor, AppLayout.spacing.value).0
