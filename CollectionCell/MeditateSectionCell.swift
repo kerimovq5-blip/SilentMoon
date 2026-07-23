@@ -20,9 +20,9 @@ final class MeditateSectionCell: UICollectionViewCell {
 
     private lazy var sectionImage: UIImageView = {
         let view = UIImageView()
-        view.contentMode = .center // İkonun daxildə düzgün qalması üçün .center və ya .scaleAspectFit
+        view.contentMode = .center
         view.clipsToBounds = true
-        view.layer.cornerRadius = 25 // Şəkildəki kimi oval/yumru künclər üçün (və ya öz AppFonts radiusun)
+        view.layer.cornerRadius = 25
         return view
     }()
     
@@ -44,7 +44,6 @@ final class MeditateSectionCell: UICollectionViewCell {
     }
 
     private func setupView() {
-        // Hüceyrənin öz fonunu clear edirik ki, kənarlarında kvadrat iz qalmasın
         contentView.backgroundColor = .clear
         backgroundColor = .clear
         

@@ -27,7 +27,7 @@ enum AssetColors : String{
     case lightGray = "Lightgray"
     case errorColor = "ErrorColor"
     case wrongColor = "WrongColor"
-    case colorIndigo = "ColorIndigo"
+    case colorIndigo = "colorIndigo"
     case datepicker = " datePicker"
     case dailyColor = "dailycolor"
     case sectionColor = "SectionColor"

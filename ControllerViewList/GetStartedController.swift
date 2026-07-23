@@ -73,18 +73,19 @@ final class GetStartedController: UIViewController {
     
     private var logOutButton: UIBarButtonItem {
         
-           let button = UIButton()
-
-           button.setImage(UIImage(named: "LogOut"), for: .normal)
-           button.backgroundColor = .clear
-           button.addTarget(self, action: #selector(logOutTapped), for: .touchUpInside)
-           let barItem = UIBarButtonItem(customView: button)
-           return barItem
+        let button = UIButton()
         
-       }
+        button.setImage(UIImage(systemName: "door.right.hand.open" ), for: .normal)
+        button.tintColor = .black
+        button.backgroundColor = .clear
+        button.addTarget(self, action: #selector(logOutTapped), for: .touchUpInside)
+        let barItem = UIBarButtonItem(customView: button)
+        return barItem
+        
+    }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-       navigationItem.rightBarButtonItem = logOutButton
+        navigationItem.rightBarButtonItem = logOutButton
     }
     
     override func viewDidLoad() {
@@ -120,7 +121,7 @@ final class GetStartedController: UIViewController {
         return label
     }
     
-   
+    
     private func setupHierarchy() {
         view.backgroundColor = .colorIndigo
         let welcomeLabel = makeWelcomeLabel()
