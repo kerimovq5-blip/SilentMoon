@@ -225,26 +225,27 @@ final class HomeViewController: UIViewController {
         section.contentInsets = NSDirectionalEdgeInsets(
             top: 0,
             leading: AppLayout.spacing.value,
-            bottom: 0 ,
+            bottom: 0,
             trailing: AppLayout.spacing.value
         )
    
         let header = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .estimated(25)
+                heightDimension: .estimated(30)
             ),
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .topLeading
         )
         header.contentInsets = NSDirectionalEdgeInsets(
-            top: 20,
+            top: 10,
             leading: 0,
-            bottom: -AppLayout.spacing.value,
+            bottom: AppLayout.spacing.value,
             trailing: 0
         )
         section.boundarySupplementaryItems = [header]
-   
+        section.interGroupSpacing = AppLayout.spacing.value
+
         return section
     }
 }
@@ -276,9 +277,7 @@ extension HomeViewController: UICollectionViewDataSource {
             ) as? CoursesCardCell else { return UICollectionViewCell() }
             cell.configure(with: courses[indexPath.item])
             cell.onStartTapped = { [weak self] in
-                guard let self else { return }
-                let vc = CoursesDetailViewController()
-                self.navigationController?.pushViewController(vc, animated: true)
+                self?.coordinator?.showMorning()
             }
             return cell
    

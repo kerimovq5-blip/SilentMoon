@@ -49,6 +49,11 @@
 			path = Resuable;
 			sourceTree = "<group>";
 		};
+		F295D8893016AD64007D6F6D /* SleepyControllerViewList */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = SleepyControllerViewList;
+			sourceTree = "<group>";
+		};
 		F2CC69712FF3FDA000A76DC5 /* TabbarControllerView */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = TabbarControllerView;
@@ -80,6 +85,7 @@
 		F218C9302FED5734002251F7 = {
 			isa = PBXGroup;
 			children = (
+				F295D8893016AD64007D6F6D /* SleepyControllerViewList */,
 				F2CC6A082FF5903200A76DC5 /* CollectionCell */,
 				F2CC6A042FF58FC500A76DC5 /* ViewControllerModels */,
 				F2CC69712FF3FDA000A76DC5 /* TabbarControllerView */,
@@ -121,6 +127,7 @@
 				F26071F52FEEDE6300F5F017 /* CoordinatorView */,
 				F26071F92FEEDE6A00F5F017 /* Utils */,
 				F26071FE2FEEDE7100F5F017 /* Resuable */,
+				F295D8893016AD64007D6F6D /* SleepyControllerViewList */,
 				F2CC69712FF3FDA000A76DC5 /* TabbarControllerView */,
 				F2CC6A042FF58FC500A76DC5 /* ViewControllerModels */,
 				F2CC6A082FF5903200A76DC5 /* CollectionCell */,

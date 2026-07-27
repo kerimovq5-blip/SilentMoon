@@ -31,6 +31,8 @@ enum AssetColors : String{
     case datepicker = " datePicker"
     case dailyColor = "dailycolor"
     case sectionColor = "SectionColor"
+    case ellipsesColor = "ellipsesColor"
+    case sleepModeColor = "SleepModeColor"
     
     var color : UIColor {
         return UIColor(named: self.rawValue) ?? .clear

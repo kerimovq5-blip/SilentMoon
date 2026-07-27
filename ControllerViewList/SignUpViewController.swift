@@ -114,14 +114,14 @@ final class SignUpViewController: UIViewController {
                 .font: AppFonts.body.font]
         )
         text.append(
-NSAttributedString(
-            string: "Privacy Policy",
-            attributes: [
-                .foregroundColor: AssetColors.accent.color,
-                .font: AppFonts.body.font
-            ]
+            NSAttributedString(
+                string: "Privacy Policy",
+                attributes: [
+                    .foregroundColor: AssetColors.accent.color,
+                    .font: AppFonts.body.font
+                ]
+            )
         )
-)
         label.attributedText = text
         return label
     }()
@@ -154,7 +154,7 @@ NSAttributedString(
             object: nil
         )
     }
-
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }

@@ -1,6 +1,7 @@
 import UIKit
 
-final class AuthCoordinator: Coordinator {
+final class AuthCoordinator: Coordinator, ContentNavigating {
+
     var navigationController: UINavigationController
     var onFlowFinished: (() -> Void)?
     
@@ -58,4 +59,19 @@ final class AuthCoordinator: Coordinator {
     func finishAuth() {
         onFlowFinished?()
     }
+    func showMusicPage(item : String) {
+        let controller = MusicPageController()
+        controller.titleLabel = item
+        controller.coordinator = self
+        navigationController.pushViewController(controller, animated: true)
+    }
+    func dismissMusicPage() {
+        navigationController.popViewController(animated: true)
+    }
+func showSleepyStory() {
+        let controller = SleepyStoryController()
+        controller.coordinator = self
+        navigationController.pushViewController(controller, animated: true)
+    }
+    
 }

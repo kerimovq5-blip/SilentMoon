@@ -7,8 +7,7 @@
 
 import UIKit
 final class CoursesDetailViewController: UIViewController {
-    var coordinator : AuthCoordinator?
-    
+    var coordinator : ContentNavigating?
     private enum VoiceTab : Int , CaseIterable {
         case male , female
         var title: String {
@@ -256,8 +255,14 @@ final class CoursesDetailViewController: UIViewController {
     private func makeSessionRow(_ item: CourseSessionItem, showsDivider: Bool) -> UIView {
         let container = UIView()
 
-        let playButton = UIView()
+        let playButton = UIButton(type: .system)
         playButton.layer.cornerRadius = 25
+        playButton
+            .addAction(
+                UIAction { [weak self] _ in self?.openMusicPage(for: item)
+                },
+                for: .touchUpInside)
+
         if item.isHighlighted {
             playButton.backgroundColor = .colorIndigo
         } else {
@@ -269,6 +274,7 @@ final class CoursesDetailViewController: UIViewController {
         let playIcon = UIImageView(image: UIImage(systemName: "play.fill"))
         playIcon.tintColor = item.isHighlighted ? .white : UIColor.textSecondary.withAlphaComponent(0.6)
         playIcon.contentMode = .scaleAspectFit
+        playIcon.isUserInteractionEnabled = false
 
         let titleLabel = UILabel()
         titleLabel.text = item.title
@@ -318,6 +324,10 @@ final class CoursesDetailViewController: UIViewController {
 
         return container
     }
+
+    private func openMusicPage(for item: CourseSessionItem) {
+           coordinator?.showMusicPage(item: item.title)
+       }
 
     @objc private func tabTapped(_ sender: UIButton) {
         guard let tab = VoiceTab(rawValue: sender.tag) else { return }

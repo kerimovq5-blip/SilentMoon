@@ -25,8 +25,14 @@ final class MainTabBarCoordinator: Coordinator {
         ]
     }
 
+    private var activeNavigationController: UINavigationController? {
+        tabBarController.selectedViewController as? UINavigationController
+    }
+
      func makeHomeTab() -> UINavigationController {
-        let navigation = UINavigationController(rootViewController: HomeViewController(userName: ""))
+        let homeController = HomeViewController(userName: "")
+        homeController.coordinator = self
+        let navigation = UINavigationController(rootViewController: homeController)
         navigation.tabBarItem = UITabBarItem(
             title: "Home",
             image: UIImage(named: "Home")?.withRenderingMode(.alwaysOriginal),
@@ -36,10 +42,9 @@ final class MainTabBarCoordinator: Coordinator {
     }
 
      func makeSleepTab() -> UINavigationController {
-        let controller = UIViewController()
-        controller.view.backgroundColor = .white
-
-        let navigation = UINavigationController(rootViewController: controller)
+        let sleepController = SleepyModeViewController()
+        sleepController.coordinator = self
+        let navigation = UINavigationController(rootViewController: sleepController)
         navigation.tabBarItem = UITabBarItem(
             title: "Sleep",
             image: UIImage(named: "sleep")?.withRenderingMode(.alwaysOriginal),
@@ -82,5 +87,31 @@ final class MainTabBarCoordinator: Coordinator {
             tag: 4
         )
         return navigation
+    }
+}
+
+extension MainTabBarCoordinator: ContentNavigating {
+   
+    func showMorning() {
+        let controller = CoursesDetailViewController()
+        controller.coordinator = self
+        activeNavigationController?.pushViewController(controller, animated: true)
+    }
+
+    func showMusicPage(item titlelabel : String) {
+        let controller = MusicPageController()
+        controller.titleLabel = titlelabel
+        controller.coordinator = self
+        activeNavigationController?.pushViewController(controller, animated: true)
+        
+    }
+    func dismissMusicPage() {
+        activeNavigationController?.popViewController(animated: true)
+    }
+    
+    func showSleepyStory() {
+        let controller = SleepyStoryController()
+        controller.coordinator = self
+        activeNavigationController?.pushViewController(controller, animated: true)
     }
 }
