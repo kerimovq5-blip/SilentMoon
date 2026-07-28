@@ -1,5 +1,5 @@
 //
-//  SleepyModeViewController.swift
+//  WelcomeSleepyiewController.swift
 //  SilentMoon
 //
 //  Created by Kerimov Qehreman on 26.07.26.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class SleepyModeViewController: UIViewController {
+final class WelcomeSleepyiewController: UIViewController {
     
     var coordinator: ContentNavigating?
     

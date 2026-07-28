@@ -42,7 +42,7 @@ final class MainTabBarCoordinator: Coordinator {
     }
 
      func makeSleepTab() -> UINavigationController {
-        let sleepController = SleepyModeViewController()
+        let sleepController = WelcomeSleepyiewController()
         sleepController.coordinator = self
         let navigation = UINavigationController(rootViewController: sleepController)
         navigation.tabBarItem = UITabBarItem(
@@ -100,6 +100,13 @@ extension MainTabBarCoordinator: ContentNavigating {
 
     func showMusicPage(item titlelabel : String) {
         let controller = MusicPageController()
+        controller.titleLabel = titlelabel
+        controller.coordinator = self
+        activeNavigationController?.pushViewController(controller, animated: true)
+        
+    }
+    func showMusicPage2(item titlelabel : String) {
+        let controller = MusicSleepPageController()
         controller.titleLabel = titlelabel
         controller.coordinator = self
         activeNavigationController?.pushViewController(controller, animated: true)

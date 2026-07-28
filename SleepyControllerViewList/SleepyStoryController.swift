@@ -16,6 +16,24 @@ final class SleepyStoryController: UIViewController {
     
     private var selectedIndexes: Set<Int> = []
     
+    
+    private lazy var scrollView: UIScrollView = {
+        let scroll = UIScrollView()
+        scroll.showsVerticalScrollIndicator = false
+        return scroll
+    }()
+
+    private lazy var contentView: UIView = {
+        let view = UIView()
+        return view
+    }()
+    
+    private lazy var sleepmodeImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named : "sleepymode")?.withRenderingMode(.alwaysOriginal)
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
     private lazy var sleepyStoryLabel: UILabel = {
         let label = UILabel()
         let attributed = NSMutableAttributedString(
@@ -44,6 +62,7 @@ final class SleepyStoryController: UIViewController {
         layout.scrollDirection = .horizontal
         collectionView.backgroundColor = .clear
         collectionView.showsHorizontalScrollIndicator = false
+        collectionView.isScrollEnabled = false
         collectionView.register(MeditateSectionCell.self, forCellWithReuseIdentifier: MeditateSectionCell.identifier)
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -53,7 +72,6 @@ final class SleepyStoryController: UIViewController {
     private lazy var theOceanMoon : UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
-        // view.image = UIImage(named: "daily-calm")
         view.clipsToBounds = true
         view.layer.cornerRadius = AppFonts.AppRaduis.buttonRadiusSmall
         view.backgroundColor = .colorIndigo
@@ -90,9 +108,9 @@ final class SleepyStoryController: UIViewController {
         button.setTitle("START", for: .normal)
         button.titleLabel?.font = AppFonts.litletitle.font
         button.titleLabel?.textAlignment = .center
-        button.layer.cornerRadius = AppFonts.AppRaduis.buttonRadiusLarge
-        button.frame.size.height = 35
-        button.frame.size.width = 70
+        button.layer.cornerRadius = AppFonts.AppRaduis.buttonRadiusSmall
+        button.backgroundColor = .white
+        button.tintColor = .black
         button.addAction(UIAction { [weak self] _ in
             self?.openOceanMoonStory()
         }, for: .touchUpInside)
@@ -104,10 +122,9 @@ final class SleepyStoryController: UIViewController {
         stack.axis = .vertical
         stack.alignment = .center
         stack.spacing = AppLayout.spacing.value
-        stack.distribution = .fill
+        stack.distribution = .equalSpacing
         return stack
     }()
-    
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -125,7 +142,10 @@ final class SleepyStoryController: UIViewController {
         )
         return controller
     }()
-    
+    override func viewWillAppear(_ animated: Bool) {
+           super.viewWillAppear(animated)
+           tabBarController?.tabBar.isHidden = false
+       }
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -137,36 +157,62 @@ final class SleepyStoryController: UIViewController {
     }
     
     private func openOceanMoonStory() {
-        coordinator?.showMusicPage(item: "The Ocean Moon")
+        coordinator?.showMusicPage2(item: "The Ocean Moon")
     }
     
     private func setupView() {
-        view.backgroundColor = .white
-        view.addSubviews(
-            sleepyStoryLabel ,
-            sectionCollectionView ,
-            theOceanMoon ,
-            collectionView)
+        view.backgroundColor = AssetColors.sleepModeColor.color
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+            
+    contentView.addSubviews(
+                sleepmodeImage,
+                sleepyStoryLabel,
+                sectionCollectionView,
+                theOceanMoon,
+                collectionView
+            )
         
         theOceanMoon.addSubviews(mainStackView)
         
     }
     
     private func setupConstraints() {
+        scrollView
+            .top(view.topAnchor).0
+            .leading(view.leadingAnchor).0
+            .trailing(view.trailingAnchor).0
+            .bottom(view.bottomAnchor)
+            
+        contentView
+            .top(scrollView.topAnchor).0
+            .leading(scrollView.leadingAnchor).0
+            .trailing(scrollView.trailingAnchor).0
+            .bottom(scrollView.bottomAnchor).0
+            .width(scrollView.widthAnchor)
+        sleepmodeImage
+            .top(view.topAnchor).0
+            .leading(contentView.leadingAnchor).0
+            .trailing(contentView.trailingAnchor)
+        
         sleepyStoryLabel
-            .bottom(view.safeAreaLayoutGuide.topAnchor ,AppLayout.xLargeSpacing.value).0
-            .centerX(view.centerXAnchor)
+            .bottom(contentView.safeAreaLayoutGuide.topAnchor ,AppLayout.xLargeSpacing.value).0
+            .centerX(contentView.centerXAnchor)
         
         sectionCollectionView
-            .top(sleepyStoryLabel.bottomAnchor , AppLayout.spacing.value).0
-            .leading(view.leadingAnchor , AppLayout.spacing.value).0
-            .trailing(view.trailingAnchor).0
+            .top(sleepyStoryLabel.bottomAnchor, AppLayout.spacing.value).0
+            .leading(contentView.leadingAnchor).0
+            .trailing(contentView.trailingAnchor).0
             .height(100)
-        
+            
+        oceanStartButton
+            .height(35).0
+            .width(70)
+            
         theOceanMoon
             .top(sectionCollectionView.bottomAnchor, AppLayout.spacing.value).0
-            .leading(view.leadingAnchor, AppLayout.spacing.value).0
-            .trailing(view.trailingAnchor, -AppLayout.spacing.value).0
+            .leading(contentView.leadingAnchor, AppLayout.spacing.value).0
+            .trailing(contentView.trailingAnchor, -AppLayout.spacing.value).0
             .height(235)
         
         mainStackView
@@ -177,9 +223,16 @@ final class SleepyStoryController: UIViewController {
         
         collectionView
             .top(theOceanMoon.bottomAnchor, AppLayout.spacing.value).0
-            .leading(view.leadingAnchor, AppLayout.spacing.value).0
-            .trailing(view.trailingAnchor, -AppLayout.spacing.value).0
-            .bottom(view.bottomAnchor, -AppLayout.spacing.value)
+            .leading(contentView.leadingAnchor, AppLayout.spacing.value).0
+            .trailing(contentView.trailingAnchor, -AppLayout.spacing.value).0
+            .bottom(contentView.bottomAnchor, -AppLayout.spacing.value)
+    }
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        let height = collectionView.collectionViewLayout.collectionViewContentSize.height
+        if height > 0 {
+            collectionView.height(height)
+        }
     }
 }
 
@@ -197,7 +250,7 @@ extension SleepyStoryController: UICollectionViewDelegate {
             } else {
                 collectionView.deselectItem(at: indexPath, animated: true)
                 let story = collectionViews[indexPath.item]
-                coordinator?.showMusicPage(item: story.title)
+                coordinator?.showMusicPage2(item: story.title)
             }
         }
     }
@@ -290,9 +343,6 @@ extension SleepyStoryController: UICollectionViewDelegate {
                     right: AppLayout.spacing.value
                 )
             } else {
-                // collectionView already has AppLayout.spacing.value leading/trailing
-                // from its own Auto Layout constraints — adding it again here
-                // would double the margin, so this stays at 0.
                 return .zero
             }
         }

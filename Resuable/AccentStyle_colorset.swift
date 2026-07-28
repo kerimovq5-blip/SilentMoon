@@ -33,6 +33,7 @@ enum AssetColors : String{
     case sectionColor = "SectionColor"
     case ellipsesColor = "ellipsesColor"
     case sleepModeColor = "SleepModeColor"
+    case darksleepmusic = "darksleepmusic"
     
     var color : UIColor {
         return UIColor(named: self.rawValue) ?? .clear

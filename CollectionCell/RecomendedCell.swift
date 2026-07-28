@@ -72,7 +72,7 @@ final class RecomendedCell: UICollectionViewCell {
 
             titleLabel
                 .top(imageView.bottomAnchor, 10).0
-                .leading(contentView.leadingAnchor, 12).0
+                .leading(contentView.leadingAnchor).0
                 .trailing(contentView.trailingAnchor, -12)
 
             durationLabel

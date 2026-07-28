@@ -65,6 +65,12 @@ final class AuthCoordinator: Coordinator, ContentNavigating {
         controller.coordinator = self
         navigationController.pushViewController(controller, animated: true)
     }
+    func showMusicPage2(item : String) {
+        let controller = MusicSleepPageController()
+        controller.titleLabel = item
+        controller.coordinator = self
+        navigationController.pushViewController(controller, animated: true)
+    }
     func dismissMusicPage() {
         navigationController.popViewController(animated: true)
     }
