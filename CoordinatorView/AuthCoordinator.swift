@@ -71,6 +71,12 @@ final class AuthCoordinator: Coordinator, ContentNavigating {
         controller.coordinator = self
         navigationController.pushViewController(controller, animated: true)
     }
+    
+    func playOptionPage() {
+        let controller = PlayOptionViewController()
+        controller.coordinator = self
+        navigationController.pushViewController(controller, animated: true)
+    }
     func dismissMusicPage() {
         navigationController.popViewController(animated: true)
     }

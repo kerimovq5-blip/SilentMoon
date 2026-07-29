@@ -76,8 +76,6 @@ final class SleepyStoryController: UIViewController {
         view.layer.cornerRadius = AppFonts.AppRaduis.buttonRadiusSmall
         view.backgroundColor = .colorIndigo
         view.isUserInteractionEnabled = true
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(oceanMoonTapped))
-        view.addGestureRecognizer(tapGesture)
         return view
     }()
     
@@ -152,12 +150,9 @@ final class SleepyStoryController: UIViewController {
         setupConstraints()
     }
     
-    @objc private func oceanMoonTapped() {
-        openOceanMoonStory()
-    }
     
-    private func openOceanMoonStory() {
-        coordinator?.showMusicPage2(item: "The Ocean Moon")
+    @objc  private func openOceanMoonStory() {
+        coordinator?.playOptionPage()
     }
     
     private func setupView() {

@@ -121,4 +121,9 @@ extension MainTabBarCoordinator: ContentNavigating {
         controller.coordinator = self
         activeNavigationController?.pushViewController(controller, animated: true)
     }
+    func playOptionPage() {
+        let controller = PlayOptionViewController()
+        controller.coordinator = self
+        activeNavigationController?.pushViewController(controller, animated: true)
+    }
 }

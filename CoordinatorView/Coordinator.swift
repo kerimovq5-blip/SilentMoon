@@ -17,4 +17,5 @@ protocol ContentNavigating: AnyObject {
     func showMusicPage2(item : String)
     func dismissMusicPage()
     func showSleepyStory()
+    func playOptionPage()
 }
