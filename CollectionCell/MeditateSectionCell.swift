@@ -74,7 +74,7 @@ final class MeditateSectionCell: UICollectionViewCell {
             sectionImage.backgroundColor = AssetColors.colorIndigo.color
             sectionImage.tintColor = .white
             
-            sectionLabel.textColor = AssetColors.textPrimary.color
+            sectionLabel.textColor = AssetColors.textSecondary.color
         } else {
             sectionImage.backgroundColor = AssetColors.sectionColor.color
             sectionImage.tintColor = AssetColors.textSecondary.color

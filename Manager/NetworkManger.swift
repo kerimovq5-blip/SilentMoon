@@ -17,13 +17,14 @@ final class NetworkManager {
     
     static let shared = NetworkManager(
         session: URLSession.shared ,
-        mainPath :  "https://api.themoviedb.org/3",
+        mainPath :  "",
         header: [
-            "accept":"application/json",
-            "content-type":"application/json",
-            "Authorization":"Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkMjdmM2U0NzIzYjBjMDAyZGEyNzNiZDNmMDFkMDM3ZSIsIm5iZiI6MTc4MDgxOTI4My41MjQ5OTk5LCJzdWIiOiI2YTI1MjU1M2FhMTZjNzEzMjdjMGZhZDkiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.u6b3Q9Ga4afBGMCzgmZENXkolKZ5TtzaAMsOLxPh0w4"
+            "" : ""
         ])
-    init(session : URLSession , mainPath : String , header: [ String:String]){
+    init(session : URLSession ,
+         mainPath : String ,
+         header: [ String:String])
+    {
         self.session = session
         self.mainPath = mainPath
         self.header = header
