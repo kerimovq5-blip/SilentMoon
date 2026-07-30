@@ -5,7 +5,6 @@
 //  Created by Kerimov Qehreman on 29.07.26.
 //
 
-
 import Foundation
 
 enum SilentMoonEndPoint: EndPoint {
@@ -14,6 +13,7 @@ enum SilentMoonEndPoint: EndPoint {
     case verifyEmail(email: String, otp: String)
     case resendOtp(email: String)
     case refresh(refreshToken: String)
+    case logout(refreshToken: String)
 
     var path: String {
         switch self {
@@ -22,6 +22,7 @@ enum SilentMoonEndPoint: EndPoint {
         case .verifyEmail: return "/auth/verify-email"
         case .resendOtp:   return "/auth/resend-otp"
         case .refresh:     return "/auth/refresh"
+        case .logout:      return "/auth/logout"
         }
     }
 
@@ -41,6 +42,50 @@ enum SilentMoonEndPoint: EndPoint {
             return .dictionary(["email": email])
         case .refresh(let refreshToken):
             return .dictionary(["refreshToken": refreshToken])
+        case .logout(let refreshToken):
+            return .dictionary(["refreshToken": refreshToken])
         }
     }
+
+    var requiresAuth: Bool {
+        switch self {
+        case .logout:
+            return true
+        default:
+            return false
+        }
+    }
+}
+
+// MARK: - Response modelləri
+// Qeyd: bu struct-lar ayrıca "Models" faylında deyil, məhz aid olduqları
+// endpoint enum-unun yanında saxlanılır — ErrorModel-in EndPoint.swift-də
+// olduğu kimi eyni məntiq.
+
+struct RegisterResponse: Decodable {
+    let message: String
+    let email: String
+    let otpExpiresAt: String
+}
+
+struct ResendOtpResponse: Decodable {
+    let message: String
+    let otpExpiresAt: String
+}
+
+struct AuthResponse: Decodable {
+    let accessToken: String
+    let refreshToken: String
+    let tokenType: String
+    let expiresIn: Int
+    let user: UserProfile
+}
+
+struct UserProfile: Decodable {
+    let id: String
+    let name: String
+    let email: String
+    let emailVerified: Bool
+    let avatarUrl: String?
+    let createdAt: String
 }

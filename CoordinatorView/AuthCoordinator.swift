@@ -33,6 +33,15 @@ final class AuthCoordinator: Coordinator, ContentNavigating {
         controller.coordinator = self
         navigationController.pushViewController(controller , animated: true)
     }
+
+    /// Register-dən sonra (və ya login zamanı EMAIL_NOT_VERIFIED gəldikdə) OTP təsdiq ekranını göstərir.
+    func showOtpVerification(email: String, name: String = "") {
+        let controller = OtpViewController()
+        controller.email = email
+        controller.userName = name
+        controller.coordinator = self
+        navigationController.pushViewController(controller, animated: true)
+    }
     func showTopics() {
         let controller = ChooseTopicViewController()
         controller.coordinator = self

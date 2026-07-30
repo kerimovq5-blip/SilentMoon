@@ -12,6 +12,11 @@ protocol EndPoint {
     var method : HTTPMethod { get }
     var queryItems: [URLQueryItem] { get }
     var requestBody: RequestBody? { get }
+    var requiresAuth: Bool { get }
+}
+
+extension EndPoint {
+    var requiresAuth: Bool { false }
 }
 
 enum HTTPMethod: String {
@@ -53,4 +58,21 @@ struct ErrorModel : Decodable  ,Error {
         return " Unknown Error"
         
     }
+}
+
+
+struct ApiErrorEnvelope: Decodable, Error {
+    struct ErrorDetail: Decodable {
+        let field: String
+        let issue: String
+    }
+    struct ErrorBody: Decodable {
+        let code: String
+        let message: String
+        let details: [ErrorDetail]?
+        let requestId: String?
+    }
+    let error: ErrorBody
+
+    var code: String { error.code }
 }

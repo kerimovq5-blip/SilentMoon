@@ -237,14 +237,52 @@ final class LogInViewController: UIViewController {
             .height(AppLayout.xLargeSpacing.value)
     }
 
-//    private func logInTapped() {
-//        emailValidation.markSubmitAttempt()
-//        guard emailValidation.isValid else { return }
-//        coordinator?.finishAuth()
-//    }
- @objc private func logInTapped() {
-    coordinator?.finishAuth()
+    @objc private func logInTapped() {
+        emailValidation.markSubmitAttempt()
+        guard emailValidation.isValid else { return }
+
+        let email = emailTextField.text
+        let password = passwordTextField.text
+        guard !password.isEmpty else { return }
+
+        setLoading(true)
+        SilentMoonApiService.shared.login(email: email, password: password) {
+            [weak self] result in
+            guard let self else { return }
+            self.setLoading(false)
+            switch result {
+            case .success:
+                self.coordinator?.finishAuth()
+            case .failure(let error):
+                self.handleLoginError(error, email: email)
+            }
+        }
     }
+
+    private func handleLoginError(_ error: Error, email: String) {
+        if let apiError = error as? ApiErrorEnvelope {
+            switch apiError.code {
+            case "EMAIL_NOT_VERIFIED":
+                coordinator?.showOtpVerification(email: email)
+            default:
+                showAlert(message: apiError.error.message)
+            }
+        } else {
+            showAlert(message: error.localizedDescription)
+        }
+    }
+
+    private func setLoading(_ isLoading: Bool) {
+        logInButton.isUserInteractionEnabled = !isLoading
+        logInButton.alpha = isLoading ? 0.6 : 1.0
+    }
+
+    private func showAlert(message: String) {
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
+
     @objc private func signUpTapped() {
         coordinator?.showSignUp()
     }

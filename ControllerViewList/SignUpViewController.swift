@@ -257,10 +257,47 @@ final class SignUpViewController: UIViewController {
     }
 
     private func getStartedTapped() {
-//        guard isPrivacyAccepted else { return }
-//        emailValidation.markSubmitAttempt()
-//        guard emailValidation.isValid else { return }
-        coordinator?.getStarted(name: accountTextField.text)
+        guard isPrivacyAccepted else {
+            showAlert(message: "Davam etmək üçün Privacy Policy-ni qəbul edin.")
+            return
+        }
+        emailValidation.markSubmitAttempt()
+        guard emailValidation.isValid else { return }
+
+        let name = accountTextField.text
+        let email = emailTextField.text
+        let password = passwordTextField.text
+        guard !name.isEmpty, !password.isEmpty else { return }
+
+        setLoading(true)
+        SilentMoonApiService.shared.register(name: name, email: email, password: password) { [weak self] result in
+            guard let self else { return }
+            self.setLoading(false)
+            switch result {
+            case .success:
+                self.coordinator?.showOtpVerification(email: email, name: name)
+            case .failure(let error):
+                self.showAlert(message: self.message(for: error))
+            }
+        }
+    }
+
+    private func message(for error: Error) -> String {
+        if let apiError = error as? ApiErrorEnvelope {
+            return apiError.error.message
+        }
+        return error.localizedDescription
+    }
+
+    private func setLoading(_ isLoading: Bool) {
+        getStartedButton.isUserInteractionEnabled = !isLoading
+        getStartedButton.alpha = isLoading ? 0.6 : 1.0
+    }
+
+    private func showAlert(message: String) {
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
     }
 
     @objc private func togglePasswordVisibility() {
