@@ -14,10 +14,7 @@ final class SilentMoonApiService {
     private let network: NetworkManager
 
     /// Test üçün fərqli bir NetworkManager (məsələn mock) inject etmək istəsəniz init-i istifadə edin.
-    init(network: NetworkManager = .init(
-        session: .shared,
-        mainPath: "",
-        header: .init())) {
+    init(network: NetworkManager = .silentMoon) {
         self.network = network
     }
 

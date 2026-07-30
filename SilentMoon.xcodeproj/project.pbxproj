@@ -59,11 +59,6 @@
 			path = Manager;
 			sourceTree = "<group>";
 		};
-		F295DA66301BBB6B007D6F6D /* Common */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Common;
-			sourceTree = "<group>";
-		};
 		F295DA67301BBB77007D6F6D /* DTO.S */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = DTO.S;
@@ -101,7 +96,6 @@
 			isa = PBXGroup;
 			children = (
 				F295DA67301BBB77007D6F6D /* DTO.S */,
-				F295DA66301BBB6B007D6F6D /* Common */,
 				F295D8E4301A28C4007D6F6D /* Manager */,
 				F295D8893016AD64007D6F6D /* SleepyControllerViewList */,
 				F2CC6A082FF5903200A76DC5 /* CollectionCell */,
@@ -147,7 +141,6 @@
 				F26071FE2FEEDE7100F5F017 /* Resuable */,
 				F295D8893016AD64007D6F6D /* SleepyControllerViewList */,
 				F295D8E4301A28C4007D6F6D /* Manager */,
-				F295DA66301BBB6B007D6F6D /* Common */,
 				F295DA67301BBB77007D6F6D /* DTO.S */,
 				F2CC69712FF3FDA000A76DC5 /* TabbarControllerView */,
 				F2CC6A042FF58FC500A76DC5 /* ViewControllerModels */,

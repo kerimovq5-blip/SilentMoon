@@ -17,12 +17,18 @@ enum SilentMoonEndPoint: EndPoint {
 
     var path: String {
         switch self {
-        case .register:    return "/auth/register"
-        case .login:       return "/auth/login"
-        case .verifyEmail: return "/auth/verify-email"
-        case .resendOtp:   return "/auth/resend-otp"
-        case .refresh:     return "/auth/refresh"
-        case .logout:      return "/auth/logout"
+        case .register:   
+            return "/auth/register"
+        case .login:     
+            return "/auth/login"
+        case .verifyEmail:
+            return "/auth/verify-email"
+        case .resendOtp:
+            return "/auth/resend-otp"
+        case .refresh:
+            return "/auth/refresh"
+        case .logout:   
+            return "/auth/logout"
         }
     }
 
@@ -33,7 +39,8 @@ enum SilentMoonEndPoint: EndPoint {
     var requestBody: RequestBody? {
         switch self {
         case .register(let name, let email, let password):
-            return .dictionary(["name": name, "email": email, "password": password])
+            let dto = RegisterRequest(name: name, email: email, password: password)
+            return .encodable(dto)
         case .login(let email, let password):
             return .dictionary(["email": email, "password": password])
         case .verifyEmail(let email, let otp):
@@ -55,17 +62,6 @@ enum SilentMoonEndPoint: EndPoint {
             return false
         }
     }
-}
-
-// MARK: - Response modelləri
-// Qeyd: bu struct-lar ayrıca "Models" faylında deyil, məhz aid olduqları
-// endpoint enum-unun yanında saxlanılır — ErrorModel-in EndPoint.swift-də
-// olduğu kimi eyni məntiq.
-
-struct RegisterResponse: Decodable {
-    let message: String
-    let email: String
-    let otpExpiresAt: String
 }
 
 struct ResendOtpResponse: Decodable {

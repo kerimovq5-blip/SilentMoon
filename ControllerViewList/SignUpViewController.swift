@@ -140,6 +140,27 @@ final class SignUpViewController: UIViewController {
         return button
     }()
 
+    private lazy var logInButton: UIButton = {
+        let button = UIButton()
+        let attributed = NSMutableAttributedString(
+            string: "ALREADY HAVE AN ACCOUNT? ",
+            attributes: [
+                .foregroundColor: AssetColors.textSecondary.color,
+                .font: AppFonts.body.font
+            ]
+        )
+        attributed.append(NSAttributedString(
+            string: "LOG IN",
+            attributes: [
+                .foregroundColor: AssetColors.accent.color,
+                .font: AppFonts.body.font
+            ]
+        ))
+        button.setAttributedTitle(attributed, for: .normal)
+        button.addTarget(self, action: #selector(logInTapped), for: .touchUpInside)
+        return button
+    }()
+
     private func configureKeyboardHandling() {
         NotificationCenter.default.addObserver(
             self,
@@ -184,7 +205,8 @@ final class SignUpViewController: UIViewController {
             emailTextField,
             passwordTextField,
             privacyStackView,
-            getStartedButton
+            getStartedButton,
+            logInButton
         )
     }
 
@@ -250,36 +272,47 @@ final class SignUpViewController: UIViewController {
 
         getStartedButton
             .top(privacyStackView.bottomAnchor, AppLayout.largeSpacing.value).0
-            .bottom(contentView.bottomAnchor, -AppLayout.bottomInset.value).0
             .leading(contentView.leadingAnchor, AppLayout.spacing.value).0
             .trailing(contentView.trailingAnchor, -AppLayout.spacing.value).0
             .height(AppLayout.textFieldHeight.value)
+
+        logInButton
+            .top(getStartedButton.bottomAnchor, AppLayout.spacing.value).0
+            .bottom(contentView.bottomAnchor, -AppLayout.bottomInset.value).0
+            .centerX(contentView.centerXAnchor).0
+            .height(40)
     }
 
     private func getStartedTapped() {
-        guard isPrivacyAccepted else {
-            showAlert(message: "Davam etmək üçün Privacy Policy-ni qəbul edin.")
-            return
-        }
-        emailValidation.markSubmitAttempt()
-        guard emailValidation.isValid else { return }
-
         let name = accountTextField.text
-        let email = emailTextField.text
-        let password = passwordTextField.text
-        guard !name.isEmpty, !password.isEmpty else { return }
+        self.coordinator?.getStarted(name: name)
 
-        setLoading(true)
-        SilentMoonApiService.shared.register(name: name, email: email, password: password) { [weak self] result in
-            guard let self else { return }
-            self.setLoading(false)
-            switch result {
-            case .success:
-                self.coordinator?.showOtpVerification(email: email, name: name)
-            case .failure(let error):
-                self.showAlert(message: self.message(for: error))
-            }
-        }
+//        guard isPrivacyAccepted else {
+//            showAlert(message: "Davam etmək üçün Privacy Policy-ni qəbul edin.")
+//            return
+//        }
+//        emailValidation.markSubmitAttempt()
+//        guard emailValidation.isValid else { return }
+//
+//        let name = accountTextField.text
+//        let email = emailTextField.text
+//        let password = passwordTextField.text
+//        guard !name.isEmpty, !password.isEmpty else { return }
+//
+//        setLoading(true)
+//        SilentMoonApiService.shared.register(name: name, email: email, password: password) { [weak self] result in
+//            guard let self else { return }
+//            self.setLoading(false)
+//            switch result {
+//
+//            case .success:
+//
+//                self.coordinator?.showOtpVerification(email: email, name: name)
+//            case .failure(let error):
+//                print(error.localizedDescription)
+//                self.showAlert(message: self.message(for: error))
+//            }
+//        }
     }
 
     private func message(for error: Error) -> String {
@@ -298,6 +331,10 @@ final class SignUpViewController: UIViewController {
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
+    }
+
+    @objc private func logInTapped() {
+        coordinator?.showLogin()
     }
 
     @objc private func togglePasswordVisibility() {

@@ -238,25 +238,26 @@ final class LogInViewController: UIViewController {
     }
 
     @objc private func logInTapped() {
-        emailValidation.markSubmitAttempt()
-        guard emailValidation.isValid else { return }
-
-        let email = emailTextField.text
-        let password = passwordTextField.text
-        guard !password.isEmpty else { return }
-
-        setLoading(true)
-        SilentMoonApiService.shared.login(email: email, password: password) {
-            [weak self] result in
-            guard let self else { return }
-            self.setLoading(false)
-            switch result {
-            case .success:
-                self.coordinator?.finishAuth()
-            case .failure(let error):
-                self.handleLoginError(error, email: email)
-            }
-        }
+        self.coordinator?.finishAuth()
+//        emailValidation.markSubmitAttempt()
+//        guard emailValidation.isValid else { return }
+//
+//        let email = emailTextField.text
+//        let password = passwordTextField.text
+//        guard !password.isEmpty else { return }
+//
+//        setLoading(true)
+//        SilentMoonApiService.shared.login(email: email, password: password) {
+//            [weak self] result in
+//            guard let self else { return }
+//            self.setLoading(false)
+//            switch result {
+//            case .success:
+//                self.coordinator?.finishAuth()
+//            case .failure(let error):
+//                self.handleLoginError(error, email: email)
+//            }
+//        }
     }
 
     private func handleLoginError(_ error: Error, email: String) {

@@ -8,10 +8,10 @@
 import Foundation
 
 // MARK: - RegisterRequest
-struct RegisterRequest: Codable {
-    let name: String?
-    let email: String?
-    let password: String?
+struct RegisterRequest: Decodable {
+    let name: String
+    let email: String
+    let password: String
 
     enum CodingKeys: String, CodingKey {
         case name = "name"

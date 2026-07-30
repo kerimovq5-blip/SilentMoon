@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - RegisterResponse
-struct RegisterResponse: Codable {
+struct RegisterResponse: Decodable {
     let message: String?
     let email: String?
     let otpExpiresAt: String?

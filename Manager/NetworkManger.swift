@@ -12,22 +12,46 @@ final class NetworkManager {
     private  let session: URLSession
     private let mainPath : String
     private let header : [String:String]
+    /// Backend-in xəta formatını decode edən closure. Default TMDB-nin ErrorModel formatını sınayır.
+    private let errorDecoder: (Data) -> Error?
     
     
     
     static let shared = NetworkManager(
         session: URLSession.shared ,
-        mainPath :  "",
+        mainPath :  "https://api.themoviedb.org/3",
         header: [
-            "" : ""
+            "accept":"application/json",
+            "content-type":"application/json",
+            "Authorization":"Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkMjdmM2U0NzIzYjBjMDAyZGEyNzNiZDNmMDFkMDM3ZSIsIm5iZiI6MTc4MDgxOTI4My41MjQ5OTk5LCJzdWIiOiI2YTI1MjU1M2FhMTZjNzEzMjdjMGZhZDkiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.u6b3Q9Ga4afBGMCzgmZENXkolKZ5TtzaAMsOLxPh0w4"
         ])
-    init(session : URLSession ,
-         mainPath : String ,
-         header: [ String:String])
-    {
+
+    /// Silent Moon öz backend-imiz üçün ayrıca instans — TMDB instansına toxunmuruq.
+    /// Lokal test üçün mainPath-i "http://localhost:3000/api/v1" ilə əvəz edə bilərsiniz.
+    static let silentMoon = NetworkManager(
+        session: URLSession.shared,
+        mainPath: "http://localhost:3000/api/v1",
+        header: [
+            "accept": "application/json",
+            "content-type": "application/json"
+        ],
+        errorDecoder: { data in
+            try? JSONDecoder().decode(ApiErrorEnvelope.self, from: data)
+        }
+    )
+
+    init(
+        session : URLSession ,
+        mainPath : String ,
+        header: [ String:String],
+        errorDecoder: @escaping (Data) -> Error? = { data in
+            try? JSONDecoder().decode(ErrorModel.self, from: data)
+        }
+    ){
         self.session = session
         self.mainPath = mainPath
         self.header = header
+        self.errorDecoder = errorDecoder
     }
     
     func request <T : Decodable>(
@@ -41,7 +65,7 @@ final class NetworkManager {
             }
             switch urlRequest {
             case .success(let urlRequest):
-                session.dataTask(with: urlRequest) { (data, response, error) in
+                session.dataTask(with: urlRequest) { [weak self] (data, response, error) in
                     if let error = error {
                         callback(.failure(error))
                         return
@@ -53,14 +77,10 @@ final class NetworkManager {
                     
                     if let result = try? JSONDecoder().decode(T.self, from: data){
                         callback(.success(result))
-                    }else {
-                        do {
-                            let model = try
-                            JSONDecoder().decode(ErrorModel.self, from: data)
-                            callback(.failure(LocalError.backEndError (model.self)))
-                        } catch{
-                            callback(.failure(error))
-                        }
+                    } else if let backendError = self?.errorDecoder(data) {
+                        callback(.failure(backendError))
+                    } else {
+                        callback(.failure(LocalError.invalidDecode))
                     }
                     
                 }.resume()
@@ -80,6 +100,9 @@ final class NetworkManager {
         header.forEach({
             urlReuqest.setValue($1 , forHTTPHeaderField: $0)
         })
+        if endPoint.requiresAuth, let accessToken = TokenStore.shared.accessToken {
+            urlReuqest.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        }
         urlReuqest.httpMethod = endPoint.method.rawValue
         if let body = endPoint.requestBody {
             switch body {
