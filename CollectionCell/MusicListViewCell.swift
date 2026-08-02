@@ -1,4 +1,11 @@
 //
+//  MusicListViewCell.swift
+//  SilentMoon
+//
+//  Created by Kerimov Qehreman on 31.07.26.
+//
+
+//
 //  SleepyStoryCell.swift
 //  SilentMoon
 //
@@ -7,8 +14,8 @@
 
 import UIKit
 
-final class SleepyStoryCell: UICollectionViewCell {
-    static let identifier: String = "SleepyStoryCell"
+final class MusicListViewCell: UICollectionViewCell {
+    static let identifier: String = "MusicListViewCell"
 
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
@@ -22,7 +29,7 @@ final class SleepyStoryCell: UICollectionViewCell {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = AppFonts.semiBold.font
-        label.textColor = .buttonTitle
+        label.textColor = .textPrimary
         return label
     }()
 

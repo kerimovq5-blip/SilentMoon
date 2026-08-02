@@ -15,7 +15,7 @@ final class RelatedCollectionCell: UICollectionViewCell {
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = 16
+        imageView.layer.cornerRadius = AppFonts.AppRaduis.buttonRadiusSmall
         imageView.clipsToBounds = true
         imageView.backgroundColor = .colorIndigo
         return imageView
@@ -23,7 +23,7 @@ final class RelatedCollectionCell: UICollectionViewCell {
 
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 18, weight: .semibold)
+        label.font = AppFonts.semiBold.font
         label.textColor = .buttonTitle
         return label
     }()

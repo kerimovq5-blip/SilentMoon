@@ -66,7 +66,18 @@ final class HomeViewController: UIViewController {
         label.numberOfLines = 0
         return label
     }()
-    
+
+    private lazy var searchButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
+        button.tintColor = AssetColors.textPrimary.color
+        button.backgroundColor = AssetColors.lightGray.color
+        button.layer.cornerRadius = AppLayout.buttonHeight2.value / 2
+        button.layer.masksToBounds = true
+        button.addTarget(self, action: #selector(searchPage), for: .touchUpInside)
+        return button
+    }()
+
     private lazy var collectionView: UICollectionView = {
         let collection = UICollectionView(
             frame: .zero,
@@ -110,6 +121,7 @@ final class HomeViewController: UIViewController {
         view.addSubviews(
             logoLabel,
             greetingLabel,
+            searchButton,
             collectionView
         )
     }
@@ -119,12 +131,18 @@ final class HomeViewController: UIViewController {
             .bottom(view.safeAreaLayoutGuide.topAnchor).0
             .centerX(view.centerXAnchor).0
             .height(50)
-        
+
+        searchButton
+            .centerY(greetingLabel.topAnchor, AppLayout.mediumSpacing.value).0
+            .trailing(view.trailingAnchor, -AppLayout.spacing.value).0
+            .height(AppLayout.buttonHeight2.value).0
+            .width(AppLayout.buttonHeight2.value)
+
         greetingLabel
             .top(logoLabel.bottomAnchor, AppLayout.largeSpacing.value).0
             .leading(view.leadingAnchor, AppLayout.spacing.value).0
-            .trailing(view.trailingAnchor, -AppLayout.spacing.value)
-        
+            .trailing(searchButton.leadingAnchor, -AppLayout.spacing.value)
+
         collectionView
             .top(greetingLabel.bottomAnchor, AppLayout.spacing.value).0
             .leading(view.leadingAnchor).0
@@ -248,6 +266,11 @@ final class HomeViewController: UIViewController {
 
         return section
     }
+    
+    @objc private func searchPage() {
+        coordinator?.showSearchPage()
+    }
+    
 }
 
    
@@ -324,5 +347,6 @@ extension HomeViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         //  coordinator?.showDetail()
+        
     }
 }

@@ -14,12 +14,13 @@ enum SilentMoonEndPoint: EndPoint {
     case resendOtp(email: String)
     case refresh(refreshToken: String)
     case logout(refreshToken: String)
+    case search(query: String, type: String? = nil, page: Int = 1, limit: Int = 20)
 
     var path: String {
         switch self {
-        case .register:   
+        case .register:
             return "/auth/register"
-        case .login:     
+        case .login:
             return "/auth/login"
         case .verifyEmail:
             return "/auth/verify-email"
@@ -27,20 +28,44 @@ enum SilentMoonEndPoint: EndPoint {
             return "/auth/resend-otp"
         case .refresh:
             return "/auth/refresh"
-        case .logout:   
+        case .logout:
             return "/auth/logout"
+        case .search:
+            return "/search"
         }
     }
 
-    var method: HTTPMethod { .post }
+    var method: HTTPMethod {
+        switch self {
+        case .register, .login, .verifyEmail, .resendOtp, .logout, .refresh:
+            return .post
+        case .search:
+            return .get
+        }
+    }
 
-    var queryItems: [URLQueryItem] { [] }
+    var queryItems: [URLQueryItem] {
+        switch self {
+        case .search(let query, let type, let page, let limit):
+            var items = [
+                URLQueryItem(name: "q", value: query),
+                URLQueryItem(name: "page", value: "\(page)"),
+                URLQueryItem(name: "limit", value: "\(limit)")
+            ]
+            if let type {
+                items.append(URLQueryItem(name: "type", value: type))
+            }
+            return items
+        default:
+            return []
+        }
+    }
 
     var requestBody: RequestBody? {
         switch self {
         case .register(let name, let email, let password):
             let dto = RegisterRequest(name: name, email: email, password: password)
-            return .encodable(dto)
+            return .encodable(dto as! Encodable)
         case .login(let email, let password):
             return .dictionary(["email": email, "password": password])
         case .verifyEmail(let email, let otp):
@@ -51,6 +76,8 @@ enum SilentMoonEndPoint: EndPoint {
             return .dictionary(["refreshToken": refreshToken])
         case .logout(let refreshToken):
             return .dictionary(["refreshToken": refreshToken])
+        case .search:
+            return nil
         }
     }
 

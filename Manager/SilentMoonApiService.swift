@@ -61,7 +61,6 @@ final class SilentMoonApiService {
         }
     }
 
-    // MARK: - Resend OTP
 
     func resendOtp(
         email: String,
@@ -70,7 +69,6 @@ final class SilentMoonApiService {
         network.request(endPoint: SilentMoonEndPoint.resendOtp(email: email), completion: completion)
     }
 
-    // MARK: - Refresh token
 
     func refreshToken(
         completion: @escaping (Result<AuthResponse, Error>) -> Void
@@ -87,7 +85,7 @@ final class SilentMoonApiService {
         }
     }
 
-    // MARK: - Logout
+    
 
     func logout(completion: @escaping (Result<Void, Error>) -> Void) {
         guard let refreshToken = TokenStore.shared.refreshToken else {
@@ -95,9 +93,10 @@ final class SilentMoonApiService {
             completion(.success(()))
             return
         }
-        // /auth/logout 204 (boş gövdə) qaytarır, ona görə Decodable üçün kiçik bir "EmptyResponse" istifadə edirik.
+        
         struct EmptyResponse: Decodable {}
-        network.request(endPoint: SilentMoonEndPoint.logout(refreshToken: refreshToken)) { (result: Result<EmptyResponse, Error>) in
+        network.request(endPoint: SilentMoonEndPoint.logout(refreshToken: refreshToken)) {(
+            result: Result<EmptyResponse, Error>) in
             TokenStore.shared.clear()
             switch result {
             case .success:
@@ -107,4 +106,16 @@ final class SilentMoonApiService {
             }
         }
     }
+    func search(
+           query: String,
+           type: String? = nil,
+           page: Int = 1,
+           limit: Int = 20,
+           completion: @escaping (Result<SearchResponse, Error>) -> Void
+       ) {
+           network.request(
+               endPoint: SilentMoonEndPoint.search(query: query, type: type, page: page, limit: limit),
+               completion: completion
+           )
+       }
 }

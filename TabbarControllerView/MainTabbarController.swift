@@ -42,9 +42,7 @@ final class MainTabBarCoordinator: Coordinator {
     }
 
      func makeSleepTab() -> UINavigationController {
-        let sleepController = WelcomeSleepyiewController()
-        sleepController.coordinator = self
-        let navigation = UINavigationController(rootViewController: sleepController)
+        let navigation = UINavigationController(rootViewController:  WelcomeSleepyiewController())
         navigation.tabBarItem = UITabBarItem(
             title: "Sleep",
             image: UIImage(named: "sleep")?.withRenderingMode(.alwaysOriginal),
@@ -64,10 +62,12 @@ final class MainTabBarCoordinator: Coordinator {
     }
 
      func makeMusicTab() -> UINavigationController {
-        let controller = UIViewController()
-        controller.view.backgroundColor = .white
+         let musicController = MusicListViewController()
+         musicController.coordinator = self
 
-        let navigation = UINavigationController(rootViewController: controller)
+         let navigation = UINavigationController(
+            rootViewController: musicController
+         )
         navigation.tabBarItem = UITabBarItem(
             title: "Music",
             image: UIImage(named: "music")?.withRenderingMode(.alwaysOriginal),
@@ -111,6 +111,16 @@ extension MainTabBarCoordinator: ContentNavigating {
         controller.coordinator = self
         activeNavigationController?.pushViewController(controller, animated: true)
         
+    }
+    func showMusicList() {
+        let controller = MusicListViewController()
+        controller.coordinator = self
+        activeNavigationController?.pushViewController(controller, animated: true)
+    }
+    func showSearchPage() {
+        let controller = SearchPageController()
+        controller.coordinator = self
+        activeNavigationController?.pushViewController(controller, animated: true)
     }
     func dismissMusicPage() {
         activeNavigationController?.popViewController(animated: true)

@@ -34,6 +34,9 @@ enum AssetColors : String{
     case ellipsesColor = "ellipsesColor"
     case sleepModeColor = "SleepModeColor"
     case darksleepmusic = "darksleepmusic"
+    case iceBlueColor = "IceBlueColor"
+   // case searchBackground = "Lightgray"
+   // case searchcolor = "TextSecondary"
     
     var color : UIColor {
         return UIColor(named: self.rawValue) ?? .clear
@@ -75,7 +78,7 @@ enum AppFonts {
 
     enum AppRaduis {
         static let buttonRadius: CGFloat = 30
-        static let buttonRadiusSmall: CGFloat = 15
+        static let buttonRadiusSmall: CGFloat = 16
         static let buttonRadiusMedium: CGFloat = 20
         static let buttonRadiusLarge: CGFloat = 25
     }

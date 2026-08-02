@@ -13,7 +13,7 @@ final class ChooseCollectionCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 16
+        imageView.layer.cornerRadius = AppFonts.AppRaduis.buttonRadiusSmall
         imageView.backgroundColor = .colorIndigo
         imageView.isUserInteractionEnabled = true
         
