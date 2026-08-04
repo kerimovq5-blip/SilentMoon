@@ -19,7 +19,12 @@ final class AppCoordinator: Coordinator {
     func start() {
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
-        showAuthFlow()
+
+        if TokenStore.shared.isLoggedIn {
+            showMainTabBarFlow()
+        } else {
+            showAuthFlow()
+        }
     }
 
     private func showAuthFlow() {
@@ -28,7 +33,6 @@ final class AppCoordinator: Coordinator {
             [weak self] in
             self?.showMainTabBarFlow()
         }
-
         childCoordinators = [authCoordinator]
         authCoordinator.start()
     }
@@ -38,10 +42,21 @@ final class AppCoordinator: Coordinator {
 
         let tabBarController = UITabBarController()
         let tabBarCoordinator = MainTabBarCoordinator(tabBarController: tabBarController)
+        tabBarCoordinator.onLogout = { [weak self] in
+            self?.logout()
+        }
         childCoordinators = [tabBarCoordinator]
         tabBarCoordinator.start()
 
         setRoot(tabBarController)
+    }
+
+    private func logout() {
+        TokenStore.shared.clear()
+        childCoordinators.removeAll()
+        navigationController.setViewControllers([], animated: false)
+        setRoot(navigationController)
+        showAuthFlow()
     }
 
     private func setRoot(_ viewController: UIViewController) {
@@ -54,8 +69,3 @@ final class AppCoordinator: Coordinator {
         )
     }
 }
-     
-   
-   
-
-

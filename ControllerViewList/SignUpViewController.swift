@@ -20,7 +20,7 @@ final class SignUpViewController: UIViewController {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Create your account"
-        label.font = AppFonts.title.font.withSize(28)
+        label.font = AppFonts.title.font
         label.textColor = .textPrimary
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -66,6 +66,10 @@ final class SignUpViewController: UIViewController {
 
     private lazy var emailValidation: FieldValidationController = {
         .email(fieldController: emailTextField)
+    }()
+
+    private lazy var passwordValidation: FieldValidationController = {
+        .minLength(8, fieldController: passwordTextField)
     }()
 
     private lazy var emailTextField: AppTextFieldController = {
@@ -185,6 +189,7 @@ final class SignUpViewController: UIViewController {
         setupHierarchy()
         setupLayout()
         _ = emailValidation
+        _ = passwordValidation
         configureKeyboardHandling()
         let tapgesture = UITapGestureRecognizer(
             target: self, action: #selector(dismissKeyboard))
@@ -284,35 +289,31 @@ final class SignUpViewController: UIViewController {
     }
 
     private func getStartedTapped() {
-        let name = accountTextField.text
-        self.coordinator?.getStarted(name: name)
+        guard isPrivacyAccepted else {
+            showAlert(message: "Davam etmək üçün Privacy Policy-ni qəbul edin.")
+            return
+        }
 
-//        guard isPrivacyAccepted else {
-//            showAlert(message: "Davam etmək üçün Privacy Policy-ni qəbul edin.")
-//            return
-//        }
-//        emailValidation.markSubmitAttempt()
-//        guard emailValidation.isValid else { return }
-//
-//        let name = accountTextField.text
-//        let email = emailTextField.text
-//        let password = passwordTextField.text
-//        guard !name.isEmpty, !password.isEmpty else { return }
-//
-//        setLoading(true)
-//        SilentMoonApiService.shared.register(name: name, email: email, password: password) { [weak self] result in
-//            guard let self else { return }
-//            self.setLoading(false)
-//            switch result {
-//
-//            case .success:
-//
-//                self.coordinator?.showOtpVerification(email: email, name: name)
-//            case .failure(let error):
-//                print(error.localizedDescription)
-//                self.showAlert(message: self.message(for: error))
-//            }
-//        }
+        emailValidation.markSubmitAttempt()
+        passwordValidation.markSubmitAttempt()
+        guard emailValidation.isValid, passwordValidation.isValid else { return }
+
+        let name = accountTextField.text
+        let email = emailTextField.text
+        let password = passwordTextField.text
+        guard !name.isEmpty else { return }
+
+        setLoading(true)
+        SilentMoonApiService.shared.register(name: name, email: email, password: password) { [weak self] result in
+            guard let self else { return }
+            self.setLoading(false)
+            switch result {
+            case .success:
+                self.coordinator?.showOtpVerification(email: email, name: name)
+            case .failure(let error):
+                self.showAlert(message: self.message(for: error))
+            }
+        }
     }
 
     private func message(for error: Error) -> String {

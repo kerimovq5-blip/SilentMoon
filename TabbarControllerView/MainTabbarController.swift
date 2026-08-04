@@ -10,6 +10,7 @@ import UIKit
 final class MainTabBarCoordinator: Coordinator {
     var childCoordinators: [Coordinator] = []
     let tabBarController: UITabBarController
+    var onLogout: (() -> Void)?
 
     init(tabBarController: UITabBarController) {
         self.tabBarController = tabBarController
@@ -42,7 +43,9 @@ final class MainTabBarCoordinator: Coordinator {
     }
 
      func makeSleepTab() -> UINavigationController {
-        let navigation = UINavigationController(rootViewController:  WelcomeSleepyiewController())
+        let sleepController = WelcomeSleepyiewController()
+        sleepController.coordinator = self
+        let navigation = UINavigationController(rootViewController: sleepController)
         navigation.tabBarItem = UITabBarItem(
             title: "Sleep",
             image: UIImage(named: "sleep")?.withRenderingMode(.alwaysOriginal),
@@ -77,8 +80,10 @@ final class MainTabBarCoordinator: Coordinator {
     }
 
      func makeAccountTab() -> UINavigationController {
-        let controller = UIViewController()
-        controller.view.backgroundColor = .white
+        let controller = AccountViewController()
+        controller.onLogoutTapped = { [weak self] in
+            self?.onLogout?()
+        }
 
         let navigation = UINavigationController(rootViewController: controller)
         navigation.tabBarItem = UITabBarItem(

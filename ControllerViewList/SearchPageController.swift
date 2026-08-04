@@ -18,7 +18,7 @@ final class SearchPageController: UIViewController {
     }
 
     private enum State {
-        case idle         
+        case idle
         case loading
         case loaded
         case empty
@@ -37,8 +37,9 @@ final class SearchPageController: UIViewController {
         textfield.textColor = .black
         textfield.tintColor = AssetColors.textSecondary.color
         textfield.attributedPlaceholder = NSAttributedString(
-            string: "Search",
-            attributes: [.foregroundColor: AssetColors.lightGray.color]
+            string: "Search in Meditate" ,
+            
+            attributes: [.foregroundColor: AssetColors.textSecondary.color]
         )
 
         let leftPadding = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 1))
@@ -77,45 +78,52 @@ final class SearchPageController: UIViewController {
         return indicator
     }()
 
-    private lazy var emptyStateLabel: UILabel = {
-        let label = UILabel()
-        
-        let search = NSAttributedString(
-            string: "we are sorry, We can not find the Search :( ",
-            attributes: [
-                .foregroundColor: AssetColors.buttonTitle.color,
-                .font: AppFonts.title.font
-            ]
-        )
-        
-        let attachment = NSTextAttachment()
-        attachment.image = UIImage(named: "seachicon")?
-            .withRenderingMode(.alwaysOriginal)
-        attachment.bounds = CGRect(x: 0, y: -6, width: 30, height: 30)
-        let searchicon = NSAttributedString(attachment: attachment)
-        
-        let categories = NSAttributedString(
-            string: " Find your movie by Type title,\n categories, years, etc ",
-            attributes: [
-                .foregroundColor: AssetColors.textSecondary.color,
-                .font: AppFonts.body.font]
-        )
-        
-        let full = NSMutableAttributedString()
-        full.append(search)
-        full.append(searchicon)
-        full.append(categories)
-        
-        label.attributedText = full
-        label.textAlignment = .center
-        return label
-    }()
     private lazy var silentMoonFrame: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "SilentMoonFrame")
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        imageView.isHidden = true
         return imageView
+    }()
+
+    
+    private lazy var emptyStateIcon: UIImageView = {
+        let imageView = UIImageView(image: UIImage(systemName: "magnifyingglass.circle"))
+        imageView.tintColor = AssetColors.buttonTitle.color
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+
+    private lazy var emptyStateTitleLabel: UILabel = {
+        let label = UILabel()
+        label.font = AppFonts.title.font
+        label.textColor = AssetColors.buttonTitle.color
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        return label
+    }()
+
+    private lazy var emptyStateSubtitleLabel: UILabel = {
+        let label = UILabel()
+        label.font = AppFonts.body.font
+        label.textColor = AssetColors.textSecondary.color
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.text = "Find your movie by title, category, year, etc."
+        return label
+    }()
+
+    private lazy var emptyStateStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [
+            emptyStateIcon,
+            emptyStateTitleLabel,
+            emptyStateSubtitleLabel
+        ])
+        stack.axis = .vertical
+        stack.spacing = AppLayout.smallSpacing.value
+        stack.alignment = .center
+        return stack
     }()
 
     override func viewDidLoad() {
@@ -131,7 +139,11 @@ final class SearchPageController: UIViewController {
     private func setupHierarchy() {
         view.addSubviews(
             searchTextField,
-            tableView, loadingIndicator, emptyStateLabel)
+            tableView,
+            loadingIndicator,
+            silentMoonFrame,
+            emptyStateStack
+        )
     }
 
     private func setupLayout() {
@@ -151,8 +163,18 @@ final class SearchPageController: UIViewController {
             .top(tableView.topAnchor, AppLayout.largeSpacing.value).0
             .centerX(view.centerXAnchor)
 
-        emptyStateLabel
-            .top(tableView.topAnchor, AppLayout.largeSpacing.value).0
+        silentMoonFrame
+            .top(searchTextField.bottomAnchor, AppLayout.largeSpacing.value).0
+            .leading(view.leadingAnchor, AppLayout.xLargeSpacing.value).0
+            .trailing(view.trailingAnchor, -AppLayout.xLargeSpacing.value).0
+            .height(140)
+
+        emptyStateIcon
+            .height(44).0
+            .width(44)
+
+        emptyStateStack
+            .top(silentMoonFrame.bottomAnchor, AppLayout.spacing.value).0
             .leading(view.leadingAnchor, AppLayout.spacing.value).0
             .trailing(view.trailingAnchor, -AppLayout.spacing.value)
     }
@@ -200,29 +222,37 @@ final class SearchPageController: UIViewController {
         return error.localizedDescription
     }
 
+    
     private func updateUI(for state: State) {
         switch state {
         case .idle:
             loadingIndicator.stopAnimating()
-            emptyStateLabel.isHidden = true
+            emptyStateStack.isHidden = true
+            silentMoonFrame.isHidden = true
             tableView.isHidden = false
         case .loading:
             loadingIndicator.startAnimating()
-            emptyStateLabel.isHidden = true
+            emptyStateStack.isHidden = true
+            silentMoonFrame.isHidden = true
             tableView.isHidden = true
         case .loaded:
             loadingIndicator.stopAnimating()
-            emptyStateLabel.isHidden = true
+            emptyStateStack.isHidden = true
+            silentMoonFrame.isHidden = true
             tableView.isHidden = false
         case .empty:
             loadingIndicator.stopAnimating()
-            emptyStateLabel.text = "Nəticə tapılmadı"
-            emptyStateLabel.isHidden = false
+            emptyStateTitleLabel.text = "we are sorry, we can't find the search :("
+            emptyStateSubtitleLabel.text = "Find your movie by title, category, year, etc."
+            emptyStateStack.isHidden = false
+            silentMoonFrame.isHidden = false
             tableView.isHidden = true
         case .error(let message):
             loadingIndicator.stopAnimating()
-            emptyStateLabel.text = message
-            emptyStateLabel.isHidden = false
+            emptyStateTitleLabel.text = "Something went wrong"
+            emptyStateSubtitleLabel.text = message
+            emptyStateStack.isHidden = false
+            silentMoonFrame.isHidden = true
             tableView.isHidden = true
         }
     }
@@ -256,7 +286,7 @@ extension SearchPageController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let item = results[indexPath.row]
-        
+
         print("Seçilən kurs: \(item.title) (id: \(item.id))")
     }
 }

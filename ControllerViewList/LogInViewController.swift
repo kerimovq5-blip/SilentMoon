@@ -59,6 +59,10 @@ final class LogInViewController: UIViewController {
         .email(fieldController: emailTextField)
     }()
 
+    private lazy var passwordValidation: FieldValidationController = {
+        .minLength(8, fieldController: passwordTextField)
+    }()
+
     private lazy var emailTextField: AppTextFieldController = {
         AppTextFieldController(
             placeholder: "Email address",

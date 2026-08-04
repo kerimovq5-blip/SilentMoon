@@ -5,22 +5,15 @@
 //  Created by Kerimov Qehreman on 31.07.26.
 //
 
-//
-//  SleepyStoryCell.swift
-//  SilentMoon
-//
-//  Created by Kerimov Qehreman on 28.07.26.
-//
-
 import UIKit
 
-final class MusicListViewCell: UICollectionViewCell {
+final class MusicListViewCell: UITableViewCell {
     static let identifier: String = "MusicListViewCell"
 
-    private lazy var imageView: UIImageView = {
+    internal  lazy var imageview: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = AppFonts.AppRaduis.buttonRadiusSmall
+        imageView.layer.cornerRadius = AppFonts.AppRaduis.buttonRadius
         imageView.clipsToBounds = true
         imageView.backgroundColor = .colorIndigo
         return imageView
@@ -37,15 +30,15 @@ final class MusicListViewCell: UICollectionViewCell {
         let label = UILabel()
         label.font = .systemFont(ofSize: 14, weight: .regular)
         label.textColor = .textSecondary
-        label.numberOfLines = 1
+        label.numberOfLines = 0
         label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.8
-        
         return label
     }()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        selectionStyle = .none
+        backgroundColor = .clear
         setup()
         setConstraint()
     }
@@ -56,41 +49,41 @@ final class MusicListViewCell: UICollectionViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        imageView.image = nil
+        imageview.image = nil
         titleLabel.text = nil
         durationItem.text = nil
     }
 
     private func setup() {
-        
         contentView.addSubviews(
-            imageView,
+            imageview,
             titleLabel,
             durationItem
         )
     }
 
     private func setConstraint() {
-        imageView
-                .top(contentView.topAnchor).0
-                .leading(contentView.leadingAnchor).0
-                .trailing(contentView.trailingAnchor).0
-                .height(120)
 
-            titleLabel
-                .top(imageView.bottomAnchor, 10).0
-                .leading(contentView.leadingAnchor).0
-                .trailing(contentView.trailingAnchor, -12)
+        imageview
+            .top(contentView.topAnchor, AppLayout.smallSpacing.value).0
+            .leading(contentView.leadingAnchor, AppLayout.spacing.value).0
+            .height(60).0
+            .width(60)
+
+        titleLabel
+            .centerY(imageview.centerYAnchor).0
+            .leading(imageview.trailingAnchor, AppLayout.spacing.value).0
+            .trailing(contentView.trailingAnchor, -AppLayout.spacing.value)
 
         durationItem
-            .top(titleLabel.bottomAnchor, 4).0
-            .leading(contentView.leadingAnchor, 2).0
-            .trailing(contentView.trailingAnchor).0
-            .bottom(contentView.bottomAnchor, -4)
+            .top(titleLabel.bottomAnchor ).0
+            .leading(imageview.trailingAnchor, AppLayout.spacing.value).0
+            .trailing(contentView.trailingAnchor, -AppLayout.spacing.value).0
+            .bottom(contentView.bottomAnchor)
     }
 
     func configure(with item: SleepyStoryModels) {
-        imageView.image = item.image
+        imageview.image = item.image
         titleLabel.text = item.title
         durationItem.text = item.durationItem
     }
