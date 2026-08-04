@@ -13,7 +13,6 @@ final class SilentMoonApiService {
 
     private let network: NetworkManager
 
-    /// Test üçün fərqli bir NetworkManager (məsələn mock) inject etmək istəsəniz init-i istifadə edin.
     init(network: NetworkManager = .silentMoon) {
         self.network = network
     }
@@ -74,7 +73,8 @@ final class SilentMoonApiService {
         completion: @escaping (Result<AuthResponse, Error>) -> Void
     ) {
         guard let refreshToken = TokenStore.shared.refreshToken else {
-            completion(.failure(LocalError.invalidResponse))
+            
+            completion(.failure(AppError.unauthorized))
             return
         }
         network.request(endPoint: SilentMoonEndPoint.refresh(refreshToken: refreshToken)) { (result: Result<AuthResponse, Error>) in
