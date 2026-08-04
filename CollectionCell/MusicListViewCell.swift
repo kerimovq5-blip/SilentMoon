@@ -71,7 +71,7 @@ final class MusicListViewCell: UITableViewCell {
             .width(60)
 
         titleLabel
-            .centerY(imageview.centerYAnchor).0
+            .centerY(imageview.centerYAnchor , -10).0
             .leading(imageview.trailingAnchor, AppLayout.spacing.value).0
             .trailing(contentView.trailingAnchor, -AppLayout.spacing.value)
 

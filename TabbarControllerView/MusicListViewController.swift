@@ -38,7 +38,7 @@ final class MusicListViewController: UIViewController {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "Union")?
             .withRenderingMode(.alwaysTemplate)
-        imageView.tintColor = AssetColors.iceBlueColor.color
+        imageView.tintColor = AssetColors.colorIndigo.color
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.isUserInteractionEnabled = false
@@ -185,6 +185,6 @@ extension MusicListViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        return 80
     }
 }
