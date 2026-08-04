@@ -3,6 +3,7 @@ import UIKit
 final class LogInViewController: UIViewController {
 
     weak var coordinator: AuthCoordinator?
+    private let viewModel = LoginViewModel()
     private var isPasswordVisible = false
 
     private lazy var scrollView: UIScrollView = {
@@ -151,12 +152,41 @@ final class LogInViewController: UIViewController {
         super.viewDidLoad()
         setupHierarchy()
         setupLayout()
-       // _ = emailValidation
+        _ = emailValidation
+        _ = passwordValidation
         configureKeyboardHandling()
+        bindViewModel()
         let tapgesture = UITapGestureRecognizer(
             target: self, action: #selector(dismissKeyboard))
         tapgesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapgesture)
+    }
+
+    private func bindViewModel() {
+        viewModel.onStateChange = { [weak self] in
+            self?.render()
+        }
+        viewModel.onEmailNotVerified = { [weak self] email in
+            self?.coordinator?.showOtpVerification(email: email)
+        }
+    }
+
+    private func render() {
+        switch viewModel.state {
+        case .idle:
+            setLoading(false)
+        case .loading:
+            setLoading(true)
+        case .success:
+            setLoading(false)
+            coordinator?.finishAuth()
+        case .invalidInput(let message):
+            setLoading(false)
+            showAlert(message: message)
+        case .requestFailed(let appError):
+            setLoading(false)
+            showAlert(message: appError.errorDescription ?? "Naməlum xəta baş verdi.")
+        }
     }
 
     private func setupHierarchy() {
@@ -242,39 +272,13 @@ final class LogInViewController: UIViewController {
     }
 
     @objc private func logInTapped() {
-        self.coordinator?.finishAuth()
-//        emailValidation.markSubmitAttempt()
-//        guard emailValidation.isValid else { return }
-//
-//        let email = emailTextField.text
-//        let password = passwordTextField.text
-//        guard !password.isEmpty else { return }
-//
-//        setLoading(true)
-//        SilentMoonApiService.shared.login(email: email, password: password) {
-//            [weak self] result in
-//            guard let self else { return }
-//            self.setLoading(false)
-//            switch result {
-//            case .success:
-//                self.coordinator?.finishAuth()
-//            case .failure(let error):
-//                self.handleLoginError(error, email: email)
-//            }
-//        }
-    }
+        emailValidation.markSubmitAttempt()
+        passwordValidation.markSubmitAttempt()
 
-    private func handleLoginError(_ error: Error, email: String) {
-        if let apiError = error as? ApiErrorEnvelope {
-            switch apiError.code {
-            case "EMAIL_NOT_VERIFIED":
-                coordinator?.showOtpVerification(email: email)
-            default:
-                showAlert(message: apiError.error.message)
-            }
-        } else {
-            showAlert(message: error.localizedDescription)
-        }
+        viewModel.email = emailTextField.text
+        viewModel.password = passwordTextField.text
+
+        viewModel.login()
     }
 
     private func setLoading(_ isLoading: Bool) {

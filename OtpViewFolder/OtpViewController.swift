@@ -10,8 +10,16 @@ import UIKit
 final class OtpViewController: UIViewController {
 
     weak var coordinator: AuthCoordinator?
-    var email: String = ""
-    var userName: String = ""
+    private let viewModel = OtpViewModel()
+
+    var email: String {
+        get { viewModel.email }
+        set { viewModel.email = newValue }
+    }
+    var userName: String {
+        get { viewModel.userName }
+        set { viewModel.userName = newValue }
+    }
 
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -70,6 +78,39 @@ final class OtpViewController: UIViewController {
         view.backgroundColor = .backgroundSecondary
         setupHierarchy()
         setupLayout()
+        bindViewModel()
+    }
+
+    private func bindViewModel() {
+        viewModel.onStateChange = { [weak self] in
+            self?.render()
+        }
+        viewModel.onVerifySucceeded = { [weak self] userName in
+            self?.coordinator?.getStarted(name: userName)
+        }
+    }
+
+    private func render() {
+        switch viewModel.state {
+        case .idle, .verifySucceeded:
+            verifyButton.isUserInteractionEnabled = true
+        case .verifying:
+            verifyButton.isUserInteractionEnabled = false
+        case .invalidInput(let message):
+            verifyButton.isUserInteractionEnabled = true
+            showAlert(message: message)
+        case .verifyFailed(let appError):
+            verifyButton.isUserInteractionEnabled = true
+            showAlert(message: appError.errorDescription ?? "Naməlum xəta baş verdi.")
+        case .resending:
+            resendButton.isUserInteractionEnabled = false
+        case .resendSucceeded(let message):
+            resendButton.isUserInteractionEnabled = true
+            showAlert(message: message)
+        case .resendFailed(let appError):
+            resendButton.isUserInteractionEnabled = true
+            showAlert(message: appError.errorDescription ?? "Naməlum xəta baş verdi.")
+        }
     }
 
     private func setupHierarchy() {
@@ -105,41 +146,12 @@ final class OtpViewController: UIViewController {
     }
 
     private func verifyTapped() {
-        let otp = otpTextField.text
-        guard otp.count == 6 else {
-            showAlert(message: "Zəhmət olmasa 6 rəqəmli kodu daxil edin.")
-            return
-        }
-
-        verifyButton.isUserInteractionEnabled = false
-        SilentMoonApiService.shared.verifyEmail(email: email, otp: otp) { [weak self] result in
-            guard let self else { return }
-            self.verifyButton.isUserInteractionEnabled = true
-            switch result {
-            case .success:
-                self.coordinator?.getStarted(name: self.userName)
-            case .failure(let error):
-                self.showAlert(message: self.message(for: error))
-            }
-        }
+        viewModel.otp = otpTextField.text
+        viewModel.verify()
     }
 
     @objc private func resendTapped() {
-        SilentMoonApiService.shared.resendOtp(email: email) { [weak self] result in
-            switch result {
-            case .success(let response):
-                self?.showAlert(message: response.message)
-            case .failure(let error):
-                self?.showAlert(message: self?.message(for: error) ?? "Xəta baş verdi")
-            }
-        }
-    }
-
-    private func message(for error: Error) -> String {
-        if let apiError = error as? ApiErrorEnvelope {
-            return apiError.error.message
-        }
-        return error.localizedDescription
+        viewModel.resendOtp()
     }
 
     private func showAlert(message: String) {

@@ -3,6 +3,7 @@ import UIKit
 final class SignUpViewController: UIViewController {
 
     var coordinator: AuthCoordinator?
+    private let viewModel = SignUpViewModel()
     private var isPasswordVisible = false
     private var isPrivacyAccepted = false
 
@@ -191,10 +192,35 @@ final class SignUpViewController: UIViewController {
         _ = emailValidation
         _ = passwordValidation
         configureKeyboardHandling()
+        bindViewModel()
         let tapgesture = UITapGestureRecognizer(
             target: self, action: #selector(dismissKeyboard))
         tapgesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapgesture)
+    }
+
+    private func bindViewModel() {
+        viewModel.onStateChange = { [weak self] in
+            self?.render()
+        }
+        viewModel.onRegisterSucceeded = { [weak self] email, name in
+            self?.coordinator?.showOtpVerification(email: email, name: name)
+        }
+    }
+
+    private func render() {
+        switch viewModel.state {
+        case .idle, .success:
+            setLoading(false)
+        case .loading:
+            setLoading(true)
+        case .invalidInput(let message):
+            setLoading(false)
+            showAlert(message: message)
+        case .requestFailed(let appError):
+            setLoading(false)
+            showAlert(message: appError.errorDescription ?? "Naməlum xəta baş verdi.")
+        }
     }
 
     private func setupHierarchy() {
@@ -289,38 +315,16 @@ final class SignUpViewController: UIViewController {
     }
 
     private func getStartedTapped() {
-        guard isPrivacyAccepted else {
-            showAlert(message: "Davam etmək üçün Privacy Policy-ni qəbul edin.")
-            return
-        }
-
+        
         emailValidation.markSubmitAttempt()
         passwordValidation.markSubmitAttempt()
-        guard emailValidation.isValid, passwordValidation.isValid else { return }
 
-        let name = accountTextField.text
-        let email = emailTextField.text
-        let password = passwordTextField.text
-        guard !name.isEmpty else { return }
+        viewModel.name = accountTextField.text
+        viewModel.email = emailTextField.text
+        viewModel.password = passwordTextField.text
+        viewModel.isPrivacyAccepted = isPrivacyAccepted
 
-        setLoading(true)
-        SilentMoonApiService.shared.register(name: name, email: email, password: password) { [weak self] result in
-            guard let self else { return }
-            self.setLoading(false)
-            switch result {
-            case .success:
-                self.coordinator?.showOtpVerification(email: email, name: name)
-            case .failure(let error):
-                self.showAlert(message: self.message(for: error))
-            }
-        }
-    }
-
-    private func message(for error: Error) -> String {
-        if let apiError = error as? ApiErrorEnvelope {
-            return apiError.error.message
-        }
-        return error.localizedDescription
+        viewModel.register()
     }
 
     private func setLoading(_ isLoading: Bool) {

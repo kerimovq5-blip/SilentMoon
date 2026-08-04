@@ -45,8 +45,6 @@ final class SilentMoonApiService {
         }
     }
 
-    // MARK: - Verify Email (OTP)
-
     func verifyEmail(
         email: String,
         otp: String,
