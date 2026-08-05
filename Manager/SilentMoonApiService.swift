@@ -67,7 +67,7 @@ final class SilentMoonApiService {
                 callbacks.forEach { $0(true) }
             case .failure:
                 TokenStore.shared.clear()
-                NotificationCenter.default.post(name: .sessionExpired, object: nil)
+//                NotificationCenter.default.post(name: .sessionExpired, object: nil)
                 callbacks.forEach { $0(false) }
             }
         }

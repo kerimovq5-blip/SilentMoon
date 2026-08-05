@@ -5,6 +5,11 @@ enum Validator {
         let pattern = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
         return NSPredicate(format: "SELF MATCHES %@", pattern).evaluate(with: text)
     }
+
+   
+    static func isValidPassword(_ text: String) -> Bool {
+        text.count >= 8
+    }
 }
 
 final class FieldValidationController: NSObject {
@@ -78,7 +83,11 @@ extension FieldValidationController {
     static func email(fieldController: AppTextFieldController) -> FieldValidationController {
         FieldValidationController(fieldController: fieldController, validator: Validator.isValidEmail)
     }
-    
+
+    static func password(fieldController: AppTextFieldController) -> FieldValidationController {
+        FieldValidationController(fieldController: fieldController, validator: Validator.isValidPassword)
+    }
+
     static func minLength(_ minLength: Int, fieldController: AppTextFieldController) -> FieldValidationController {
         FieldValidationController(fieldController: fieldController) { $0.count >= minLength }
     }

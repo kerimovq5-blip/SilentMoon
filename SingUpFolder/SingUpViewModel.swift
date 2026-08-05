@@ -1,10 +1,14 @@
 //
-//  SingUpViewModel.swift
+//  SignUpViewModel.swift
 //  SilentMoon
 //
-//  Created by Kerimov Qehreman on 05.08.26.
+//  Created by Kerimov Qehreman on 04.08.26.
 //
-
+//  MVVM-in "Model qatı ilə View arasındakı vasitəçi" rolu:
+//  - View-dən heç bir UIKit tipi (UILabel, UIButton və s.) bura idxal olunmur
+//  - Bütün "nə vaxt sorğu göndərilsin, hansı şərtlər ödənməlidir" məntiqi burdadır
+//  - View yalnız `state`-i oxuyur, heç vaxt SilentMoonApiService-i özü çağırmır
+//
 
 import Foundation
 
@@ -17,6 +21,9 @@ enum SignUpViewModelState {
 }
 
 final class SignUpViewModel {
+
+    // MARK: - Inputs
+    // View bu sahələri birbaşa (məsələn textField.editingChanged-də) yeniləyir.
     var name: String = ""
     var email: String = ""
     var password: String = ""
@@ -26,8 +33,14 @@ final class SignUpViewModel {
     private(set) var state: SignUpViewModelState = .idle {
         didSet { onStateChange?() }
     }
+
+    /// View bu closure-u özünə bağlayır (bind edir) və state dəyişəndə UI-ı yeniləyir.
+    /// Bu, Combine/RxSwift əvəzinə istifadə etdiyimiz ən sadə "binding" üsuludur.
     var onStateChange: (() -> Void)?
 
+    /// Register uğurlu olanda View-ə "hansı email/ad ilə OTP ekranına keçim"
+    /// deməyimiz lazımdır — bunun üçün ayrıca callback (state-in özü ilə
+    /// deyil, çünki bu, "naviqasiya" fikridir, "state" fikri deyil).
     var onRegisterSucceeded: ((_ email: String, _ name: String) -> Void)?
 
     private let service: SilentMoonApiService
@@ -36,36 +49,20 @@ final class SignUpViewModel {
         self.service = service
     }
 
-   
-
-    var isEmailValid: Bool {
-        Validator.isValidEmail(email)
-    }
-
-    var isPasswordValid: Bool {
-        password.count >= 8
-    }
-
-    private var isNameValid: Bool {
-        !name.trimmingCharacters(in: .whitespaces).isEmpty
-    }
-
+    // MARK: - Register
 
     func register() {
         guard isPrivacyAccepted else {
             state = .invalidInput("Davam etmək üçün Privacy Policy-ni qəbul edin.")
             return
         }
-        guard isEmailValid else {
-            state = .invalidInput("E-poçt formatı yanlışdır.")
-            return
-        }
-        guard isPasswordValid else {
-            state = .invalidInput("Şifrə minimum 8 simvol olmalıdır.")
-            return
-        }
-        guard isNameValid else {
-            state = .invalidInput("Ad boş ola bilməz.")
+
+        if let message = FormValidator.validate([
+            (email, [EmailRule()]),
+            (password, [MinLengthRule(minLength: 8, fieldName: "Şifrə")]),
+            (name, [NotEmptyRule(fieldName: "Ad")])
+        ]) {
+            state = .invalidInput(message)
             return
         }
 
@@ -81,7 +78,10 @@ final class SignUpViewModel {
             }
         }
     }
-    
+
+    /// Service qatı hələ ümumi Error qaytarır (AppError-a keçidi tam
+    /// tamamlayanda bura ehtiyac qalmayacaq) — buradan keçirməyimiz
+    /// ViewModel-i "gələcəkdə Service dəyişsə belə" qoruyur.
     private func asAppError(_ error: Error) -> AppError {
         (error as? AppError) ?? .unknown(error)
     }
