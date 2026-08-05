@@ -163,10 +163,12 @@ final class LogInViewController: UIViewController {
     }
 
     private func bindViewModel() {
-        viewModel.onStateChange = { [weak self] in
+        viewModel.onStateChange = {
+            [weak self] in
             self?.render()
         }
-        viewModel.onEmailNotVerified = { [weak self] email in
+        viewModel.onEmailNotVerified = {
+            [weak self] email in
             self?.coordinator?.showOtpVerification(email: email)
         }
     }

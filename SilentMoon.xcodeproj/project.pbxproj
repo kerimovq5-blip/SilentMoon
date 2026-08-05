@@ -29,9 +29,9 @@
 			path = SilentMoon;
 			sourceTree = "<group>";
 		};
-		F26071EC2FEEDE4F00F5F017 /* ControllerViewList */ = {
+		F26071EC2FEEDE4F00F5F017 /* StartFolder */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ControllerViewList;
+			path = StartFolder;
 			sourceTree = "<group>";
 		};
 		F26071F52FEEDE6300F5F017 /* Common */ = {
@@ -74,19 +74,19 @@
 			path = OtpViewFolder;
 			sourceTree = "<group>";
 		};
+		F295DB9030238318007D6F6D /* ChooseTopicFolder */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ChooseTopicFolder;
+			sourceTree = "<group>";
+		};
+		F295DB9130238388007D6F6D /* ReminderViewFolder */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ReminderViewFolder;
+			sourceTree = "<group>";
+		};
 		F2CC69712FF3FDA000A76DC5 /* TabbarControllerView */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = TabbarControllerView;
-			sourceTree = "<group>";
-		};
-		F2CC6A042FF58FC500A76DC5 /* ViewControllerModels */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ViewControllerModels;
-			sourceTree = "<group>";
-		};
-		F2CC6A082FF5903200A76DC5 /* CollectionCell */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = CollectionCell;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -105,18 +105,18 @@
 		F218C9302FED5734002251F7 = {
 			isa = PBXGroup;
 			children = (
+				F295DB9130238388007D6F6D /* ReminderViewFolder */,
+				F295DB9030238318007D6F6D /* ChooseTopicFolder */,
 				F295DB8C30229DD3007D6F6D /* OtpViewFolder */,
 				F295DB8830229B1C007D6F6D /* LoginViewFolder */,
 				F295DB8430229949007D6F6D /* SingUpFolder */,
 				F295DA67301BBB77007D6F6D /* DTO.S */,
 				F295D8E4301A28C4007D6F6D /* Manager */,
-				F2CC6A082FF5903200A76DC5 /* CollectionCell */,
-				F2CC6A042FF58FC500A76DC5 /* ViewControllerModels */,
 				F2CC69712FF3FDA000A76DC5 /* TabbarControllerView */,
 				F26071FE2FEEDE7100F5F017 /* Resuable */,
 				F26071F92FEEDE6A00F5F017 /* Utils */,
 				F26071F52FEEDE6300F5F017 /* Common */,
-				F26071EC2FEEDE4F00F5F017 /* ControllerViewList */,
+				F26071EC2FEEDE4F00F5F017 /* StartFolder */,
 				F218C93B2FED5734002251F7 /* SilentMoon */,
 				F218C93A2FED5734002251F7 /* Products */,
 			);
@@ -147,7 +147,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				F218C93B2FED5734002251F7 /* SilentMoon */,
-				F26071EC2FEEDE4F00F5F017 /* ControllerViewList */,
+				F26071EC2FEEDE4F00F5F017 /* StartFolder */,
 				F26071F52FEEDE6300F5F017 /* Common */,
 				F26071F92FEEDE6A00F5F017 /* Utils */,
 				F26071FE2FEEDE7100F5F017 /* Resuable */,
@@ -156,9 +156,9 @@
 				F295DB8430229949007D6F6D /* SingUpFolder */,
 				F295DB8830229B1C007D6F6D /* LoginViewFolder */,
 				F295DB8C30229DD3007D6F6D /* OtpViewFolder */,
+				F295DB9030238318007D6F6D /* ChooseTopicFolder */,
+				F295DB9130238388007D6F6D /* ReminderViewFolder */,
 				F2CC69712FF3FDA000A76DC5 /* TabbarControllerView */,
-				F2CC6A042FF58FC500A76DC5 /* ViewControllerModels */,
-				F2CC6A082FF5903200A76DC5 /* CollectionCell */,
 			);
 			name = SilentMoon;
 			packageProductDependencies = (

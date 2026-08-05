@@ -17,10 +17,11 @@ final class NetworkManager {
 
     static let silentMoon = NetworkManager(
         session: URLSession.shared,
-        mainPath: "http://localhost:3000/api/v1",
+        mainPath: "https://api.silentmoon.app/api/v1",
         header: [
             "accept": "application/json",
-            "content-type": "application/json"
+            "content-type": "application/json",
+            "Authorization" : ""
         ],
         errorDecoder: { data in
             try? JSONDecoder().decode(ApiErrorEnvelope.self, from: data)

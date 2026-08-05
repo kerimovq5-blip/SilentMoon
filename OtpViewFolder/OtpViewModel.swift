@@ -61,8 +61,6 @@ final class OtpViewModel {
         }
     }
 
-   
-
     func resendOtp() {
         state = .resending
         apiService.resendOtp(email: email) { [weak self] result in

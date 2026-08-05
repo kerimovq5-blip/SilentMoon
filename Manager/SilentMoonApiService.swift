@@ -8,16 +8,72 @@
 import Foundation
 
 final class SilentMoonApiService {
-
+    
     static let shared = SilentMoonApiService()
-
+    
     private let network: NetworkManager
-
+    
+    
+    private var isRefreshing = false
+    private var refreshCallbacks: [(Bool) -> Void] = []
+    
     init(network: NetworkManager = .silentMoon) {
         self.network = network
     }
-
-
+    
+    
+    private func requestWithRefresh<T: Decodable>(
+        endPoint: EndPoint,
+        completion: @escaping (Result<T, Error>) -> Void
+    ) {
+        network.request(endPoint: endPoint) { [weak self] (result: Result<T, Error>) in
+            guard let self else { return }
+            
+            guard
+                case .failure(let error) = result,
+                let appError = error as? AppError,
+                case .unauthorized = appError,
+                endPoint.requiresAuth
+            else {
+                completion(result)
+                return
+            }
+            
+            self.refreshTokenIfNeeded { refreshed in
+                if refreshed {
+                    // Token yeniləndi — eyni sorğunu bir dəfə də göndəririk.
+                    self.network.request(endPoint: endPoint, completion: completion)
+                } else {
+                    completion(.failure(AppError.unauthorized))
+                }
+            }
+        }
+    }
+    
+    private func refreshTokenIfNeeded(completion: @escaping (Bool) -> Void) {
+        refreshCallbacks.append(completion)
+        
+        guard !isRefreshing else { return }
+        isRefreshing = true
+        
+        refreshToken { [weak self] result in
+            guard let self else { return }
+            self.isRefreshing = false
+            let callbacks = self.refreshCallbacks
+            self.refreshCallbacks = []
+            
+            switch result {
+            case .success:
+                callbacks.forEach { $0(true) }
+            case .failure:
+                TokenStore.shared.clear()
+                NotificationCenter.default.post(name: .sessionExpired, object: nil)
+                callbacks.forEach { $0(false) }
+            }
+        }
+    }
+    
+    
     func register(
         name: String,
         email: String,
@@ -29,9 +85,9 @@ final class SilentMoonApiService {
             completion: completion
         )
     }
-
+    
     // MARK: - Login
-
+    
     func login(
         email: String,
         password: String,
@@ -44,7 +100,9 @@ final class SilentMoonApiService {
             completion(result)
         }
     }
-
+    
+    // MARK: - Verify Email (OTP)
+    
     func verifyEmail(
         email: String,
         otp: String,
@@ -57,16 +115,16 @@ final class SilentMoonApiService {
             completion(result)
         }
     }
-
-
+    
+    
     func resendOtp(
         email: String,
         completion: @escaping (Result<ResendOtpResponse, Error>) -> Void
     ) {
         network.request(endPoint: SilentMoonEndPoint.resendOtp(email: email), completion: completion)
     }
-
-
+    
+    
     func refreshToken(
         completion: @escaping (Result<AuthResponse, Error>) -> Void
     ) {
@@ -82,9 +140,9 @@ final class SilentMoonApiService {
             completion(result)
         }
     }
-
     
-
+    
+    
     func logout(completion: @escaping (Result<Void, Error>) -> Void) {
         guard let refreshToken = TokenStore.shared.refreshToken else {
             TokenStore.shared.clear()
@@ -105,15 +163,16 @@ final class SilentMoonApiService {
         }
     }
     func search(
-           query: String,
-           type: String? = nil,
-           page: Int = 1,
-           limit: Int = 20,
-           completion: @escaping (Result<SearchResponse, Error>) -> Void
-       ) {
-           network.request(
-               endPoint: SilentMoonEndPoint.search(query: query, type: type, page: page, limit: limit),
-               completion: completion
-           )
-       }
+        query: String,
+        type: String? = nil,
+        page: Int = 1,
+        limit: Int = 20,
+        completion: @escaping (Result<SearchResponse, Error>) -> Void
+    ) {
+        network.request(
+            endPoint: SilentMoonEndPoint.search(query: query, type: type, page: page, limit: limit),
+            completion: completion
+        )
+    }
+    
 }

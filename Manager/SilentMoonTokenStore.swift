@@ -5,14 +5,6 @@
 //  Created by Kerimov Qehreman on 30.07.26.
 //
 
-//  Access/refresh token-i saxlayır. NetworkManager `requiresAuth == true`
-//  olan sorğulara buradakı accessToken-i avtomatik header kimi əlavə edir.
-//
-//  QEYD: Bu sadə (UserDefaults-a əsaslanan) implementasiyadır.
-//  Production-da mütləq Keychain istifadə edin (məsələn, KeychainAccess
-//  kitabxanası və ya öz Keychain wrapper-iniz) — token-lər UserDefaults-da
-//  şifrələnməmiş şəkildə saxlanılmamalıdır.
-//
 
 import Foundation
 

@@ -61,8 +61,6 @@ extension AppError: LocalizedError {
         }
     }
 
-    /// Backend-in öz xəta kodu (məsələn "EMAIL_NOT_VERIFIED"). ViewModel-lər
-    /// Backend xətası deyilsə, nil qaytarır.
     var backendCode: String? {
         if case .backend(let envelope) = self {
             return envelope.code
@@ -72,9 +70,7 @@ extension AppError: LocalizedError {
 }
 
 extension AppError {
-    /// URLSession-dan gələn xam (data, response, error) üçlüyünü AppError-a çevirir.
-    /// Bütün status-kod → xəta uyğunlaşdırması BURDA cəmlənib — NetworkManager
-    /// yalnız bu funksiyanı çağırır, özü heç bir status kodu bilmir.
+    
     static func map(
         data: Data?,
         response: URLResponse?,
