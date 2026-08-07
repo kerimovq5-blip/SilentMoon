@@ -24,10 +24,6 @@ final class LoginViewModel {
     }
     var onStateChange: (() -> Void)?
 
-    /// Backend "EMAIL_NOT_VERIFIED" qaytaranda Controller-ə "hansı email üçün
-    /// OTP ekranı açılmalıdır" deyirik. Bu, .requestFailed state-inin bir
-    /// hissəsi DEYİL — çünki bu, sadəcə "xəta göstər" yox, "başqa ekrana keç"
-    /// deməkdir (SignUpViewModel-dəki onRegisterSucceeded ilə eyni məntiq).
     var onEmailNotVerified: ((_ email: String) -> Void)?
 
     private let service: SilentMoonApiService
@@ -44,9 +40,10 @@ final class LoginViewModel {
             state = .invalidInput(message)
             return
         }
-
+        
         state = .loading
-        service.login(email: email, password: password) { [weak self] result in
+        service.login(email: email, password: password) {
+            [weak self] result in
             guard let self else { return }
             switch result {
             case .success:

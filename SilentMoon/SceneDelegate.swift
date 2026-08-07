@@ -23,7 +23,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         self.window = window
     }
-
+private func configureNetwork() {
+   NetworkManager(
+    session: URLSession.shared,
+    mainPath: "https://api.silentmoon.app/api/v1",
+    header: [
+        "accept": "application/json",
+        "content-type": "application/json",
+        "Authorization" : ""
+    ],
+    errorDecoder: { data in
+        try? JSONDecoder().decode(ApiErrorEnvelope.self, from: data)
+    }
+)
+        
+    }
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
         // This occurs shortly after the scene enters the background, or when its session is discarded.

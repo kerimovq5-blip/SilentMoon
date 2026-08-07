@@ -61,7 +61,7 @@ final class LogInViewController: UIViewController {
     }()
 
     private lazy var passwordValidation: FieldValidationController = {
-        .minLength(8, fieldController: passwordTextField)
+        .password( fieldController: passwordTextField)
     }()
 
     private lazy var emailTextField: AppTextFieldController = {
@@ -163,14 +163,14 @@ final class LogInViewController: UIViewController {
     }
 
     private func bindViewModel() {
-        viewModel.onStateChange = {
-            [weak self] in
-            self?.render()
-        }
-        viewModel.onEmailNotVerified = {
-            [weak self] email in
-            self?.coordinator?.showOtpVerification(email: email)
-        }
+//        viewModel.onStateChange = {
+//            [weak self] in
+//            self?.render()
+//        }
+//        viewModel.onEmailNotVerified = {
+//            [weak self] email in
+//            self?.coordinator?.showOtpVerification(email: email)
+//        }
     }
 
     private func render() {
@@ -274,13 +274,14 @@ final class LogInViewController: UIViewController {
     }
 
     @objc private func logInTapped() {
-        emailValidation.markSubmitAttempt()
-        passwordValidation.markSubmitAttempt()
-
-        viewModel.email = emailTextField.text
-        viewModel.password = passwordTextField.text
-
-        viewModel.login()
+//        emailValidation.markSubmitAttempt()
+//        passwordValidation.markSubmitAttempt()
+//
+//        viewModel.email = emailTextField.text
+//        viewModel.password = passwordTextField.text
+//
+//        viewModel.login()
+        coordinator?.finishAuth()
     }
 
     private func setLoading(_ isLoading: Bool) {

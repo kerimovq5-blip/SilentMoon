@@ -1,15 +1,10 @@
 //
-//  ValidationRule.swift
+//  ValidationPattern.swift
 //  SilentMoon
 //
 //  Created by Kerimov Qehreman on 06.08.26.
 //
 
-//
-//  ValidationRule.swift
-//  SilentMoon
-//
-//  Created by Kerimov Qehreman on 05.08.26.
 //
 //  "Validation pattern" (Rule/Specification pattern): hər qayda öz-özünü
 //  yoxlayır və xəta mesajını özü daşıyır. ViewModel-lər Validator.isValidEmail

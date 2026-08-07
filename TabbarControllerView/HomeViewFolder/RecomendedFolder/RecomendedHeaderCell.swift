@@ -1,5 +1,5 @@
 //
-//  SectionHeader.swift
+//  RecomendedHeader.swift
 //  SilentMoon
 //
 //  Created by Kerimov Qehreman on 10.07.26.
