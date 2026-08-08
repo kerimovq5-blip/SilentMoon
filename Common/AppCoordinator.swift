@@ -7,15 +7,19 @@
 
 import UIKit
 import SilentMoonNetworkCommon
+import SilentMoonManager
 
 final class AppCoordinator: Coordinator {
     var childCoordinators: [Coordinator] = []
     private let window: UIWindow
     private let navigationController = UINavigationController()
-    private let tokenStore : TokenStore
-    init(window: UIWindow , tokenStore: TokenStore) {
+    private let tokenStore: TokenStore
+    private let apiService: SilentMoonApiService
+
+    init(window: UIWindow, tokenStore: TokenStore, apiService: SilentMoonApiService) {
         self.window = window
         self.tokenStore = tokenStore
+        self.apiService = apiService
     }
 
     func start() {
@@ -30,7 +34,10 @@ final class AppCoordinator: Coordinator {
     }
 
     private func showAuthFlow() {
-        let authCoordinator = AuthCoordinator(navigationController: navigationController)
+        let authCoordinator = AuthCoordinator(
+            navigationController: navigationController,
+            apiService: apiService
+        )
         authCoordinator.onFlowFinished = {
             [weak self] in
             self?.showMainTabBarFlow()
@@ -43,7 +50,10 @@ final class AppCoordinator: Coordinator {
         childCoordinators.removeAll()
 
         let tabBarController = UITabBarController()
-        let tabBarCoordinator = MainTabBarCoordinator(tabBarController: tabBarController)
+        let tabBarCoordinator = MainTabBarCoordinator(
+            tabBarController: tabBarController,
+            apiService: apiService
+        )
         tabBarCoordinator.onLogout = { [weak self] in
             self?.logout()
         }

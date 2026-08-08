@@ -7,10 +7,22 @@
 
 
 import UIKit
+import SilentMoonManager
 
 final class AccountViewController: UIViewController {
 
     var onLogoutTapped: (() -> Void)?
+
+    private let apiService: SilentMoonApiService
+
+    init(apiService: SilentMoonApiService) {
+        self.apiService = apiService
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     private lazy var logoutButton: AppButton = {
         let button = AppButton(
@@ -36,9 +48,10 @@ final class AccountViewController: UIViewController {
 
     private func logoutTapped() {
         logoutButton.isUserInteractionEnabled = false
-        SilentMoonApiService.shared.logout {
-            [weak self] _ in
-            self?.onLogoutTapped?()
+        Task { [weak self] in
+            guard let self else { return }
+            _ = await self.apiService.logout()
+            self.onLogoutTapped?()
         }
     }
 }

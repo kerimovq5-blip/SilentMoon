@@ -6,9 +6,23 @@
 //
 
 import UIKit
+import SilentMoonNetworkCommon
+import SilentMoonManager
+import SilentMoonDTOs
 
 final class SearchPageController: UIViewController {
     var coordinator: ContentNavigating?
+
+    private let apiService: SilentMoonApiService
+
+    init(apiService: SilentMoonApiService) {
+        self.apiService = apiService
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     private var searchDebounceTimer: Timer?
     private var currentRequestID = 0
@@ -37,8 +51,8 @@ final class SearchPageController: UIViewController {
         textfield.textColor = .black
         textfield.tintColor = AssetColors.textSecondary.color
         textfield.attributedPlaceholder = NSAttributedString(
-            string: "Search in Meditate" ,
-            
+            string: "Search in Meditate",
+
             attributes: [.foregroundColor: AssetColors.textSecondary.color]
         )
 
@@ -87,7 +101,7 @@ final class SearchPageController: UIViewController {
         return imageView
     }()
 
-    
+
     private lazy var emptyStateIcon: UIImageView = {
         let imageView = UIImageView(image: UIImage(systemName: "magnifyingglass.circle"))
         imageView.tintColor = AssetColors.buttonTitle.color
@@ -202,8 +216,10 @@ final class SearchPageController: UIViewController {
         let requestID = currentRequestID
         state = .loading
 
-        SilentMoonApiService.shared.search(query: query) { [weak self] result in
-            guard let self, requestID == self.currentRequestID else { return }
+        Task { [weak self] in
+            guard let self else { return }
+            let result = await self.apiService.search(query: query)
+            guard requestID == self.currentRequestID else { return }
             switch result {
             case .success(let response):
                 self.results = response.data
@@ -216,13 +232,13 @@ final class SearchPageController: UIViewController {
     }
 
     private func message(for error: Error) -> String {
-        if let apiError = error as? ApiErrorEnvelope {
-            return apiError.error.message
+        if let appError = error as? AppError {
+            return appError.errorDescription ?? "Naməlum xəta baş verdi."
         }
         return error.localizedDescription
     }
 
-    
+
     private func updateUI(for state: State) {
         switch state {
         case .idle:

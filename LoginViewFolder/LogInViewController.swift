@@ -163,7 +163,6 @@ final class LogInViewController: UIViewController {
         NotificationCenter.default.removeObserver(self)
     }
 
-    // MARK: - Binding & Render
     private func bindViewModel() {
         viewModel.onStateChange = { [weak self] in
             self?.render()
@@ -192,7 +191,6 @@ final class LogInViewController: UIViewController {
         }
     }
 
-    // MARK: - Actions
     @objc private func logInTapped() {
         emailValidation.markSubmitAttempt()
         passwordValidation.markSubmitAttempt()
@@ -208,7 +206,6 @@ final class LogInViewController: UIViewController {
     }
 
     @objc private func forgotPasswordTapped() {
-        // Coordinator üzərindən şifrə sıfırlama ekranına yönləndirmə
         // coordinator?.showForgotPassword()
     }
 
@@ -218,7 +215,6 @@ final class LogInViewController: UIViewController {
         eyeButton.alpha = isPasswordVisible ? 1.0 : 0.5
     }
 
-    // MARK: - Setup UI
     private func setupHierarchy() {
         view.backgroundColor = .backgroundSecondary
         view.addSubviews(scrollView)

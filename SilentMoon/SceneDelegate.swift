@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import SilentMoonNetworkCommon
+import SilentMoonManager
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -13,31 +15,26 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var appCoordinator: AppCoordinator?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        
-        guard let windowScene = (scene as? UIWindowScene) else { return }
-        
-        let window = UIWindow(windowScene: windowScene)
 
-        appCoordinator = AppCoordinator(window: window)
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+
+        let window = UIWindow(windowScene: windowScene)
+        let controller = UINavigationController()
+        window.rootViewController = controller
+        window.makeKeyAndVisible()
+
+        let dependencies = NetworkFactory.make()
+
+        appCoordinator = AppCoordinator(
+            window: window,
+            tokenStore: dependencies.tokenStore,
+            apiService: dependencies.apiService
+        )
         appCoordinator?.start()
-        
+
         self.window = window
     }
-private func configureNetwork() {
-   NetworkManager(
-    session: URLSession.shared,
-    mainPath: "https://api.silentmoon.app/api/v1",
-    header: [
-        "accept": "application/json",
-        "content-type": "application/json",
-        "Authorization" : ""
-    ],
-    errorDecoder: { data in
-        try? JSONDecoder().decode(ApiErrorEnvelope.self, from: data)
-    }
-)
-        
-    }
+
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
         // This occurs shortly after the scene enters the background, or when its session is discarded.
