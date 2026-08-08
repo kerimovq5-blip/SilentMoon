@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import SilentMoonNetworkCommon
+import SilentMoonManager
 
 enum LoginViewModelState {
     case idle
@@ -28,9 +30,10 @@ final class LoginViewModel {
 
     private let service: SilentMoonApiService
 
-    init(service: SilentMoonApiService = .shared) {
+    init(service: SilentMoonApiService ) {
         self.service = service
     }
+   
 
     func login() {
         if let message = FormValidator.validate([
@@ -40,11 +43,12 @@ final class LoginViewModel {
             state = .invalidInput(message)
             return
         }
-        
         state = .loading
-        service.login(email: email, password: password) {
-            [weak self] result in
-            guard let self else { return }
+        
+        Task {[weak self ] in
+        guard let self  else { return}
+        let result = await service.login(email: email, password: password)
+            
             switch result {
             case .success:
                 self.state = .success

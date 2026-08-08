@@ -1,11 +1,21 @@
 import UIKit
+import SilentMoonManager
 
 final class SignUpViewController: UIViewController {
 
-    var coordinator: AuthCoordinator?
-    private let viewModel = SignUpViewModel()
+    weak var coordinator: AuthCoordinator?
+    private let viewModel: SignUpViewModel
     private var isPasswordVisible = false
     private var isPrivacyAccepted = false
+
+    init(viewModel: SignUpViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -61,8 +71,8 @@ final class SignUpViewController: UIViewController {
     private lazy var accountTextField: AppTextFieldController = {
         AppTextFieldController(
             placeholder: "Account name",
-            backgroundColor: .lightGray)
-
+            backgroundColor: .lightGray
+        )
     }()
 
     private lazy var emailValidation: FieldValidationController = {
@@ -79,6 +89,7 @@ final class SignUpViewController: UIViewController {
             backgroundColor: .lightGray
         )
     }()
+
     private lazy var eyeButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(named: "EyeVector"), for: .normal)
@@ -112,11 +123,14 @@ final class SignUpViewController: UIViewController {
     private lazy var privacyLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
+        label.isUserInteractionEnabled = true
+        
         let text = NSMutableAttributedString(
             string: "I have read the ",
             attributes: [
                 .foregroundColor: AssetColors.textSecondary.color,
-                .font: AppFonts.body.font]
+                .font: AppFonts.body.font
+            ]
         )
         text.append(
             NSAttributedString(
@@ -128,6 +142,10 @@ final class SignUpViewController: UIViewController {
             )
         )
         label.attributedText = text
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(privacyPolicyTapped))
+        label.addGestureRecognizer(tapGesture)
+        
         return label
     }()
 
@@ -166,25 +184,7 @@ final class SignUpViewController: UIViewController {
         return button
     }()
 
-    private func configureKeyboardHandling() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillShow(notification:)),
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillHide(notification:)),
-            name: UIResponder.keyboardWillHideNotification,
-            object: nil
-        )
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupHierarchy()
@@ -193,12 +193,17 @@ final class SignUpViewController: UIViewController {
         _ = passwordValidation
         configureKeyboardHandling()
         bindViewModel()
-        let tapgesture = UITapGestureRecognizer(
-            target: self, action: #selector(dismissKeyboard))
-        tapgesture.cancelsTouchesInView = false
-        view.addGestureRecognizer(tapgesture)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    // MARK: - Binding & Render
     private func bindViewModel() {
         viewModel.onStateChange = { [weak self] in
             self?.render()
@@ -221,6 +226,42 @@ final class SignUpViewController: UIViewController {
             setLoading(false)
             showAlert(message: appError.errorDescription ?? "Naməlum xəta baş verdi.")
         }
+    }
+
+    private func getStartedTapped() {
+        emailValidation.markSubmitAttempt()
+        passwordValidation.markSubmitAttempt()
+
+        viewModel.name = accountTextField.textField.text ?? ""
+        viewModel.email = emailTextField.textField.text ?? ""
+        viewModel.password = passwordTextField.textField.text ?? ""
+        viewModel.isPrivacyAccepted = isPrivacyAccepted
+
+        viewModel.register()
+    }
+
+    @objc private func logInTapped() {
+        coordinator?.showLogin()
+    }
+
+    @objc private func privacyPolicyTapped() {
+        // coordinator?.showPrivacyPolicy()
+    }
+
+    @objc private func togglePasswordVisibility() {
+        isPasswordVisible.toggle()
+        passwordTextField.textField.isSecureTextEntry = !isPasswordVisible
+        eyeButton.alpha = isPasswordVisible ? 1.0 : 0.5
+    }
+
+    @objc private func checkboxTapped() {
+        isPrivacyAccepted.toggle()
+
+        let symbolName = isPrivacyAccepted ? "checkmark.square.fill" : "square"
+        privacyCheckbox.image = UIImage(systemName: symbolName)
+        privacyCheckbox.tintColor = isPrivacyAccepted
+            ? AssetColors.accent.color
+            : AssetColors.textSecondary.color
     }
 
     private func setupHierarchy() {
@@ -305,7 +346,7 @@ final class SignUpViewController: UIViewController {
             .top(privacyStackView.bottomAnchor, AppLayout.largeSpacing.value).0
             .leading(contentView.leadingAnchor, AppLayout.spacing.value).0
             .trailing(contentView.trailingAnchor, -AppLayout.spacing.value).0
-            .height(AppLayout.textFieldHeight.value)
+            .height(AppLayout.buttonHeight.value)
 
         logInButton
             .top(getStartedButton.bottomAnchor, AppLayout.spacing.value).0
@@ -314,17 +355,19 @@ final class SignUpViewController: UIViewController {
             .height(40)
     }
 
-    private func getStartedTapped() {
-        
-        emailValidation.markSubmitAttempt()
-        passwordValidation.markSubmitAttempt()
-
-        viewModel.name = accountTextField.text
-        viewModel.email = emailTextField.text
-        viewModel.password = passwordTextField.text
-        viewModel.isPrivacyAccepted = isPrivacyAccepted
-
-        viewModel.register()
+    private func configureKeyboardHandling() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow(notification:)),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillHide(notification:)),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
     }
 
     private func setLoading(_ isLoading: Bool) {
@@ -336,26 +379,6 @@ final class SignUpViewController: UIViewController {
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
-    }
-
-    @objc private func logInTapped() {
-        coordinator?.showLogin()
-    }
-
-    @objc private func togglePasswordVisibility() {
-        isPasswordVisible.toggle()
-        passwordTextField.textField.isSecureTextEntry = !isPasswordVisible
-        eyeButton.alpha = isPasswordVisible ? 1.0 : 0.5
-    }
-
-    @objc private func checkboxTapped() {
-        isPrivacyAccepted.toggle()
-
-        let symbolName = isPrivacyAccepted ? "checkmark.square.fill" : "square"
-        privacyCheckbox.image = UIImage(systemName: symbolName)
-        privacyCheckbox.tintColor = isPrivacyAccepted
-            ? AssetColors.accent.color
-            : AssetColors.textSecondary.color
     }
 
     @objc private func keyboardWillShow(notification: NSNotification) {

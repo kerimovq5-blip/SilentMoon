@@ -6,11 +6,12 @@
 //
 
 import UIKit
+import SilentMoonManager
 
 final class OtpViewController: UIViewController {
 
     weak var coordinator: AuthCoordinator?
-    private let viewModel = OtpViewModel()
+    private let viewModel: OtpViewModel
 
     var email: String {
         get { viewModel.email }
@@ -21,6 +22,17 @@ final class OtpViewController: UIViewController {
         set { viewModel.userName = newValue }
     }
 
+    
+    init(viewModel: OtpViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+   
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Verify your email"
@@ -73,6 +85,7 @@ final class OtpViewController: UIViewController {
         return button
     }()
 
+   
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .backgroundSecondary
@@ -146,7 +159,8 @@ final class OtpViewController: UIViewController {
     }
 
     private func verifyTapped() {
-        viewModel.otp = otpTextField.text
+        // AppTextFieldController daxilindəki textField.text götürülür
+        viewModel.otp = otpTextField.textField.text ?? ""
         viewModel.verify()
     }
 

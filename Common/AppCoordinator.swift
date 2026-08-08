@@ -6,21 +6,23 @@
 //
 
 import UIKit
+import SilentMoonNetworkCommon
 
 final class AppCoordinator: Coordinator {
     var childCoordinators: [Coordinator] = []
     private let window: UIWindow
     private let navigationController = UINavigationController()
-
-    init(window: UIWindow) {
+    private let tokenStore : TokenStore
+    init(window: UIWindow , tokenStore: TokenStore) {
         self.window = window
+        self.tokenStore = tokenStore
     }
 
     func start() {
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
 
-        if TokenStore.shared.isLoggedIn {
+        if tokenStore.isLoggedIn {
             showMainTabBarFlow()
         } else {
             showAuthFlow()
@@ -52,7 +54,7 @@ final class AppCoordinator: Coordinator {
     }
 
     private func logout() {
-        TokenStore.shared.clear()
+        tokenStore.clear()
         childCoordinators.removeAll()
         navigationController.setViewControllers([], animated: false)
         setRoot(navigationController)

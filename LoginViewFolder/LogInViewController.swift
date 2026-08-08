@@ -1,11 +1,23 @@
 import UIKit
+import SilentMoonManager
 
 final class LogInViewController: UIViewController {
 
     weak var coordinator: AuthCoordinator?
-    private let viewModel = LoginViewModel()
+    private let viewModel: LoginViewModel
     private var isPasswordVisible = false
 
+    
+    init(viewModel: LoginViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+   
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.keyboardDismissMode = .interactive
@@ -61,7 +73,7 @@ final class LogInViewController: UIViewController {
     }()
 
     private lazy var passwordValidation: FieldValidationController = {
-        .password( fieldController: passwordTextField)
+        .password(fieldController: passwordTextField)
     }()
 
     private lazy var emailTextField: AppTextFieldController = {
@@ -105,6 +117,9 @@ final class LogInViewController: UIViewController {
         label.textColor = .textPrimary
         label.textAlignment = .center
         label.isUserInteractionEnabled = true
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(forgotPasswordTapped))
+        label.addGestureRecognizer(tapGesture)
         return label
     }()
 
@@ -129,25 +144,7 @@ final class LogInViewController: UIViewController {
         return button
     }()
 
-    private func configureKeyboardHandling() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillShow(notification:)),
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillHide(notification:)),
-            name: UIResponder.keyboardWillHideNotification,
-            object: nil
-        )
-    }
-
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupHierarchy()
@@ -156,21 +153,25 @@ final class LogInViewController: UIViewController {
         _ = passwordValidation
         configureKeyboardHandling()
         bindViewModel()
-        let tapgesture = UITapGestureRecognizer(
-            target: self, action: #selector(dismissKeyboard))
-        tapgesture.cancelsTouchesInView = false
-        view.addGestureRecognizer(tapgesture)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    // MARK: - Binding & Render
     private func bindViewModel() {
-//        viewModel.onStateChange = {
-//            [weak self] in
-//            self?.render()
-//        }
-//        viewModel.onEmailNotVerified = {
-//            [weak self] email in
-//            self?.coordinator?.showOtpVerification(email: email)
-//        }
+        viewModel.onStateChange = { [weak self] in
+            self?.render()
+        }
+        
+        viewModel.onEmailNotVerified = { [weak self] email in
+            self?.coordinator?.showOtpVerification(email: email)
+        }
     }
 
     private func render() {
@@ -191,6 +192,33 @@ final class LogInViewController: UIViewController {
         }
     }
 
+    // MARK: - Actions
+    @objc private func logInTapped() {
+        emailValidation.markSubmitAttempt()
+        passwordValidation.markSubmitAttempt()
+
+        viewModel.email = emailTextField.textField.text ?? ""
+        viewModel.password = passwordTextField.textField.text ?? ""
+
+        viewModel.login()
+    }
+
+    @objc private func signUpTapped() {
+        coordinator?.showSignUp()
+    }
+
+    @objc private func forgotPasswordTapped() {
+        // Coordinator üzərindən şifrə sıfırlama ekranına yönləndirmə
+        // coordinator?.showForgotPassword()
+    }
+
+    @objc private func togglePasswordVisibility() {
+        isPasswordVisible.toggle()
+        passwordTextField.textField.isSecureTextEntry = !isPasswordVisible
+        eyeButton.alpha = isPasswordVisible ? 1.0 : 0.5
+    }
+
+    // MARK: - Setup UI
     private func setupHierarchy() {
         view.backgroundColor = .backgroundSecondary
         view.addSubviews(scrollView)
@@ -260,7 +288,7 @@ final class LogInViewController: UIViewController {
             .top(passwordTextField.bottomAnchor, AppLayout.spacing.value).0
             .leading(contentView.leadingAnchor, AppLayout.spacing.value).0
             .trailing(contentView.trailingAnchor, -AppLayout.spacing.value).0
-            .height(AppLayout.textFieldHeight.value)
+            .height(AppLayout.buttonHeight.value) // textFieldHeight yerinə buttonHeight daha uyğundur
 
         forgotLabel
             .top(logInButton.bottomAnchor, AppLayout.spacing.value).0
@@ -273,15 +301,20 @@ final class LogInViewController: UIViewController {
             .height(AppLayout.xLargeSpacing.value)
     }
 
-    @objc private func logInTapped() {
-//        emailValidation.markSubmitAttempt()
-//        passwordValidation.markSubmitAttempt()
-//
-//        viewModel.email = emailTextField.text
-//        viewModel.password = passwordTextField.text
-//
-//        viewModel.login()
-        coordinator?.finishAuth()
+    // MARK: - Keyboard & Helpers
+    private func configureKeyboardHandling() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow(notification:)),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillHide(notification:)),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
     }
 
     private func setLoading(_ isLoading: Bool) {
@@ -293,19 +326,6 @@ final class LogInViewController: UIViewController {
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
-    }
-
-    @objc private func signUpTapped() {
-        coordinator?.showSignUp()
-    }
-
-//    @objc private func forgotPasswordTapped() {
-//    }
-
-    @objc private func togglePasswordVisibility() {
-        isPasswordVisible.toggle()
-        passwordTextField.textField.isSecureTextEntry = !isPasswordVisible
-        eyeButton.alpha = isPasswordVisible ? 1.0 : 0.5
     }
 
     @objc private func keyboardWillShow(notification: NSNotification) {

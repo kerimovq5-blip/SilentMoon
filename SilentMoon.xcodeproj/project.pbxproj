@@ -7,11 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F295DBA23025233D007D6F6D /* SilentMoonNetwork in Frameworks */ = {isa = PBXBuildFile; productRef = F295DBA13025233D007D6F6D /* SilentMoonNetwork */; };
+		F2ADCE2530271E4300ECCB11 /* SilentMoonNetwork in Frameworks */ = {isa = PBXBuildFile; productRef = F2ADCE2430271E4300ECCB11 /* SilentMoonNetwork */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		F218C9392FED5734002251F7 /* SilentMoon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SilentMoon.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F295DC223027170E007D6F6D /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../SilentMoonNetwork/Package.swift; sourceTree = "<group>"; };
+		F295DC2330271723007D6F6D /* SilentMoonNetwork */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SilentMoonNetwork; path = ../SilentMoonNetwork; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -95,7 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F295DBA23025233D007D6F6D /* SilentMoonNetwork in Frameworks */,
+				F2ADCE2530271E4300ECCB11 /* SilentMoonNetwork in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -117,6 +119,7 @@
 				F26071F52FEEDE6300F5F017 /* Common */,
 				F26071EC2FEEDE4F00F5F017 /* StartFolder */,
 				F218C93B2FED5734002251F7 /* SilentMoon */,
+				F295DC213027170E007D6F6D /* Frameworks */,
 				F218C93A2FED5734002251F7 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -127,6 +130,15 @@
 				F218C9392FED5734002251F7 /* SilentMoon.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		F295DC213027170E007D6F6D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F295DC2330271723007D6F6D /* SilentMoonNetwork */,
+				F295DC223027170E007D6F6D /* Package.swift */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -160,7 +172,7 @@
 			);
 			name = SilentMoon;
 			packageProductDependencies = (
-				F295DBA13025233D007D6F6D /* SilentMoonNetwork */,
+				F2ADCE2430271E4300ECCB11 /* SilentMoonNetwork */,
 			);
 			productName = SilentMoon;
 			productReference = F218C9392FED5734002251F7 /* SilentMoon.app */;
@@ -191,7 +203,7 @@
 			mainGroup = F218C9302FED5734002251F7;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				F295DBA3302524B0007D6F6D /* XCLocalSwiftPackageReference "../SilentMoonNetwork" */,
+				F2ADCE2330271E4300ECCB11 /* XCLocalSwiftPackageReference "../SilentMoonNetwork" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F218C93A2FED5734002251F7 /* Products */;
@@ -441,14 +453,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		F295DBA3302524B0007D6F6D /* XCLocalSwiftPackageReference "../SilentMoonNetwork" */ = {
+		F2ADCE2330271E4300ECCB11 /* XCLocalSwiftPackageReference "../SilentMoonNetwork" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../SilentMoonNetwork;
 		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		F295DBA13025233D007D6F6D /* SilentMoonNetwork */ = {
+		F2ADCE2430271E4300ECCB11 /* SilentMoonNetwork */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SilentMoonNetwork;
 		};

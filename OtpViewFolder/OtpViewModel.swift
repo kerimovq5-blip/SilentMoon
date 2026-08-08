@@ -6,22 +6,23 @@
 //
 
 import Foundation
+import SilentMoonNetworkCommon
+import SilentMoonManager
 
-
-enum OtpViewModelState {
+public enum OtpViewModelState {
     case idle
 
     case verifying
     case verifySucceeded
-    case invalidInput(String)       // klient-tərəfi validasiya (məs. "6 rəqəm daxil edin")
+    case invalidInput(String)
     case verifyFailed(AppError)
 
     case resending
-    case resendSucceeded(String)    // backend-in "Yeni kod göndərildi" mesajı
+    case resendSucceeded(String)    
     case resendFailed(AppError)
 }
 
-final class OtpViewModel {
+public final class OtpViewModel {
 
     var email: String = ""
     var userName: String = ""
@@ -36,35 +37,40 @@ final class OtpViewModel {
 
     var onVerifySucceeded: ((_ userName: String) -> Void)?
 
-    init(apiService: SilentMoonApiService = .shared) {
+    init(apiService: SilentMoonApiService ) {
         self.apiService = apiService
     }
 
     
 
-    func verify() {
+  public  func verify() {
         guard otp.count == 6 else {
             state = .invalidInput("Zəhmət olmasa 6 rəqəmli kodu daxil edin.")
             return
         }
-
+        
         state = .verifying
-        apiService.verifyEmail(email: email, otp: otp) { [weak self] result in
-            guard let self else { return }
-            switch result {
-            case .success:
-                self.state = .verifySucceeded
-                self.onVerifySucceeded?(self.userName)
-            case .failure(let error):
-                self.state = .verifyFailed(self.asAppError(error))
+        Task { [weak self] in
+                    guard let self else { return }
+                    
+                    let result = await self.apiService.verifyEmail(email: self.email, otp: self.otp)
+                    
+                    switch result {
+                    case .success:
+                        self.state = .verifySucceeded
+                        self.onVerifySucceeded?(self.userName)
+                    case .failure(let error):
+                        self.state = .verifyFailed(self.asAppError(error))
+                    }
+                }
             }
-        }
-    }
-
-    func resendOtp() {
+   public func resendOtp() {
         state = .resending
-        apiService.resendOtp(email: email) { [weak self] result in
+        Task { [weak self] in
             guard let self else { return }
+            
+            let result = await self.apiService.resendOtp(email: self.email)
+            
             switch result {
             case .success(let response):
                 self.state = .resendSucceeded(response.message)
@@ -72,8 +78,8 @@ final class OtpViewModel {
                 self.state = .resendFailed(self.asAppError(error))
             }
         }
+      
     }
-
     private func asAppError(_ error: Error) -> AppError {
         (error as? AppError) ?? .unknown(error)
     }
