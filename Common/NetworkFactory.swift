@@ -18,24 +18,25 @@ struct NetworkFactory {
                 refreshToken: "silentmoon.refreshToken"
             )
         )
+        
         let networkManager = NetworkManager(
             session: URLSession.shared,
             mainPath: "http://13.48.242.142:30080/api/v1",
             header: [
-                "accept": "application/json",
-                "content-type": "application/json"
+                "Accept": "application/json",
+                "Content-Type": "application/json"
             ],
             errorDecoder: { data in
                 try? JSONDecoder().decode(ApiErrorEnvelope.self, from: data)
             },
             tokenStore: tokenStore
         )
-
+        
         let apiService = SilentMoonApiService(
             networkManager: networkManager,
             tokenStore: tokenStore
         )
-
+        
         return (tokenStore, apiService)
     }
 }

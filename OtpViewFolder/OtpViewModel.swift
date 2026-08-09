@@ -8,6 +8,7 @@
 import Foundation
 import SilentMoonNetworkCommon
 import SilentMoonManager
+import SilentMoonDTOs
 
 public enum OtpViewModelState {
     case idle
@@ -48,8 +49,8 @@ public final class OtpViewModel {
             state = .invalidInput("Zəhmət olmasa 6 rəqəmli kodu daxil edin.")
             return
         }
-        
-        state = .verifying
+
+      state = .verifying
         Task { [weak self] in
                     guard let self else { return }
                     

@@ -184,7 +184,6 @@ final class SignUpViewController: UIViewController {
         return button
     }()
 
-    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupHierarchy()
@@ -203,22 +202,32 @@ final class SignUpViewController: UIViewController {
         NotificationCenter.default.removeObserver(self)
     }
 
-    // MARK: - Binding & Render
     private func bindViewModel() {
-        viewModel.onStateChange = { [weak self] in
-            self?.render()
-        }
-        viewModel.onRegisterSucceeded = { [weak self] email, name in
-            self?.coordinator?.showOtpVerification(email: email, name: name)
+        viewModel.onStateChange = {
+        [weak self] in DispatchQueue.main.async {
+            self?.render() }
+    }
+        viewModel.onRegisterSucceeded = {
+            [weak self] email, name in
+            DispatchQueue.main.async {
+                self?.view.endEditing(true)
+                self?.coordinator?.showOtpVerification(email: email, name: name)
+                self?.coordinator?.getStarted(name: name)
+            }
         }
     }
 
     private func render() {
         switch viewModel.state {
-        case .idle, .success:
+        case .idle:
             setLoading(false)
+            
         case .loading:
             setLoading(true)
+            
+        case .success:
+            setLoading(false)
+            break
         case .invalidInput(let message):
             setLoading(false)
             showAlert(message: message)
@@ -227,7 +236,6 @@ final class SignUpViewController: UIViewController {
             showAlert(message: appError.errorDescription ?? "Naməlum xəta baş verdi.")
         }
     }
-
     private func getStartedTapped() {
         emailValidation.markSubmitAttempt()
         passwordValidation.markSubmitAttempt()
@@ -284,7 +292,7 @@ final class SignUpViewController: UIViewController {
 
     private func setupLayout() {
         scrollView
-            .top(view.safeAreaLayoutGuide.topAnchor).0
+            .top(view.topAnchor).0
             .leading(view.leadingAnchor).0
             .trailing(view.trailingAnchor).0
             .bottom(view.bottomAnchor)
@@ -302,7 +310,7 @@ final class SignUpViewController: UIViewController {
             .height(AppLayout.xLargeSpacing.value)
 
         facebookButton
-            .top(titleLabel.bottomAnchor, AppLayout.xLargeSpacing.value).0
+            .top(titleLabel.bottomAnchor, AppLayout.spacing.value).0
             .leading(contentView.leadingAnchor, AppLayout.spacing.value).0
             .trailing(contentView.trailingAnchor, -AppLayout.spacing.value).0
             .height(AppLayout.buttonHeight.value)
@@ -319,7 +327,7 @@ final class SignUpViewController: UIViewController {
             .height(AppLayout.largeSpacing.value)
 
         accountTextField
-            .top(dividerLabel.bottomAnchor, AppLayout.largeSpacing.value).0
+            .top(dividerLabel.bottomAnchor, AppLayout.spacing.value).0
             .leading(contentView.leadingAnchor, AppLayout.spacing.value).0
             .trailing(contentView.trailingAnchor, -AppLayout.spacing.value).0
             .height(AppLayout.textFieldHeight.value)
@@ -343,14 +351,14 @@ final class SignUpViewController: UIViewController {
             .height(AppLayout.xLargeSpacing.value)
 
         getStartedButton
-            .top(privacyStackView.bottomAnchor, AppLayout.largeSpacing.value).0
+            .top(privacyStackView.bottomAnchor, AppLayout.spacing.value).0
             .leading(contentView.leadingAnchor, AppLayout.spacing.value).0
             .trailing(contentView.trailingAnchor, -AppLayout.spacing.value).0
             .height(AppLayout.buttonHeight.value)
 
         logInButton
             .top(getStartedButton.bottomAnchor, AppLayout.spacing.value).0
-            .bottom(contentView.bottomAnchor, -AppLayout.bottomInset.value).0
+            .bottom(contentView.bottomAnchor, -AppLayout.spacing.value).0
             .centerX(contentView.centerXAnchor).0
             .height(40)
     }
