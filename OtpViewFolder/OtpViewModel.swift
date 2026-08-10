@@ -7,7 +7,7 @@
 
 import Foundation
 import SilentMoonNetworkCommon
-import SilentMoonManager
+import SilentMoonManagers
 import SilentMoonDTOs
 
 public enum OtpViewModelState {

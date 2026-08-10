@@ -1,5 +1,4 @@
 import UIKit
-import SilentMoonManager
 
 final class LogInViewController: UIViewController {
 

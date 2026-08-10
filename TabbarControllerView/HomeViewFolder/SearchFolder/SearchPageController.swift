@@ -6,8 +6,8 @@
 //
 
 import UIKit
+import SilentMoonManagers
 import SilentMoonNetworkCommon
-import SilentMoonManager
 import SilentMoonDTOs
 
 final class SearchPageController: UIViewController {

@@ -1,5 +1,4 @@
 import UIKit
-import SilentMoonManager
 
 final class SignUpViewController: UIViewController {
 
@@ -211,7 +210,7 @@ final class SignUpViewController: UIViewController {
             [weak self] email, name in
             DispatchQueue.main.async {
                 self?.view.endEditing(true)
-                self?.coordinator?.showOtpVerification(email: email, name: name)
+//                self?.coordinator?.showOtpVerification(email: email, name: name)
                 self?.coordinator?.getStarted(name: name)
             }
         }
@@ -227,7 +226,6 @@ final class SignUpViewController: UIViewController {
             
         case .success:
             setLoading(false)
-            break
         case .invalidInput(let message):
             setLoading(false)
             showAlert(message: message)

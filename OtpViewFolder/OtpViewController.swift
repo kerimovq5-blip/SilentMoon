@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SilentMoonManager
 
 final class OtpViewController: UIViewController {
 

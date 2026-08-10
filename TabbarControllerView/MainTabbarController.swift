@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import SilentMoonManager
+import SilentMoonManagers
 
 final class MainTabBarCoordinator: Coordinator {
     var childCoordinators: [Coordinator] = []

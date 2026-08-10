@@ -6,8 +6,7 @@
 //
 
 import UIKit
-import SilentMoonNetworkCommon
-import SilentMoonManager
+import SilentMoonApiService
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
