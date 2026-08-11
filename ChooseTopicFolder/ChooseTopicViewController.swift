@@ -1,11 +1,11 @@
+
 import UIKit
 
 final class ChooseTopicViewController: UIViewController {
     private let topicItemHeight: CGFloat = 260
     
     var coordinator: AuthCoordinator?
-    private let topics = ChooseTopicModel.all
-    
+    private let topics = ChooseTopicViewModel.all
     
     private lazy var unionview :UIImageView = {
         let imageView = UIImageView()
@@ -13,6 +13,7 @@ final class ChooseTopicViewController: UIViewController {
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
+    
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         let attributed = NSMutableAttributedString(
@@ -60,15 +61,11 @@ final class ChooseTopicViewController: UIViewController {
         return controller
     }()
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupHierarchy()
         setupLayout()
     }
-    
-    
     
     private func setupHierarchy() {
         view.backgroundColor = .backgroundSecondary
@@ -104,7 +101,6 @@ final class ChooseTopicViewController: UIViewController {
             .bottom(view.safeAreaLayoutGuide.bottomAnchor)
         
     }
-
     
     private func isBigCard(at index: Int) -> Bool {
         (index % 4 == 0) || (index % 4 == 3)
@@ -113,7 +109,6 @@ final class ChooseTopicViewController: UIViewController {
     private func itemHeight(at index: Int) -> CGFloat {
         isBigCard(at: index) ? AppLayout.leftCardHeight.value : AppLayout.rightCardHeight.value
     }
-
     
     private func makeMasonryLayout() -> UICollectionViewCompositionalLayout {
         UICollectionViewCompositionalLayout { [weak self] _, _ in

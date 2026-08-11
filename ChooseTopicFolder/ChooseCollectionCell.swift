@@ -66,9 +66,9 @@ final class ChooseCollectionCell: UICollectionViewCell {
 
     
 
-    func configure(model: ChooseTopicModel) {
+    func configure(model: ChooseTopicViewModel) {
             topicImageView.image = model.image.image
-     titleLabel.text = model.title
+           titleLabel.text = model.title
     }
     
     func configure(data: MeditateCollectionModels) {

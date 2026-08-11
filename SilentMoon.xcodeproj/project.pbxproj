@@ -86,6 +86,11 @@
 			path = Validator;
 			sourceTree = "<group>";
 		};
+		F2ADCFF6302B68EF00ECCB11 /* Core */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Core;
+			sourceTree = "<group>";
+		};
 		F2CC69712FF3FDA000A76DC5 /* TabbarControllerView */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = TabbarControllerView;
@@ -111,6 +116,7 @@
 		F218C9302FED5734002251F7 = {
 			isa = PBXGroup;
 			children = (
+				F2ADCFF6302B68EF00ECCB11 /* Core */,
 				F295DB9A3023DA22007D6F6D /* Validator */,
 				F295DB9130238388007D6F6D /* ReminderViewFolder */,
 				F295DB9030238318007D6F6D /* ChooseTopicFolder */,
@@ -162,6 +168,7 @@
 				F295DB9030238318007D6F6D /* ChooseTopicFolder */,
 				F295DB9130238388007D6F6D /* ReminderViewFolder */,
 				F295DB9A3023DA22007D6F6D /* Validator */,
+				F2ADCFF6302B68EF00ECCB11 /* Core */,
 				F2CC69712FF3FDA000A76DC5 /* TabbarControllerView */,
 			);
 			name = SilentMoon;

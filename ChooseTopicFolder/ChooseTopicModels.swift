@@ -1,44 +1,59 @@
-//
-//  ChooseTopicModels.swift
-//  SilentMoon
-//
-//  Created by Kerimov Qehreman on 30.06.26.
-import UIKit
+import Foundation
+import SilentMoonManagers
+import SilentMoonNetworkCommon
 
+enum ChooseTopicViewModelState {
+    case idle
+    case loading
+    case success
+    case invalidInput(String)
+    case requestFailed(AppError)
+}
 
-enum TopicImage: String {
-    case stress      = "stress"
-    case improve     = "improve"
-    case happiness   = "happiness"
-    case anxiety     = "anxiety"
-    case growth      = "growth"
-    case sleepy      = "sleepy"
-    case mindfulness = "mindfulness"
-
-    var image: UIImage? {
-       nil
+final class ChooseTopicViewModel {
+    
+    private(set) var state: ChooseTopicViewModelState = .idle {
+        didSet {
+            onStateChange?()
+        }
+    }
+    
+    var onStateChange: (() -> Void)?
+    
+    private let service: SilentMoonApiService
+    
+    init(service: SilentMoonApiService) {
+        self.service = service
+    }
+    
+    func choose(topicIds: [String]) {
+        
+        guard !topicIds.isEmpty else {
+            state = .invalidInput("Please select at least one topic.")
+            return
+        }
+        
+        state = .loading
+        
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            
+            let result = await self.service.updateTopics(
+                topicIds: topicIds
+            )
+            
+            switch result {
+            case .success:
+                self.state = .success
+                
+            case .failure(let error):
+                let appError = self.asAppError(error)
+                self.state = .requestFailed(appError)
+            }
+        }
+    }
+    
+    private func asAppError(_ error: Error) -> AppError {
+        (error as? AppError) ?? .unknown(error)
     }
 }
-
-
-
-struct ChooseTopicModel {
-    let image: TopicImage
-    let title: String
-    let color : UIColor?
-
-    static let all: [ChooseTopicModel] = [
-        ChooseTopicModel(
-            image: .stress,
-            title: "Reduce Stress" ,
-            color : .colorIndigo
-        ),
-        ChooseTopicModel(image: .improve,     title: "Improve Performance" , color : .colorIndigo),
-        ChooseTopicModel(image: .happiness,   title: "Increase Happiness", color : .colorIndigo),
-        ChooseTopicModel(image: .anxiety,     title: "Reduce Anxiety" , color : .colorIndigo),
-        ChooseTopicModel(image: .growth,      title: "Personal Growth", color : .colorIndigo),
-        ChooseTopicModel(image: .sleepy,      title: "Better Sleep" , color : .colorIndigo),
-        ChooseTopicModel(image: .mindfulness, title: "Mindfulness" , color : .colorIndigo)
-    ]
-}
-
