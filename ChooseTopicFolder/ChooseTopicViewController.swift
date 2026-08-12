@@ -1,11 +1,21 @@
-
 import UIKit
 
 final class ChooseTopicViewController: UIViewController {
     private let topicItemHeight: CGFloat = 260
     
     var coordinator: AuthCoordinator?
-    private let topics = ChooseTopicViewModel.all
+    private let viewModel: ChooseTopicViewModel
+    private let topics = ChooseTopicModel.all
+    private var selectedTopicIds: Set<String> = []
+    
+    init(viewModel: ChooseTopicViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     private lazy var unionview :UIImageView = {
         let imageView = UIImageView()
@@ -52,6 +62,7 @@ final class ChooseTopicViewController: UIViewController {
         )
         controller.backgroundColor = .clear
         controller.showsVerticalScrollIndicator = false
+        controller.allowsMultipleSelection = true
         controller.dataSource = self
         controller.delegate = self
         controller.register(
@@ -60,11 +71,68 @@ final class ChooseTopicViewController: UIViewController {
         )
         return controller
     }()
+
+    private lazy var continueButton: AppButton = {
+        let button = AppButton(
+            title: "CONTINUE",
+            backgroundColor: .accent,
+            titleColor: .buttonTitle
+        )
+        button.onTap = { [weak self] in self?.continueTapped() }
+        return button
+    }()
+
+    private lazy var loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .medium)
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupHierarchy()
         setupLayout()
+        bindViewModel()
+    }
+
+    private func bindViewModel() {
+        viewModel.onStateChange = { [weak self] in
+            self?.render()
+        }
+    }
+
+    private func render() {
+        switch viewModel.state {
+        case .idle:
+            setLoading(false)
+        case .loading:
+            setLoading(true)
+        case .success:
+            setLoading(false)
+            coordinator?.showReminder()
+        case .invalidInput(let message):
+            setLoading(false)
+            showAlert(message: message)
+        case .requestFailed(let appError):
+            setLoading(false)
+            showAlert(message: appError.errorDescription ?? "Naməlum xəta baş verdi.")
+        }
+    }
+
+    private func setLoading(_ isLoading: Bool) {
+        continueButton.isUserInteractionEnabled = !isLoading
+        continueButton.alpha = isLoading ? 0.6 : 1.0
+        isLoading ? loadingIndicator.startAnimating() : loadingIndicator.stopAnimating()
+    }
+
+    private func showAlert(message: String) {
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
+
+    private func continueTapped() {
+        viewModel.choose(topicIds: Array(selectedTopicIds))
     }
     
     private func setupHierarchy() {
@@ -73,7 +141,9 @@ final class ChooseTopicViewController: UIViewController {
             titleLabel,
             subtitleLabel,
             unionview ,
-            collectionView
+            collectionView,
+            continueButton,
+            loadingIndicator
         )
     }
     
@@ -98,7 +168,17 @@ final class ChooseTopicViewController: UIViewController {
             .top(subtitleLabel.bottomAnchor, AppLayout.largeSpacing.value).0
             .leading(view.leadingAnchor).0
             .trailing(view.trailingAnchor).0
-            .bottom(view.safeAreaLayoutGuide.bottomAnchor)
+            .bottom(continueButton.topAnchor, -AppLayout.spacing.value)
+
+        continueButton
+            .bottom(view.safeAreaLayoutGuide.bottomAnchor, AppLayout.bottomInset.value).0
+            .leading(view.leadingAnchor, AppLayout.spacing.value).0
+            .trailing(view.trailingAnchor, -AppLayout.spacing.value).0
+            .height(AppLayout.textFieldHeight.value)
+
+        loadingIndicator
+            .centerX(continueButton.centerXAnchor).0
+            .centerY(continueButton.centerYAnchor)
         
     }
     
@@ -112,72 +192,12 @@ final class ChooseTopicViewController: UIViewController {
     
     private func makeMasonryLayout() -> UICollectionViewCompositionalLayout {
         UICollectionViewCompositionalLayout { [weak self] _, _ in
-            self?.makeTopicsSection()
-        }
-    }
-
-    private func makeTopicsSection() -> NSCollectionLayoutSection {
-        let spacing = AppLayout.spacing.value
-        let itemCount = topics.count
-
-        var leftItems: [NSCollectionLayoutItem] = []
-        var rightItems: [NSCollectionLayoutItem] = []
-        var leftHeight: CGFloat = 0
-        var rightHeight: CGFloat = 0
-
-        for index in 0..<itemCount {
-            let height = itemHeight(at: index)
-            let item = NSCollectionLayoutItem(
-                layoutSize: NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .absolute(height)
-                )
+            guard let self else { return nil }
+            return ComposinalLayoutBuilder.twoColumnMasonry(
+                itemCount: self.topics.count,
+                itemHeight: { self.itemHeight(at: $0) }
             )
-
-            if index % 2 == 0 {
-                leftItems.append(item)
-                leftHeight += height + (leftItems.count > 1 ? spacing : 0)
-            } else {
-                rightItems.append(item)
-                rightHeight += height + (rightItems.count > 1 ? spacing : 0)
-            }
         }
-
-        let leftColumn = NSCollectionLayoutGroup.vertical(
-            layoutSize: NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(0.5),
-                heightDimension: .absolute(leftHeight)
-            ),
-            subitems: leftItems
-        )
-        leftColumn.interItemSpacing = .fixed(spacing)
-
-        let rightColumn = NSCollectionLayoutGroup.vertical(
-            layoutSize: NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(0.5),
-                heightDimension: .absolute(rightHeight)
-            ),
-            subitems: rightItems
-        )
-        rightColumn.interItemSpacing = .fixed(spacing)
-
-        let columnsGroup = NSCollectionLayoutGroup.horizontal(
-            layoutSize: NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0),
-                heightDimension: .absolute(max(leftHeight, rightHeight))
-            ),
-            subitems: [leftColumn, rightColumn]
-        )
-        columnsGroup.interItemSpacing = .fixed(spacing)
-
-        let section = NSCollectionLayoutSection(group: columnsGroup)
-        section.contentInsets = NSDirectionalEdgeInsets(
-            top: 0,
-            leading: spacing,
-            bottom: spacing,
-            trailing: spacing
-        )
-        return section
     }
 }
 
@@ -202,6 +222,10 @@ extension ChooseTopicViewController: UICollectionViewDataSource {
 
 extension ChooseTopicViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        coordinator?.showReminder()
+        selectedTopicIds.insert(topics[indexPath.item].id)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        selectedTopicIds.remove(topics[indexPath.item].id)
     }
 }

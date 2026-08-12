@@ -14,7 +14,7 @@ enum LoginViewModelState {
     case loading
     case success
     case invalidInput(String)
-    case requestFailed(AppError)
+    case requestFailed(AppError<ApiErrorEnvelope>)
 }
 
 final class LoginViewModel {
@@ -47,7 +47,7 @@ final class LoginViewModel {
         
         Task {[weak self ] in
         guard let self  else { return}
-        let result = await service.login(email: email, password: password)
+            let result = await service.login(email: self.email, password: self.password)
             
             switch result {
             case .success:
@@ -63,7 +63,7 @@ final class LoginViewModel {
         }
     }
 
-    private func asAppError(_ error: Error) -> AppError {
-        (error as? AppError) ?? .unknown(error)
+    private func asAppError(_ error: Error) -> AppError<ApiErrorEnvelope> {
+        (error as? AppError<ApiErrorEnvelope>) ?? .unknown(error)
     }
 }

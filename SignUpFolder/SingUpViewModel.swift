@@ -15,7 +15,7 @@ enum SignUpViewModelState {
     case loading
     case success
     case invalidInput(String)
-    case requestFailed(AppError)
+    case requestFailed(AppError<ApiErrorEnvelope>)
 }
 
 final class SignUpViewModel {
@@ -62,7 +62,7 @@ final class SignUpViewModel {
         state = .loading
         Task {[weak self] in
         guard let self else { return }
-            let result = await service.register(name: name, email: email, password :password)
+            let result = await service.register(name: self.name, email: self.email, password: self.password)
             switch result {
             case .success:
                 self.state = .success
@@ -74,7 +74,7 @@ final class SignUpViewModel {
     }
 
     
-    private func asAppError(_ error: Error) -> AppError {
-        (error as? AppError) ?? .unknown(error)
+    private func asAppError(_ error: Error) -> AppError<ApiErrorEnvelope> {
+        (error as? AppError<ApiErrorEnvelope>) ?? .unknown(error)
     }
 }

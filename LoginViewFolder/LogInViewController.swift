@@ -68,11 +68,11 @@ final class LogInViewController: UIViewController {
     }()
 
     private lazy var emailValidation: FieldValidationController = {
-        .email(fieldController: emailTextField)
+        .email(textField: emailTextField.textField)
     }()
 
     private lazy var passwordValidation: FieldValidationController = {
-        .password(fieldController: passwordTextField)
+        .password(textField: passwordTextField.textField)
     }()
 
     private lazy var emailTextField: AppTextFieldController = {

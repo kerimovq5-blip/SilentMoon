@@ -9,7 +9,6 @@ import UIKit
 
 struct MeditateSectionModels : MeditateSectionData {
     
-
     var image: UIImage?
     var title: String
     var isSelected: Bool

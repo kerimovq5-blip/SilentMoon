@@ -179,73 +179,18 @@ final class MeditateViewController: UIViewController {
 
     private func makeMasonryLayout() -> UICollectionViewCompositionalLayout {
         UICollectionViewCompositionalLayout { [weak self] _, _ in
-            self?.makeTopicsSection()
-        }
-    }
-
-    
-    private func makeTopicsSection() -> NSCollectionLayoutSection {
-        let spacing = AppLayout.spacing.value
-        let itemCount = collectionViews.count
-
-        var leftItems: [NSCollectionLayoutItem] = []
-        var rightItems: [NSCollectionLayoutItem] = []
-        var leftHeight: CGFloat = 0
-        var rightHeight: CGFloat = 0
-
-        for index in 0..<itemCount {
-            let height = itemHeight(at: index)
-            let item = NSCollectionLayoutItem(
-                layoutSize: NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .absolute(height)
-                )
+            guard let self else { return nil }
+            return ComposinalLayoutBuilder.twoColumnMasonry(
+                itemCount: self.collectionViews.count,
+                contentInsets: NSDirectionalEdgeInsets(
+                    top: 0,
+                    leading: 0,
+                    bottom: AppLayout.spacing.value,
+                    trailing: 0
+                ),
+                itemHeight: { self.itemHeight(at: $0) }
             )
-
-            if index % 2 == 0 {
-                leftItems.append(item)
-                leftHeight += height + (leftItems.count > 1 ? spacing : 0)
-            } else {
-                rightItems.append(item)
-                rightHeight += height + (rightItems.count > 1 ? spacing : 0)
-            }
         }
-
-        let leftColumn = NSCollectionLayoutGroup.vertical(
-            layoutSize: NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(0.5),
-                heightDimension: .absolute(leftHeight)
-            ),
-            subitems: leftItems
-        )
-        leftColumn.interItemSpacing = .fixed(spacing)
-
-        let rightColumn = NSCollectionLayoutGroup.vertical(
-            layoutSize: NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(0.5),
-                heightDimension: .absolute(rightHeight)
-            ),
-            subitems: rightItems
-        )
-        rightColumn.interItemSpacing = .fixed(spacing)
-
-        let columnsGroup = NSCollectionLayoutGroup.horizontal(
-            layoutSize: NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0),
-                heightDimension: .absolute(max(leftHeight, rightHeight))
-            ),
-            subitems: [leftColumn, rightColumn]
-        )
-        columnsGroup.interItemSpacing = .fixed(spacing)
-
-        let section = NSCollectionLayoutSection(group: columnsGroup)
-        section.contentInsets = NSDirectionalEdgeInsets(
-            top: 0,
-            leading: 0,
-            bottom: spacing,
-            trailing: 0
-        )
-        return section
     }
 }
 
@@ -292,7 +237,7 @@ extension MeditateViewController: UICollectionViewDataSource {
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: "cell",
                 for: indexPath
-            ) as? ChooseCollectionCell
+            ) as? MeditateCollectionCell
             else {
                 return UICollectionViewCell()
             }

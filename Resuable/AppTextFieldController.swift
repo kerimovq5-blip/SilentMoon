@@ -39,8 +39,7 @@ final class AppTextFieldController: UIView {
             backgroundColor: backgroundColor,
             textColor: textColor,
             delegate: delegate,
-            rightView: rightView,
-            
+            rightView: rightView
         )
         setupHierarchy()
         setupLayout()

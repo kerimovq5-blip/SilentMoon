@@ -16,11 +16,11 @@ public enum OtpViewModelState {
     case verifying
     case verifySucceeded
     case invalidInput(String)
-    case verifyFailed(AppError)
-
+    case verifyFailed(AppError<ApiErrorEnvelope>)
+    
     case resending
     case resendSucceeded(String)    
-    case resendFailed(AppError)
+    case resendFailed(AppError<ApiErrorEnvelope>)
 }
 
 public final class OtpViewModel {
@@ -81,7 +81,7 @@ public final class OtpViewModel {
         }
       
     }
-    private func asAppError(_ error: Error) -> AppError {
-        (error as? AppError) ?? .unknown(error)
+    private func asAppError(_ error: Error) -> AppError<ApiErrorEnvelope> {
+        (error as? AppError<ApiErrorEnvelope>) ?? .unknown(error)
     }
 }

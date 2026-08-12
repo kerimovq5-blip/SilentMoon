@@ -50,9 +50,14 @@ final class AuthCoordinator: Coordinator, ContentNavigating {
     }
 
     func showTopics() {
-        let controller = ChooseTopicViewController()
+        let viewModel = ChooseTopicViewModel(service: apiService)
+        let controller = ChooseTopicViewController(viewModel: viewModel)
         controller.coordinator = self
-        navigationController.pushViewController(controller, animated: true)
+        
+        navigationController.pushViewController(
+            controller,
+            animated: true
+        )
     }
 
     func showReminder() {

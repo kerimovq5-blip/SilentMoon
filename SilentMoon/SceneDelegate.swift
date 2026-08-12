@@ -27,7 +27,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         appCoordinator = AppCoordinator(
             window: window,
             tokenStore: dependencies.tokenStore,
-            apiService: dependencies.apiService
+            apiService: dependencies.apiService,
+            diContainer: dependencies.diContainer
         )
         appCoordinator?.start()
 

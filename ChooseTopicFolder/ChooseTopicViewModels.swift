@@ -1,7 +1,7 @@
 import Foundation
 import SilentMoonManagers
 import SilentMoonNetworkCommon
-
+@MainActor
 enum ChooseTopicViewModelState {
     case idle
     case loading
@@ -35,7 +35,7 @@ final class ChooseTopicViewModel {
         
         state = .loading
         
-        Task { @MainActor [weak self] in
+        Task {  [weak self] in
             guard let self else { return }
             
             let result = await self.service.updateTopics(

@@ -1,20 +1,17 @@
 //
-//  ChooseCollectionCell.swift
+//  MeditateCollectionCell.swift
 //  SilentMoon
 //
-//  Created by Kerimov Qehreman on 30.06.26.
+//  Created by Kerimov Qehreman on 12.08.26.
+//
 
-//
-//  ChooseCollectionCell.swift
-//  SilentMoon
-//
-//  Created by Kerimov Qehreman on 30.06.26.
-//
+
 
 import UIKit
 
-final class ChooseCollectionCell: UICollectionViewCell {
-        
+final class MeditateCollectionCell: UICollectionViewCell {
+    
+       
     private lazy var topicImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -124,12 +121,13 @@ final class ChooseCollectionCell: UICollectionViewCell {
         checkmarkIcon.isHidden = !isSelected
     }
         
-    func configure(model: ChooseTopicModel) {
-        topicImageView.image = model.image.image
-        titleLabel.text = model.title
+    func configure(data: MeditateCollectionModels) {
+          topicImageView.image = data.image
+          topicImageView.backgroundColor = data.viewColor ?? .colorIndigo
+          titleLabel.text = data.title
+      
         
         updateSelectionAppearance()
     }
 }
     
-

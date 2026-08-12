@@ -176,49 +176,10 @@ final class PlayOptionViewController: UIViewController {
     
     private func makeLayout() -> UICollectionViewCompositionalLayout {
         return UICollectionViewCompositionalLayout { _, _ in
-            let item = NSCollectionLayoutItem(
-                layoutSize: NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .fractionalHeight(1.0)
-                )
+            ComposinalLayoutBuilder.horizontalCarousel(
+                itemSize: CGSize(width: 165, height: 170),
+                hasHeader: true
             )
-            
-            let group = NSCollectionLayoutGroup.horizontal(
-                layoutSize: NSCollectionLayoutSize(
-                    widthDimension: .absolute(165),
-                    heightDimension: .absolute(170)
-                ),
-                subitems: [item]
-            )
-            group.interItemSpacing = .fixed(AppLayout.spacing.value)
-            
-            let section = NSCollectionLayoutSection(group: group)
-            section.orthogonalScrollingBehavior = .continuous
-            section.interGroupSpacing = AppLayout.spacing.value
-            section.contentInsets = NSDirectionalEdgeInsets(
-                top: 0,
-                leading: AppLayout.spacing.value,
-                bottom: 0,
-                trailing: AppLayout.spacing.value
-            )
-            
-            let header = NSCollectionLayoutBoundarySupplementaryItem(
-                layoutSize: NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .estimated(30)
-                ),
-                elementKind: UICollectionView.elementKindSectionHeader,
-                alignment: .topLeading
-            )
-            header.contentInsets = NSDirectionalEdgeInsets(
-                top: 10,
-                leading: 0,
-                bottom: AppLayout.spacing.value,
-                trailing: 0
-            )
-            section.boundarySupplementaryItems = [header]
-            
-            return section
         }
     }
     

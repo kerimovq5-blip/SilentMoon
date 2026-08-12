@@ -75,11 +75,11 @@ final class SignUpViewController: UIViewController {
     }()
 
     private lazy var emailValidation: FieldValidationController = {
-        .email(fieldController: emailTextField)
+        .email(textField: emailTextField.textField)
     }()
 
     private lazy var passwordValidation: FieldValidationController = {
-        .minLength(8, fieldController: passwordTextField)
+        .minLength(8, textField: passwordTextField.textField)
     }()
 
     private lazy var emailTextField: AppTextFieldController = {

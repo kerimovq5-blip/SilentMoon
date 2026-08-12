@@ -15,11 +15,13 @@ final class AppCoordinator: Coordinator {
     private let navigationController = UINavigationController()
     private let tokenStore: TokenStore
     private let apiService: SilentMoonApiService
-
-    init(window: UIWindow, tokenStore: TokenStore, apiService: SilentMoonApiService) {
+    private let diContainer: AppDiContainer
+    
+    init(window: UIWindow, tokenStore: TokenStore, apiService: SilentMoonApiService, diContainer: AppDiContainer) {
         self.window = window
         self.tokenStore = tokenStore
         self.apiService = apiService
+        self.diContainer = diContainer
     }
 
     func start() {
@@ -38,8 +40,7 @@ final class AppCoordinator: Coordinator {
             navigationController: navigationController,
             apiService: apiService
         )
-        authCoordinator.onFlowFinished = {
-            [weak self] in
+        authCoordinator.onFlowFinished = { [weak self] in
             self?.showMainTabBarFlow()
         }
         childCoordinators = [authCoordinator]
