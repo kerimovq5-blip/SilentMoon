@@ -8,11 +8,11 @@ import SilentMoonManagers
 import SilentMoonNetworkCommon
 import SilentMoonApiService
 
-final class AppDiContainer {
-    private let networkManager: NetworkManager<ApiErrorEnvelope>
-    private let apiService: SilentMoonApiService
-    private let tokenStore: TokenStore
-    init (
+final public class AppDiContainer {
+    public let networkManager: NetworkManager<ApiErrorEnvelope>
+    public let apiService: SilentMoonApiService
+    public let tokenStore: TokenStore
+    public init (
         networkManager: NetworkManager<ApiErrorEnvelope> ,
         apiService: SilentMoonApiService,
         tokenStore: TokenStore
@@ -22,7 +22,7 @@ final class AppDiContainer {
         self.tokenStore = tokenStore
         
     }
-    static func make() -> AppDiContainer {
+  public static func make() -> AppDiContainer {
         let dependencies = NetworkFactory.make()
         return AppDiContainer(
             networkManager: dependencies.networkManager,

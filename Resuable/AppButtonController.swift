@@ -16,8 +16,6 @@ final class AppButton: UIView {
         return button
     }()
 
-    
-
     init(
         title: String,
         backgroundColor: AssetColors = .accent,

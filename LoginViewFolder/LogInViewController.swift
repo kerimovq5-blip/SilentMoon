@@ -6,7 +6,6 @@ final class LogInViewController: UIViewController {
     private let viewModel: LoginViewModel
     private var isPasswordVisible = false
 
-    
     init(viewModel: LoginViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -16,56 +15,14 @@ final class LogInViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-   
-    private lazy var scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.keyboardDismissMode = .interactive
-        scrollView.showsVerticalScrollIndicator = false
-        return scrollView
-    }()
+    private lazy var form = AuthBuilders.scrollableForm()
+    private var scrollView: UIScrollView { form.scrollView }
+    private var contentView: UIView { form.contentView }
 
-    private lazy var contentView: UIView = {
-        UIView()
-    }()
-
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Welcome Back!"
-        label.font = AppFonts.title.font
-        label.textColor = .textPrimary
-        label.textAlignment = .center
-        return label
-    }()
-
-    private lazy var facebookButton: AppButton = {
-        AppButton(
-            title: "CONTINUE WITH FACEBOOK",
-            backgroundColor: .accent,
-            titleColor: .buttonTitle,
-            image: UIImage(named: "Vector"),
-            imagePosition: .leading
-        )
-    }()
-
-    private lazy var googleButton: AppButton = {
-        AppButton(
-            title: "CONTINUE WITH GOOGLE",
-            backgroundColor: .backgroundSecondary,
-            titleColor: .textPrimary,
-            image: UIImage(named: "google"),
-            imagePosition: .leading,
-            borderColor: .textSecondary
-        )
-    }()
-
-    private lazy var dividerLabel: UILabel = {
-        let label = UILabel()
-        label.text = "OR LOG IN WITH EMAIL"
-        label.font = AppFonts.body.font
-        label.textColor = .textSecondary
-        label.textAlignment = .center
-        return label
-    }()
+    private lazy var googleButton = AuthBuilders.googleButton()
+    private lazy var facebookButton = AuthBuilders.facebookButton()
+    private lazy var titleLabel = AuthBuilders.titleLabel("Log in")
+    private lazy var dividerLabel = AuthBuilders.dividerLabel("OR LOG IN WITH EMAIL")
 
     private lazy var emailValidation: FieldValidationController = {
         .email(textField: emailTextField.textField)
@@ -143,7 +100,6 @@ final class LogInViewController: UIViewController {
         return button
     }()
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupHierarchy()
@@ -164,11 +120,15 @@ final class LogInViewController: UIViewController {
 
     private func bindViewModel() {
         viewModel.onStateChange = { [weak self] in
-            self?.render()
+            DispatchQueue.main.async {
+                self?.render()
+            }
         }
         
         viewModel.onEmailNotVerified = { [weak self] email in
-            self?.coordinator?.showOtpVerification(email: email)
+            DispatchQueue.main.async {
+                self?.coordinator?.showOtpVerification(email: email)
+            }
         }
     }
 
@@ -283,7 +243,7 @@ final class LogInViewController: UIViewController {
             .top(passwordTextField.bottomAnchor, AppLayout.spacing.value).0
             .leading(contentView.leadingAnchor, AppLayout.spacing.value).0
             .trailing(contentView.trailingAnchor, -AppLayout.spacing.value).0
-            .height(AppLayout.buttonHeight.value) // textFieldHeight yerinə buttonHeight daha uyğundur
+            .height(AppLayout.buttonHeight.value)
 
         forgotLabel
             .top(logInButton.bottomAnchor, AppLayout.spacing.value).0
@@ -296,7 +256,6 @@ final class LogInViewController: UIViewController {
             .height(AppLayout.xLargeSpacing.value)
     }
 
-    // MARK: - Keyboard & Helpers
     private func configureKeyboardHandling() {
         NotificationCenter.default.addObserver(
             self,
@@ -364,11 +323,10 @@ final class LogInViewController: UIViewController {
         else { return }
 
         let fieldFrame = activeField.convert(activeField.bounds, to: scrollView)
-        scrollView
-            .scrollRectToVisible(
-                fieldFrame.insetBy(dx: 0, dy: -AppLayout.largeSpacing.value),
-                animated: true
-            )
+        scrollView.scrollRectToVisible(
+            fieldFrame.insetBy(dx: 0, dy: -AppLayout.largeSpacing.value),
+            animated: true
+        )
     }
 
     @objc private func dismissKeyboard() {

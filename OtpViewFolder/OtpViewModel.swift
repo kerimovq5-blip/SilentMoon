@@ -42,8 +42,6 @@ public final class OtpViewModel {
         self.apiService = apiService
     }
 
-    
-
   public  func verify() {
         guard otp.count == 6 else {
             state = .invalidInput("Zəhmət olmasa 6 rəqəmli kodu daxil edin.")

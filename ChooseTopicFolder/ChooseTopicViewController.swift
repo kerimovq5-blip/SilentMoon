@@ -71,16 +71,17 @@ final class ChooseTopicViewController: UIViewController {
         )
         return controller
     }()
+    private lazy var continueButton = AuthBuilders.continueButton()
 
-    private lazy var continueButton: AppButton = {
-        let button = AppButton(
-            title: "CONTINUE",
-            backgroundColor: .accent,
-            titleColor: .buttonTitle
-        )
-        button.onTap = { [weak self] in self?.continueTapped() }
-        return button
-    }()
+//    private lazy var continueButton: AppButton = {
+//        let button = AppButton(
+//            title: "CONTINUE",
+//            backgroundColor: .accent,
+//            titleColor: .buttonTitle
+//        )
+//        button.onTap = { [weak self] in self?.continueTapped() }
+//        return button
+//    }()
 
     private lazy var loadingIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .medium)
@@ -93,7 +94,9 @@ final class ChooseTopicViewController: UIViewController {
         setupHierarchy()
         setupLayout()
         bindViewModel()
-    }
+        updateContinueButton()
+        continueButton.onTap = { [weak self] in self?.continueTapped() }
+           }
 
     private func bindViewModel() {
         viewModel.onStateChange = { [weak self] in
@@ -123,6 +126,12 @@ final class ChooseTopicViewController: UIViewController {
         continueButton.isUserInteractionEnabled = !isLoading
         continueButton.alpha = isLoading ? 0.6 : 1.0
         isLoading ? loadingIndicator.startAnimating() : loadingIndicator.stopAnimating()
+    }
+
+    private func updateContinueButton() {
+        let count = selectedTopicIds.count
+        continueButton.setTitle(count > 0 ? "CONTINUE (\(count))" : "CONTINUE")
+        continueButton.setIsEnabled(count > 0)
     }
 
     private func showAlert(message: String) {
@@ -223,9 +232,11 @@ extension ChooseTopicViewController: UICollectionViewDataSource {
 extension ChooseTopicViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         selectedTopicIds.insert(topics[indexPath.item].id)
+        updateContinueButton()
     }
 
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         selectedTopicIds.remove(topics[indexPath.item].id)
+        updateContinueButton()
     }
 }

@@ -59,12 +59,12 @@ final class AuthCoordinator: Coordinator, ContentNavigating {
             animated: true
         )
     }
-
     func showReminder() {
-        let controller = ReminderViewController()
-        controller.coordinator = self
-        navigationController.pushViewController(controller, animated: true)
-    }
+          let stateModel = ReminderStateModels(service: apiService)
+          let controller = ReminderViewController(stateModel: stateModel)
+          controller.coordinator = self
+          navigationController.pushViewController(controller, animated: true)
+      }
 
     func showMorning() {
         let controller = CoursesDetailViewController()

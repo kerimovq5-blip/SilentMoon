@@ -13,14 +13,12 @@ final class AppCoordinator: Coordinator {
     var childCoordinators: [Coordinator] = []
     private let window: UIWindow
     private let navigationController = UINavigationController()
-    private let tokenStore: TokenStore
-    private let apiService: SilentMoonApiService
+    
     private let diContainer: AppDiContainer
     
-    init(window: UIWindow, tokenStore: TokenStore, apiService: SilentMoonApiService, diContainer: AppDiContainer) {
+    init(window: UIWindow,  diContainer: AppDiContainer) {
         self.window = window
-        self.tokenStore = tokenStore
-        self.apiService = apiService
+        
         self.diContainer = diContainer
     }
 
@@ -28,7 +26,7 @@ final class AppCoordinator: Coordinator {
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
 
-        if tokenStore.isLoggedIn {
+        if diContainer.tokenStore.isLoggedIn {
             showMainTabBarFlow()
         } else {
             showAuthFlow()
@@ -38,7 +36,7 @@ final class AppCoordinator: Coordinator {
     private func showAuthFlow() {
         let authCoordinator = AuthCoordinator(
             navigationController: navigationController,
-            apiService: apiService
+            apiService: diContainer.apiService
         )
         authCoordinator.onFlowFinished = { [weak self] in
             self?.showMainTabBarFlow()
@@ -53,7 +51,7 @@ final class AppCoordinator: Coordinator {
         let tabBarController = UITabBarController()
         let tabBarCoordinator = MainTabBarCoordinator(
             tabBarController: tabBarController,
-            apiService: apiService
+            apiService: diContainer.apiService
         )
         tabBarCoordinator.onLogout = { [weak self] in
             self?.logout()
@@ -65,7 +63,7 @@ final class AppCoordinator: Coordinator {
     }
 
     private func logout() {
-        tokenStore.clear()
+        diContainer.tokenStore.clear()
         childCoordinators.removeAll()
         navigationController.setViewControllers([], animated: false)
         setRoot(navigationController)

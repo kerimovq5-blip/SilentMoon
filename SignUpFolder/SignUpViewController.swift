@@ -16,56 +16,11 @@ final class SignUpViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private lazy var scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.keyboardDismissMode = .interactive
-        scrollView.showsVerticalScrollIndicator = false
-        return scrollView
-    }()
-
-    private lazy var contentView: UIView = {
-        UIView()
-    }()
-
-    private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Create your account"
-        label.font = AppFonts.title.font
-        label.textColor = .textPrimary
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        return label
-    }()
-
-    private lazy var facebookButton: AppButton = {
-        AppButton(
-            title: "CONTINUE WITH FACEBOOK",
-            backgroundColor: .accent,
-            titleColor: .buttonTitle,
-            image: UIImage(named: "Vector"),
-            imagePosition: .leading
-        )
-    }()
-
-    private lazy var googleButton: AppButton = {
-        AppButton(
-            title: "CONTINUE WITH GOOGLE",
-            backgroundColor: .backgroundSecondary,
-            titleColor: .textPrimary,
-            image: UIImage(named: "google"),
-            imagePosition: .leading,
-            borderColor: .textSecondary
-        )
-    }()
-
-    private lazy var dividerLabel: UILabel = {
-        let label = UILabel()
-        label.text = "OR SIGN UP WITH EMAIL"
-        label.font = AppFonts.body.font
-        label.textColor = .textSecondary
-        label.textAlignment = .center
-        return label
-    }()
+    private  var (scrollView, contentView) = AuthBuilders.scrollableForm()
+    private lazy var titleLabel = AuthBuilders.titleLabel("Create your account")
+    private lazy var facebookButton = AuthBuilders.facebookButton()
+    private lazy var googleButton = AuthBuilders.googleButton()
+    private lazy var dividerLabel = AuthBuilders.dividerLabel("OR SIGN UP WITH EMAIL")
 
     private lazy var accountTextField: AppTextFieldController = {
         AppTextFieldController(
@@ -202,15 +157,14 @@ final class SignUpViewController: UIViewController {
     }
 
     private func bindViewModel() {
-        viewModel.onStateChange = {
-        [weak self] in DispatchQueue.main.async {
-            self?.render() }
-    }
-        viewModel.onRegisterSucceeded = {
-            [weak self] email, name in
+        viewModel.onStateChange = { [weak self] in
+            DispatchQueue.main.async {
+                self?.render()
+            }
+        }
+        viewModel.onRegisterSucceeded = { [weak self] email, name in
             DispatchQueue.main.async {
                 self?.view.endEditing(true)
-//                self?.coordinator?.showOtpVerification(email: email, name: name)
                 self?.coordinator?.getStarted(name: name)
             }
         }
@@ -226,14 +180,17 @@ final class SignUpViewController: UIViewController {
             
         case .success:
             setLoading(false)
+            
         case .invalidInput(let message):
             setLoading(false)
             showAlert(message: message)
+            
         case .requestFailed(let appError):
             setLoading(false)
             showAlert(message: appError.errorDescription ?? "Naməlum xəta baş verdi.")
         }
     }
+
     private func getStartedTapped() {
         emailValidation.markSubmitAttempt()
         passwordValidation.markSubmitAttempt()
@@ -270,6 +227,7 @@ final class SignUpViewController: UIViewController {
             : AssetColors.textSecondary.color
     }
 
+    // MARK: - Layout Setup
     private func setupHierarchy() {
         view.backgroundColor = .backgroundSecondary
         view.addSubviews(scrollView)

@@ -9,8 +9,18 @@ import UIKit
 
 final class ReminderViewController: UIViewController {
     var coordinator: AuthCoordinator?
+    private let stateModel: ReminderStateModels
     private let weekLabels = ReminderDayItem.weeknames
     private var selectedIndexes: Set<Int> = []
+
+    init(stateModel: ReminderStateModels) {
+        self.stateModel = stateModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -85,19 +95,67 @@ final class ReminderViewController: UIViewController {
         button.onTap = { [weak self] in self?.saveTapped() }
         return button
     }()
-    private lazy var thankslabel :UILabel = {
+
+    private lazy var loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .medium)
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+
+    private lazy var thankslabel: UILabel = {
         let label = UILabel()
         label.text = "NO THANKS"
         label.textColor = .black
         label.textAlignment = .center
-        
+        label.isUserInteractionEnabled = true
+        label.addGestureRecognizer(
+            UITapGestureRecognizer(target: self, action: #selector(skipTapped))
+        )
         return label
     }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         selectedIndexes = Set(weekLabels.indices)
         setupHierarchy()
         setupConstraints()
+        bindStateModel()
+    }
+
+    private func bindStateModel() {
+        stateModel.onStateChange = { [weak self] in
+            self?.render()
+        }
+    }
+
+    private func render() {
+        switch stateModel.state {
+        case .idle:
+            setLoading(false)
+        case .loading:
+            setLoading(true)
+        case .success, .deleted:
+            setLoading(false)
+            coordinator?.finishAuth()
+        case .invalidInput(let message):
+            setLoading(false)
+            showAlert(message: message)
+        case .requestFailed(let appError):
+            setLoading(false)
+            showAlert(message: appError.errorDescription ?? "Naməlum xəta baş verdi.")
+        }
+    }
+
+    private func setLoading(_ isLoading: Bool) {
+        saveButton.isUserInteractionEnabled = !isLoading
+        saveButton.alpha = isLoading ? 0.6 : 1.0
+        isLoading ? loadingIndicator.startAnimating() : loadingIndicator.stopAnimating()
+    }
+
+    private func showAlert(message: String) {
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
     }
 
     private func setupHierarchy() {
@@ -108,6 +166,7 @@ final class ReminderViewController: UIViewController {
             subtitleLabel,
             weekCollection,
             saveButton,
+            loadingIndicator,
             thankslabel
         )
     }
@@ -140,14 +199,25 @@ final class ReminderViewController: UIViewController {
             .leading(view.leadingAnchor, AppLayout.spacing.value).0
             .trailing(view.trailingAnchor, -AppLayout.spacing.value).0
             .height(AppLayout.textFieldHeight.value)
+
+        loadingIndicator
+            .centerX(saveButton.centerXAnchor).0
+            .centerY(saveButton.centerYAnchor)
+
         thankslabel
             .top(saveButton.bottomAnchor , AppLayout.spacing.value).0
             .centerX(view.centerXAnchor)
-            
-            
     }
+
     private func saveTapped() {
-        
+        stateModel.selectedDate = datePicker.date
+        // ReminderDayItem.weeknames[0] == Sunday → Foundation's DateComponents.weekday
+        // convention is 1...7 with Sunday = 1, so the stored day is (index + 1).
+        stateModel.selectedDays = Set(selectedIndexes.map { $0 + 1 })
+        stateModel.saveReminder()
+    }
+
+    @objc private func skipTapped() {
         coordinator?.finishAuth()
     }
 }

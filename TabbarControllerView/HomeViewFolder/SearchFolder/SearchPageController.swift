@@ -232,7 +232,7 @@ final class SearchPageController: UIViewController {
     }
 
     private func message(for error: Error) -> String {
-        if let appError = error as? AppError {
+        if let appError = error as? AppError<ApiErrorEnvelope> {
             return appError.errorDescription ?? "Naməlum xəta baş verdi."
         }
         return error.localizedDescription

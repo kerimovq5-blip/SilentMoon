@@ -22,13 +22,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.rootViewController = controller
         window.makeKeyAndVisible()
 
-        let dependencies = NetworkFactory.make()
+        let diContainer = AppDiContainer.make()
 
         appCoordinator = AppCoordinator(
             window: window,
-            tokenStore: dependencies.tokenStore,
-            apiService: dependencies.apiService,
-            diContainer: dependencies.diContainer
+            
+            diContainer: diContainer
+               
         )
         appCoordinator?.start()
 
