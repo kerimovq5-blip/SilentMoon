@@ -7,10 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F2ADCFE8302A353000ECCB11 /* SilentMoonApiService in Frameworks */ = {isa = PBXBuildFile; productRef = F2ADCFE7302A353000ECCB11 /* SilentMoonApiService */; };
-		F2ADCFEA302A353000ECCB11 /* SilentMoonDTOs in Frameworks */ = {isa = PBXBuildFile; productRef = F2ADCFE9302A353000ECCB11 /* SilentMoonDTOs */; };
-		F2ADCFEC302A353000ECCB11 /* SilentMoonManagers in Frameworks */ = {isa = PBXBuildFile; productRef = F2ADCFEB302A353000ECCB11 /* SilentMoonManagers */; };
-		F2ADCFEE302A353000ECCB11 /* SilentMoonNetworkCommon in Frameworks */ = {isa = PBXBuildFile; productRef = F2ADCFED302A353000ECCB11 /* SilentMoonNetworkCommon */; };
+		F2ADD0AD303125E500ECCB11 /* SilentMoonData in Frameworks */ = {isa = PBXBuildFile; productRef = F2ADD0AC303125E500ECCB11 /* SilentMoonData */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -103,10 +100,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F2ADCFEA302A353000ECCB11 /* SilentMoonDTOs in Frameworks */,
-				F2ADCFE8302A353000ECCB11 /* SilentMoonApiService in Frameworks */,
-				F2ADCFEE302A353000ECCB11 /* SilentMoonNetworkCommon in Frameworks */,
-				F2ADCFEC302A353000ECCB11 /* SilentMoonManagers in Frameworks */,
+				F2ADD0AD303125E500ECCB11 /* SilentMoonData in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -129,6 +123,7 @@
 				F26071F52FEEDE6300F5F017 /* Common */,
 				F26071EC2FEEDE4F00F5F017 /* StartFolder */,
 				F218C93B2FED5734002251F7 /* SilentMoon */,
+				F2ADD01A303122FD00ECCB11 /* Frameworks */,
 				F218C93A2FED5734002251F7 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -139,6 +134,13 @@
 				F218C9392FED5734002251F7 /* SilentMoon.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		F2ADD01A303122FD00ECCB11 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -173,10 +175,7 @@
 			);
 			name = SilentMoon;
 			packageProductDependencies = (
-				F2ADCFE7302A353000ECCB11 /* SilentMoonApiService */,
-				F2ADCFE9302A353000ECCB11 /* SilentMoonDTOs */,
-				F2ADCFEB302A353000ECCB11 /* SilentMoonManagers */,
-				F2ADCFED302A353000ECCB11 /* SilentMoonNetworkCommon */,
+				F2ADD0AC303125E500ECCB11 /* SilentMoonData */,
 			);
 			productName = SilentMoon;
 			productReference = F218C9392FED5734002251F7 /* SilentMoon.app */;
@@ -207,7 +206,7 @@
 			mainGroup = F218C9302FED5734002251F7;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				F2ADCF6C302A34D400ECCB11 /* XCLocalSwiftPackageReference "../SilentMoonNetwork" */,
+				F2ADD0AB303125E500ECCB11 /* XCRemoteSwiftPackageReference "SilentMoonData" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F218C93A2FED5734002251F7 /* Products */;
@@ -456,33 +455,22 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		F2ADCF6C302A34D400ECCB11 /* XCLocalSwiftPackageReference "../SilentMoonNetwork" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../SilentMoonNetwork;
+/* Begin XCRemoteSwiftPackageReference section */
+		F2ADD0AB303125E500ECCB11 /* XCRemoteSwiftPackageReference "SilentMoonData" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kerimovq5-blip/SilentMoonData";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
 		};
-/* End XCLocalSwiftPackageReference section */
+/* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		F2ADCFE7302A353000ECCB11 /* SilentMoonApiService */ = {
+		F2ADD0AC303125E500ECCB11 /* SilentMoonData */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F2ADCF6C302A34D400ECCB11 /* XCLocalSwiftPackageReference "../SilentMoonNetwork" */;
-			productName = SilentMoonApiService;
-		};
-		F2ADCFE9302A353000ECCB11 /* SilentMoonDTOs */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F2ADCF6C302A34D400ECCB11 /* XCLocalSwiftPackageReference "../SilentMoonNetwork" */;
-			productName = SilentMoonDTOs;
-		};
-		F2ADCFEB302A353000ECCB11 /* SilentMoonManagers */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F2ADCF6C302A34D400ECCB11 /* XCLocalSwiftPackageReference "../SilentMoonNetwork" */;
-			productName = SilentMoonManagers;
-		};
-		F2ADCFED302A353000ECCB11 /* SilentMoonNetworkCommon */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F2ADCF6C302A34D400ECCB11 /* XCLocalSwiftPackageReference "../SilentMoonNetwork" */;
-			productName = SilentMoonNetworkCommon;
+			package = F2ADD0AB303125E500ECCB11 /* XCRemoteSwiftPackageReference "SilentMoonData" */;
+			productName = SilentMoonData;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -1,0 +1,24 @@
+{
+  "originHash" : "cb617ee9cabd257fd30e88089664e63841fb0b2390790138f0eed15acba8c55d",
+  "pins" : [
+    {
+      "identity" : "silentmoondata",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kerimovq5-blip/SilentMoonData",
+      "state" : {
+        "branch" : "main",
+        "revision" : "a123b0038f401b5c9c9e462df38e1f67633163be"
+      }
+    },
+    {
+      "identity" : "silentmoonnetwork",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kerimovq5-blip/SilentMoonNetwork",
+      "state" : {
+        "branch" : "main",
+        "revision" : "ffb8865f62243d23712e6858e08c1e958b2e49eb"
+      }
+    }
+  ],
+  "version" : 3
+}

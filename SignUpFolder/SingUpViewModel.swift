@@ -8,7 +8,7 @@
 
 import Foundation
 import SilentMoonNetworkCommon
-import SilentMoonManagers
+import SilentMoonData
 
 enum SignUpViewModelState {
     case idle

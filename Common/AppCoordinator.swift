@@ -7,7 +7,6 @@
 
 import UIKit
 import SilentMoonNetworkCommon
-import SilentMoonManagers
 
 final class AppCoordinator: Coordinator {
     var childCoordinators: [Coordinator] = []

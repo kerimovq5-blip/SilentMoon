@@ -1,5 +1,5 @@
 import UIKit
-import SilentMoonManagers
+import SilentMoonData
 
 final class AuthCoordinator: Coordinator, ContentNavigating {
 

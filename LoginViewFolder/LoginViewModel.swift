@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import SilentMoonManagers
 import SilentMoonNetworkCommon
+import SilentMoonData
 
 enum LoginViewModelState {
     case idle

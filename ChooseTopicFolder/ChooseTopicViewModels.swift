@@ -1,6 +1,7 @@
 import Foundation
-import SilentMoonManagers
+import SilentMoonData
 import SilentMoonNetworkCommon
+
 @MainActor
 enum ChooseTopicViewModelState {
     case idle

@@ -6,9 +6,8 @@
 //
 
 import Foundation
-import SilentMoonManagers
 import SilentMoonNetworkCommon
-import SilentMoonDTOs
+import SilentMoonData
 
 @MainActor
 enum ReminderModelsState {

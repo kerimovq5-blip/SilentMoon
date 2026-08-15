@@ -6,9 +6,8 @@
 //
 
 import UIKit
-import SilentMoonManagers
 import SilentMoonNetworkCommon
-import SilentMoonDTOs
+import SilentMoonData
 
 final class SearchPageController: UIViewController {
     var coordinator: ContentNavigating?

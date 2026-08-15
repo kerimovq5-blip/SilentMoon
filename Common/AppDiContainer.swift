@@ -4,9 +4,8 @@
 //
 //  Created by Kerimov Qehreman on 13.08.26.
 //
-import SilentMoonManagers
-import SilentMoonNetworkCommon
-import SilentMoonApiService
+import SilentMoonNetwork
+import SilentMoonData
 
 final public class AppDiContainer {
     public let networkManager: NetworkManager<ApiErrorEnvelope>

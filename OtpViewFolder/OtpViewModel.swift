@@ -7,8 +7,7 @@
 
 import Foundation
 import SilentMoonNetworkCommon
-import SilentMoonManagers
-import SilentMoonDTOs
+import SilentMoonData
 
 public enum OtpViewModelState {
     case idle

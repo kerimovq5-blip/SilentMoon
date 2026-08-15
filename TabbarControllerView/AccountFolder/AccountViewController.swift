@@ -7,7 +7,7 @@
 
 
 import UIKit
-import SilentMoonManagers
+import SilentMoonData
 
 final class AccountViewController: UIViewController {
 
