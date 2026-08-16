@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		F2ADD0AD303125E500ECCB11 /* SilentMoonData in Frameworks */ = {isa = PBXBuildFile; productRef = F2ADD0AC303125E500ECCB11 /* SilentMoonData */; };
+		F2ADD0B03031F78C00ECCB11 /* SilentMoonNetworkCommon in Frameworks */ = {isa = PBXBuildFile; productRef = F2ADD0AF3031F78C00ECCB11 /* SilentMoonNetworkCommon */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -100,6 +101,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F2ADD0B03031F78C00ECCB11 /* SilentMoonNetworkCommon in Frameworks */,
 				F2ADD0AD303125E500ECCB11 /* SilentMoonData in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -176,6 +178,7 @@
 			name = SilentMoon;
 			packageProductDependencies = (
 				F2ADD0AC303125E500ECCB11 /* SilentMoonData */,
+				F2ADD0AF3031F78C00ECCB11 /* SilentMoonNetworkCommon */,
 			);
 			productName = SilentMoon;
 			productReference = F218C9392FED5734002251F7 /* SilentMoon.app */;
@@ -207,6 +210,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				F2ADD0AB303125E500ECCB11 /* XCRemoteSwiftPackageReference "SilentMoonData" */,
+				F2ADD0AE3031F78C00ECCB11 /* XCRemoteSwiftPackageReference "SilentMoonNetwork" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F218C93A2FED5734002251F7 /* Products */;
@@ -464,6 +468,14 @@
 				kind = branch;
 			};
 		};
+		F2ADD0AE3031F78C00ECCB11 /* XCRemoteSwiftPackageReference "SilentMoonNetwork" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kerimovq5-blip/SilentMoonNetwork";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -471,6 +483,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F2ADD0AB303125E500ECCB11 /* XCRemoteSwiftPackageReference "SilentMoonData" */;
 			productName = SilentMoonData;
+		};
+		F2ADD0AF3031F78C00ECCB11 /* SilentMoonNetworkCommon */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F2ADD0AE3031F78C00ECCB11 /* XCRemoteSwiftPackageReference "SilentMoonNetwork" */;
+			productName = SilentMoonNetworkCommon;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

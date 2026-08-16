@@ -4,7 +4,7 @@
 //
 //  Created by Kerimov Qehreman on 13.08.26.
 //
-import SilentMoonNetwork
+import SilentMoonNetworkCommon
 import SilentMoonData
 
 final public class AppDiContainer {
