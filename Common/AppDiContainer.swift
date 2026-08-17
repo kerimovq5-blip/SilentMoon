@@ -26,7 +26,7 @@ final public class AppDiContainer {
         let dependencies = NetworkFactory.make()
         return AppDiContainer(
             networkManager: dependencies.networkManager,
-            repository: dependencies.repository,
+            repository: dependencies.apiService,
             tokenStore: dependencies.tokenStore
         )
     }

@@ -8,7 +8,6 @@
 import UIKit
 import SilentMoonNetwork
 import SilentMoonDomain
-import SilentMoonData
 
 final class SearchPageController: UIViewController {
     var coordinator: ContentNavigating?
@@ -27,7 +26,7 @@ final class SearchPageController: UIViewController {
     private var searchDebounceTimer: Timer?
     private var currentRequestID = 0
 
-    private var results: [CourseSummary] = [] {
+    private var results: [CourseSummaryEntity] = [] {
         didSet { tableView.reloadData() }
     }
 
@@ -218,7 +217,12 @@ final class SearchPageController: UIViewController {
 
         Task { [weak self] in
             guard let self else { return }
-            let result = await self.repository.search(query: query)
+            let result = await self.repository.search(
+                query: query,
+                type: nil,
+                page: 1,
+                limit: 20
+            )
             guard requestID == self.currentRequestID else { return }
             switch result {
             case .success(let response):
@@ -289,7 +293,7 @@ extension SearchPageController: UITableViewDataSource {
 
         var content = cell.defaultContentConfiguration()
         content.text = item.title
-        content.secondaryText = item.subtitle ?? item.type?.capitalized
+        content.secondaryText = item.subtitle.isEmpty ? item.type.capitalized : item.subtitle
         content.textProperties.color = AssetColors.textPrimary.color
         content.secondaryTextProperties.color = AssetColors.textSecondary.color
         cell.contentConfiguration = content

@@ -35,7 +35,7 @@ final class AppCoordinator: Coordinator {
     private func showAuthFlow() {
         let authCoordinator = AuthCoordinator(
             navigationController: navigationController,
-            apiService: diContainer.apiService
+            repository: diContainer.repository
         )
         authCoordinator.onFlowFinished = { [weak self] in
             self?.showMainTabBarFlow()
@@ -50,7 +50,7 @@ final class AppCoordinator: Coordinator {
         let tabBarController = UITabBarController()
         let tabBarCoordinator = MainTabBarCoordinator(
             tabBarController: tabBarController,
-            apiService: diContainer.apiService
+            repository: diContainer.repository
         )
         tabBarCoordinator.onLogout = { [weak self] in
             self?.logout()

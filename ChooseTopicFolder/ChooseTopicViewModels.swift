@@ -1,5 +1,5 @@
 import Foundation
-import SilentMoonData
+import SilentMoonDomain
 import SilentMoonNetwork
 
 @MainActor
@@ -21,9 +21,9 @@ final class ChooseTopicViewModel {
     
     var onStateChange: (() -> Void)?
     
-    private let service: SilentMoonRepositoryImpl
+    private let service: SilentMoonRepository
     
-    init(service: SilentMoonRepositoryImpl) {
+    init(service: SilentMoonRepository) {
         self.service = service
     }
     

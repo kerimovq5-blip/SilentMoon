@@ -15,14 +15,14 @@ final class LogInViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private lazy var form = AuthBuilders.scrollableForm()
+    private lazy var form = AppBuilders.scrollableForm()
     private var scrollView: UIScrollView { form.scrollView }
     private var contentView: UIView { form.contentView }
 
     private lazy var googleButton = AuthBuilders.googleButton()
     private lazy var facebookButton = AuthBuilders.facebookButton()
-    private lazy var titleLabel = AuthBuilders.titleLabel("Log in")
-    private lazy var dividerLabel = AuthBuilders.dividerLabel("OR LOG IN WITH EMAIL")
+    private lazy var titleLabel = AppBuilders.titleLabel("Log in")
+    private lazy var dividerLabel = AppBuilders.dividerLabel("OR LOG IN WITH EMAIL")
 
     private lazy var emailValidation: FieldValidationController = {
         .email(textField: emailTextField.textField)

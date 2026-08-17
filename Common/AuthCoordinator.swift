@@ -1,5 +1,4 @@
 import UIKit
-import SilentMoonData
 import SilentMoonDomain
 final class AuthCoordinator: Coordinator, ContentNavigating {
 
@@ -54,7 +53,7 @@ final class AuthCoordinator: Coordinator, ContentNavigating {
 
     func showTopics() {
         let viewModel = ChooseTopicViewModel(
-            service: repository as! SilentMoonRepositoryImpl
+            service: repository
         )
         let controller = ChooseTopicViewController(viewModel: viewModel)
         controller.coordinator = self

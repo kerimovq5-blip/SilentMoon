@@ -16,11 +16,11 @@ final class SignUpViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private  var (scrollView, contentView) = AuthBuilders.scrollableForm()
-    private lazy var titleLabel = AuthBuilders.titleLabel("Create your account")
+    private  var (scrollView, contentView) = AppBuilders.scrollableForm()
+    private lazy var titleLabel = AppBuilders.titleLabel("Create your account")
     private lazy var facebookButton = AuthBuilders.facebookButton()
     private lazy var googleButton = AuthBuilders.googleButton()
-    private lazy var dividerLabel = AuthBuilders.dividerLabel("OR SIGN UP WITH EMAIL")
+    private lazy var dividerLabel = AppBuilders.dividerLabel("OR SIGN UP WITH EMAIL")
 
     private lazy var accountTextField: AppTextFieldController = {
         AppTextFieldController(

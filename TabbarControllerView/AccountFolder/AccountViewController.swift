@@ -7,16 +7,16 @@
 
 
 import UIKit
-import SilentMoonData
+import SilentMoonDomain
 
 final class AccountViewController: UIViewController {
 
     var onLogoutTapped: (() -> Void)?
 
-    private let apiService: SilentMoonApiService
+    private let repository: SilentMoonRepository
 
-    init(apiService: SilentMoonApiService) {
-        self.apiService = apiService
+    init(repository: SilentMoonRepository) {
+        self.repository = repository
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -50,7 +50,7 @@ final class AccountViewController: UIViewController {
         logoutButton.isUserInteractionEnabled = false
         Task { [weak self] in
             guard let self else { return }
-            _ = await self.apiService.logout()
+            _ = await self.repository.logout()
             self.onLogoutTapped?()
         }
     }

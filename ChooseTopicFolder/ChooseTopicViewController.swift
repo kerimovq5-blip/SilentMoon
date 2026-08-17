@@ -71,7 +71,7 @@ final class ChooseTopicViewController: UIViewController {
         )
         return controller
     }()
-    private lazy var continueButton = AuthBuilders.continueButton()
+    private lazy var continueButton = AppBuilders.continueButton()
 
 //    private lazy var continueButton: AppButton = {
 //        let button = AppButton(
