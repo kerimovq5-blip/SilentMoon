@@ -6,78 +6,87 @@
 //
 
 import Foundation
-import SilentMoonNetworkCommon
-import SilentMoonData
+import SilentMoonNetwork
+import SilentMoonDomain
 
 public enum OtpViewModelState {
     case idle
-
     case verifying
     case verifySucceeded
     case invalidInput(String)
     case verifyFailed(AppError<ApiErrorEnvelope>)
-    
     case resending
-    case resendSucceeded(String)    
+    case resendSucceeded(String)
     case resendFailed(AppError<ApiErrorEnvelope>)
 }
 
+@MainActor
 public final class OtpViewModel {
 
-    var email: String = ""
-    var userName: String = ""
-    var otp: String = ""
+    public var email: String
+    public var userName: String
+    public var otp: String = ""
 
-    private let apiService: SilentMoonApiService
+    private let repository: SilentMoonRepository
 
-    private(set) var state: OtpViewModelState = .idle {
+    public private(set) var state: OtpViewModelState = .idle {
         didSet { onStateChange?() }
     }
-    var onStateChange: (() -> Void)?
+    
+    public var onStateChange: (() -> Void)?
+    public var onVerifySucceeded: ((_ userName: String) -> Void)?
 
-    var onVerifySucceeded: ((_ userName: String) -> Void)?
-
-    init(apiService: SilentMoonApiService ) {
-        self.apiService = apiService
+    public init(
+        repository: SilentMoonRepository,
+        email: String = "",
+        userName: String = ""
+    ) {
+        self.repository = repository
+        self.email = email
+        self.userName = userName
     }
 
-  public  func verify() {
+    public func verify() {
         guard otp.count == 6 else {
             state = .invalidInput("Zəhmət olmasa 6 rəqəmli kodu daxil edin.")
             return
         }
 
-      state = .verifying
-        Task { [weak self] in
-                    guard let self else { return }
-                    
-                    let result = await self.apiService.verifyEmail(email: self.email, otp: self.otp)
-                    
-                    switch result {
-                    case .success:
-                        self.state = .verifySucceeded
-                        self.onVerifySucceeded?(self.userName)
-                    case .failure(let error):
-                        self.state = .verifyFailed(self.asAppError(error))
-                    }
-                }
-            }
-   public func resendOtp() {
-        state = .resending
+        state = .verifying
+        
         Task { [weak self] in
             guard let self else { return }
-            
-            let result = await self.apiService.resendOtp(email: self.email)
-            
+
+            let result = await self.repository.verifyEmail(email: self.email, otp: self.otp)
+
+            switch result {
+            case .success:
+                self.state = .verifySucceeded
+                self.onVerifySucceeded?(self.userName)
+            case .failure(let error):
+                self.state = .verifyFailed(self.asAppError(error))
+            }
+        }
+    }
+
+    public func resendOtp() {
+        state = .resending
+        
+        Task { [weak self] in
+            guard let self else { return }
+
+            let result = await self.repository.resendOtp(email: self.email)
+
             switch result {
             case .success(let response):
-                self.state = .resendSucceeded(response.message)
+                let message = response.message
+                self.state = .resendSucceeded(message)
             case .failure(let error):
                 self.state = .resendFailed(self.asAppError(error))
             }
         }
-      
     }
+
     private func asAppError(_ error: Error) -> AppError<ApiErrorEnvelope> {
         (error as? AppError<ApiErrorEnvelope>) ?? .unknown(error)
     }

@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import SilentMoonNetworkCommon
-import SilentMoonData
+import SilentMoonNetwork
+import SilentMoonDomain
 
 enum LoginViewModelState {
     case idle
@@ -28,10 +28,10 @@ final class LoginViewModel {
 
     var onEmailNotVerified: ((_ email: String) -> Void)?
 
-    private let service: SilentMoonApiService
+    private let repository: SilentMoonRepository
 
-    init(service: SilentMoonApiService ) {
-        self.service = service
+    init(repository: SilentMoonRepository ) {
+        self.repository = repository
     }
    
 
@@ -47,7 +47,7 @@ final class LoginViewModel {
         
         Task {[weak self ] in
         guard let self  else { return}
-            let result = await service.login(email: self.email, password: self.password)
+            let result = await repository.login(email: self.email, password: self.password)
             
             switch result {
             case .success:

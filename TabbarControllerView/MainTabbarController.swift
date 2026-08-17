@@ -1,23 +1,27 @@
 //
-//  MainTabbarController.swift
+//  MainTabBarCoordinator.swift
 //  SilentMoon
 //
 //  Created by Kerimov Qehreman on 30.06.26.
 //
 
 import UIKit
-import SilentMoonData
+import SilentMoonDomain
 
+@MainActor
 final class MainTabBarCoordinator: Coordinator {
     var childCoordinators: [Coordinator] = []
     let tabBarController: UITabBarController
     var onLogout: (() -> Void)?
 
-    private let apiService: SilentMoonApiService
+    private let repository: SilentMoonRepository
 
-    init(tabBarController: UITabBarController, apiService: SilentMoonApiService) {
+    init(
+        tabBarController: UITabBarController,
+        repository: SilentMoonRepository
+    ) {
         self.tabBarController = tabBarController
-        self.apiService = apiService
+        self.repository = repository
     }
 
     func start() {
@@ -34,19 +38,20 @@ final class MainTabBarCoordinator: Coordinator {
         tabBarController.selectedViewController as? UINavigationController
     }
 
-     func makeHomeTab() -> UINavigationController {
+    private func makeHomeTab() -> UINavigationController {
         let homeController = HomeViewController(userName: "")
         homeController.coordinator = self
         let navigation = UINavigationController(rootViewController: homeController)
         navigation.tabBarItem = UITabBarItem(
             title: "Home",
             image: UIImage(named: "Home")?.withRenderingMode(.alwaysOriginal),
-            tag: 0)
+            tag: 0
+        )
         navigation.tabBarItem.badgeColor = .systemRed
         return navigation
     }
 
-     func makeSleepTab() -> UINavigationController {
+    private func makeSleepTab() -> UINavigationController {
         let sleepController = WelcomeSleepyiewController()
         sleepController.coordinator = self
         let navigation = UINavigationController(rootViewController: sleepController)
@@ -58,7 +63,7 @@ final class MainTabBarCoordinator: Coordinator {
         return navigation
     }
 
-     func makeMeditateTab() -> UINavigationController {
+    private func makeMeditateTab() -> UINavigationController {
         let navigation = UINavigationController(rootViewController: MeditateViewController())
         navigation.tabBarItem = UITabBarItem(
             title: "Meditate",
@@ -68,13 +73,11 @@ final class MainTabBarCoordinator: Coordinator {
         return navigation
     }
 
-     func makeMusicTab() -> UINavigationController {
-         let musicController = MusicListViewController()
-         musicController.coordinator = self
+    private func makeMusicTab() -> UINavigationController {
+        let musicController = MusicListViewController()
+        musicController.coordinator = self
 
-         let navigation = UINavigationController(
-            rootViewController: musicController
-         )
+        let navigation = UINavigationController(rootViewController: musicController)
         navigation.tabBarItem = UITabBarItem(
             title: "Music",
             image: UIImage(named: "music")?.withRenderingMode(.alwaysOriginal),
@@ -83,8 +86,8 @@ final class MainTabBarCoordinator: Coordinator {
         return navigation
     }
 
-     func makeAccountTab() -> UINavigationController {
-        let controller = AccountViewController(apiService: apiService)
+    private func makeAccountTab() -> UINavigationController {
+        let controller = AccountViewController(repository: repository)
         controller.onLogoutTapped = { [weak self] in
             self?.onLogout?()
         }
@@ -107,30 +110,32 @@ extension MainTabBarCoordinator: ContentNavigating {
         activeNavigationController?.pushViewController(controller, animated: true)
     }
 
-    func showMusicPage(item titlelabel : String) {
+    func showMusicPage(item titleLabel: String) {
         let controller = MusicPageController()
-        controller.titleLabel = titlelabel
+        controller.titleLabel = titleLabel
         controller.coordinator = self
         activeNavigationController?.pushViewController(controller, animated: true)
-
     }
-    func showMusicPage2(item titlelabel : String) {
+
+    func showMusicPage2(item titleLabel: String) {
         let controller = MusicSleepPageController()
-        controller.titleLabel = titlelabel
+        controller.titleLabel = titleLabel
         controller.coordinator = self
         activeNavigationController?.pushViewController(controller, animated: true)
-
     }
+
     func showMusicList() {
         let controller = MusicListViewController()
         controller.coordinator = self
         activeNavigationController?.pushViewController(controller, animated: true)
     }
+
     func showSearchPage() {
-        let controller = SearchPageController(apiService: apiService)
+        let controller = SearchPageController(repository: repository)
         controller.coordinator = self
         activeNavigationController?.pushViewController(controller, animated: true)
     }
+
     func dismissMusicPage() {
         activeNavigationController?.popViewController(animated: true)
     }
@@ -140,6 +145,7 @@ extension MainTabBarCoordinator: ContentNavigating {
         controller.coordinator = self
         activeNavigationController?.pushViewController(controller, animated: true)
     }
+
     func playOptionPage() {
         let controller = PlayOptionViewController()
         controller.coordinator = self

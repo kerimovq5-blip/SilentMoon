@@ -4,20 +4,21 @@
 //
 //  Created by Kerimov Qehreman on 13.08.26.
 //
-import SilentMoonNetworkCommon
+import SilentMoonNetwork
+import SilentMoonDomain
 import SilentMoonData
 
 final public class AppDiContainer {
     public let networkManager: NetworkManager<ApiErrorEnvelope>
-    public let apiService: SilentMoonApiService
+    public let repository: SilentMoonRepository
     public let tokenStore: TokenStore
     public init (
         networkManager: NetworkManager<ApiErrorEnvelope> ,
-        apiService: SilentMoonApiService,
+        repository: SilentMoonRepository,
         tokenStore: TokenStore
     ) {
         self.networkManager = networkManager
-        self.apiService = apiService
+        self.repository = repository
         self.tokenStore = tokenStore
         
     }
@@ -25,7 +26,7 @@ final public class AppDiContainer {
         let dependencies = NetworkFactory.make()
         return AppDiContainer(
             networkManager: dependencies.networkManager,
-            apiService: dependencies.apiService,
+            repository: dependencies.repository,
             tokenStore: dependencies.tokenStore
         )
     }

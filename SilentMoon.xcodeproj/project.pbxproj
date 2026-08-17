@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F2ADD0AD303125E500ECCB11 /* SilentMoonData in Frameworks */ = {isa = PBXBuildFile; productRef = F2ADD0AC303125E500ECCB11 /* SilentMoonData */; };
-		F2ADD0B03031F78C00ECCB11 /* SilentMoonNetworkCommon in Frameworks */ = {isa = PBXBuildFile; productRef = F2ADD0AF3031F78C00ECCB11 /* SilentMoonNetworkCommon */; };
+		F2ADD142303205A600ECCB11 /* SilentMoonData in Frameworks */ = {isa = PBXBuildFile; productRef = F2ADD141303205A600ECCB11 /* SilentMoonData */; };
+		F2ADD14430335A9300ECCB11 /* SilentMoonNetwork in Frameworks */ = {isa = PBXBuildFile; productRef = F2ADD14330335A9300ECCB11 /* SilentMoonNetwork */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -101,8 +101,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F2ADD0B03031F78C00ECCB11 /* SilentMoonNetworkCommon in Frameworks */,
-				F2ADD0AD303125E500ECCB11 /* SilentMoonData in Frameworks */,
+				F2ADD142303205A600ECCB11 /* SilentMoonData in Frameworks */,
+				F2ADD14430335A9300ECCB11 /* SilentMoonNetwork in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -177,8 +177,8 @@
 			);
 			name = SilentMoon;
 			packageProductDependencies = (
-				F2ADD0AC303125E500ECCB11 /* SilentMoonData */,
-				F2ADD0AF3031F78C00ECCB11 /* SilentMoonNetworkCommon */,
+				F2ADD141303205A600ECCB11 /* SilentMoonData */,
+				F2ADD14330335A9300ECCB11 /* SilentMoonNetwork */,
 			);
 			productName = SilentMoon;
 			productReference = F218C9392FED5734002251F7 /* SilentMoon.app */;
@@ -209,8 +209,8 @@
 			mainGroup = F218C9302FED5734002251F7;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				F2ADD0AB303125E500ECCB11 /* XCRemoteSwiftPackageReference "SilentMoonData" */,
-				F2ADD0AE3031F78C00ECCB11 /* XCRemoteSwiftPackageReference "SilentMoonNetwork" */,
+				F2ADD13D3032057B00ECCB11 /* XCRemoteSwiftPackageReference "SilentMoonNetwork" */,
+				F2ADD140303205A600ECCB11 /* XCRemoteSwiftPackageReference "SilentMoonData" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F218C93A2FED5734002251F7 /* Products */;
@@ -460,17 +460,17 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		F2ADD0AB303125E500ECCB11 /* XCRemoteSwiftPackageReference "SilentMoonData" */ = {
+		F2ADD13D3032057B00ECCB11 /* XCRemoteSwiftPackageReference "SilentMoonNetwork" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/kerimovq5-blip/SilentMoonData";
+			repositoryURL = "https://github.com/kerimovq5-blip/SilentMoonNetwork";
 			requirement = {
 				branch = main;
 				kind = branch;
 			};
 		};
-		F2ADD0AE3031F78C00ECCB11 /* XCRemoteSwiftPackageReference "SilentMoonNetwork" */ = {
+		F2ADD140303205A600ECCB11 /* XCRemoteSwiftPackageReference "SilentMoonData" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/kerimovq5-blip/SilentMoonNetwork";
+			repositoryURL = "https://github.com/kerimovq5-blip/SilentMoonData";
 			requirement = {
 				branch = main;
 				kind = branch;
@@ -479,15 +479,15 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		F2ADD0AC303125E500ECCB11 /* SilentMoonData */ = {
+		F2ADD141303205A600ECCB11 /* SilentMoonData */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F2ADD0AB303125E500ECCB11 /* XCRemoteSwiftPackageReference "SilentMoonData" */;
+			package = F2ADD140303205A600ECCB11 /* XCRemoteSwiftPackageReference "SilentMoonData" */;
 			productName = SilentMoonData;
 		};
-		F2ADD0AF3031F78C00ECCB11 /* SilentMoonNetworkCommon */ = {
+		F2ADD14330335A9300ECCB11 /* SilentMoonNetwork */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F2ADD0AE3031F78C00ECCB11 /* XCRemoteSwiftPackageReference "SilentMoonNetwork" */;
-			productName = SilentMoonNetworkCommon;
+			package = F2ADD13D3032057B00ECCB11 /* XCRemoteSwiftPackageReference "SilentMoonNetwork" */;
+			productName = SilentMoonNetwork;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import SilentMoonNetworkCommon
-import SilentMoonData
+import SilentMoonNetwork
+import SilentMoonDomain
 
 @MainActor
 enum ReminderModelsState {
@@ -33,12 +33,18 @@ final class ReminderStateModels {
     var selectedDate: Date = Date()
     var selectedDays: Set<Int> = []
     var reminderMessage: String = ""
-    private(set) var currentReminder: ReminderResponse?
+    private(set) var currentReminder: ReminderResponseEntity?
     
-    private let service: SilentMoonApiService
+    private let repository: SilentMoonRepository
     
-    init(service: SilentMoonApiService) {
-        self.service = service
+    private static let timeFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        return formatter
+    }()
+    
+    init(repository: SilentMoonRepository) {
+        self.repository = repository
     }
     
     func toggleDays(_ day: Int) {
@@ -55,7 +61,7 @@ final class ReminderStateModels {
         Task { [weak self] in
             guard let self else { return }
 
-            let result = await self.service.getReminders()
+            let result = await self.repository.getReminders()
 
             switch result {
             case .success(let reminders):
@@ -78,9 +84,9 @@ final class ReminderStateModels {
         Task { [weak self] in
             guard let self else { return }
 
-            let formattedTime = self.formattedTime()
+            let formattedTime = Self.timeFormatter.string(from: self.selectedDate)
 
-            let result = await self.service.setReminder(
+            let result = await self.repository.setReminder(
                 time: formattedTime,
                 days: Array(self.selectedDays),
                 message: self.reminderMessage
@@ -111,9 +117,9 @@ final class ReminderStateModels {
         Task { [weak self] in
             guard let self else { return }
 
-            let formattedTime = self.formattedTime()
+            let formattedTime = Self.timeFormatter.string(from: self.selectedDate)
 
-            let result = await self.service.updateReminder(
+            let result = await self.repository.updateReminder(
                 id: id,
                 time: formattedTime,
                 days: Array(self.selectedDays),
@@ -141,7 +147,7 @@ final class ReminderStateModels {
         Task { [weak self] in
             guard let self else { return }
 
-            let result = await self.service.deleteReminder(id: id)
+            let result = await self.repository.deleteReminder(id: id)
 
             switch result {
             case .success:
@@ -151,12 +157,6 @@ final class ReminderStateModels {
                 self.state = .requestFailed(self.asAppError(error))
             }
         }
-    }
-
-    private func formattedTime() -> String {
-        let timeFormatter = DateFormatter()
-        timeFormatter.dateFormat = "HH:mm"
-        return timeFormatter.string(from: selectedDate)
     }
     
     private func asAppError(_ error: Error) -> AppError<ApiErrorEnvelope> {

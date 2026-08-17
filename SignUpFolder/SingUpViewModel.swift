@@ -7,8 +7,8 @@
 
 
 import Foundation
-import SilentMoonNetworkCommon
-import SilentMoonData
+import SilentMoonNetwork
+import SilentMoonDomain
 
 enum SignUpViewModelState {
     case idle
@@ -36,10 +36,10 @@ final class SignUpViewModel {
 
     var onRegisterSucceeded: ((_ email: String, _ name: String) -> Void)?
 
-    private let service: SilentMoonApiService
+    private let repository: SilentMoonRepository
 
-    init(service: SilentMoonApiService ) {
-        self.service = service
+    init(repository: SilentMoonRepository ) {
+        self.repository = repository
     }
 
     
@@ -62,7 +62,7 @@ final class SignUpViewModel {
         state = .loading
         Task {[weak self] in
         guard let self else { return }
-            let result = await service.register(name: self.name, email: self.email, password: self.password)
+            let result = await repository.register(name: self.name, email: self.email, password: self.password)
             switch result {
             case .success:
                 self.state = .success

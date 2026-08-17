@@ -1,16 +1,19 @@
 import UIKit
 import SilentMoonData
-
+import SilentMoonDomain
 final class AuthCoordinator: Coordinator, ContentNavigating {
 
     var navigationController: UINavigationController
     var onFlowFinished: (() -> Void)?
 
-    private let apiService: SilentMoonApiService
+    private let repository: SilentMoonRepository
 
-    init(navigationController: UINavigationController, apiService: SilentMoonApiService) {
+    init(
+        navigationController: UINavigationController,
+        repository: SilentMoonRepository
+    ) {
         self.navigationController = navigationController
-        self.apiService = apiService
+        self.repository = repository
     }
 
     func start() {
@@ -20,14 +23,14 @@ final class AuthCoordinator: Coordinator, ContentNavigating {
     }
 
     func showLogin() {
-        let viewModel = LoginViewModel(service: apiService)
+        let viewModel = LoginViewModel(repository: repository)
         let controller = LogInViewController(viewModel: viewModel)
         controller.coordinator = self
         navigationController.pushViewController(controller, animated: true)
     }
 
     func showSignUp() {
-        let viewModel = SignUpViewModel(service: apiService)
+        let viewModel = SignUpViewModel(repository: repository)
         let controller = SignUpViewController(viewModel: viewModel)
         controller.coordinator = self
         navigationController.pushViewController(controller, animated: true)
@@ -41,7 +44,7 @@ final class AuthCoordinator: Coordinator, ContentNavigating {
     }
 
     func showOtpVerification(email: String, name: String = "") {
-        let viewModel = OtpViewModel(apiService: apiService)
+        let viewModel = OtpViewModel(repository: repository)
         let controller = OtpViewController(viewModel: viewModel)
         controller.email = email
         controller.userName = name
@@ -50,7 +53,9 @@ final class AuthCoordinator: Coordinator, ContentNavigating {
     }
 
     func showTopics() {
-        let viewModel = ChooseTopicViewModel(service: apiService)
+        let viewModel = ChooseTopicViewModel(
+            service: repository as! SilentMoonRepositoryImpl
+        )
         let controller = ChooseTopicViewController(viewModel: viewModel)
         controller.coordinator = self
         
@@ -60,7 +65,7 @@ final class AuthCoordinator: Coordinator, ContentNavigating {
         )
     }
     func showReminder() {
-          let stateModel = ReminderStateModels(service: apiService)
+          let stateModel = ReminderStateModels(repository: repository)
           let controller = ReminderViewController(stateModel: stateModel)
           controller.coordinator = self
           navigationController.pushViewController(controller, animated: true)
@@ -101,7 +106,7 @@ final class AuthCoordinator: Coordinator, ContentNavigating {
     }
 
     func showSearchPage() {
-        let controller = SearchPageController(apiService: apiService)
+        let controller = SearchPageController(repository: repository)
         controller.coordinator = self
         navigationController.pushViewController(controller, animated: true)
     }
