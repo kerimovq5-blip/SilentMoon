@@ -31,7 +31,7 @@ public enum AppBuilders {
     
     static func saveButton() -> AppButton {
         AppButton(
-            title: "SAVE",
+            title: AppStrings.saveButtonTitle.letters,
             backgroundColor: .accent,
             titleColor: .buttonTitle,
            
@@ -39,7 +39,7 @@ public enum AppBuilders {
     }
     static func continueButton() -> AppButton {
         AppButton(
-            title: "CONTINUE",
+            title: AppStrings.continueButtonTitle.letters,
             backgroundColor: .accent,
             titleColor: .buttonTitle,
             

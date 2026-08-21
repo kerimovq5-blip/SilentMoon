@@ -108,4 +108,10 @@ final class AppButton: UIView {
         mainButton.isEnabled = isEnabled
         mainButton.alpha = isEnabled ? 1.0 : 0.5
     }
+
+    func setLoading(_ isLoading: Bool) {
+        mainButton.configuration?.showsActivityIndicator = isLoading
+        mainButton.isEnabled = !isLoading
+        mainButton.alpha = isLoading ? 0.6 : 1.0
+    }
 }

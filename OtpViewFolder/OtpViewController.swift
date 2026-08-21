@@ -21,7 +21,6 @@ final class OtpViewController: UIViewController {
         set { viewModel.userName = newValue }
     }
 
-    
     init(viewModel: OtpViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -31,10 +30,9 @@ final class OtpViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-   
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Verify your email"
+        label.text = AppStrings.verifyEmailTitle.letters
         label.font = AppFonts.title.font
         label.textColor = .textPrimary
         label.textAlignment = .center
@@ -43,7 +41,7 @@ final class OtpViewController: UIViewController {
 
     private lazy var subtitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "\(email) ünvanına göndərilən 6 rəqəmli kodu daxil edin."
+        label.text = String(format: AppStrings.otpSubtitleFormat.letters, email)
         label.font = AppFonts.body.font
         label.textColor = .textSecondary
         label.textAlignment = .center
@@ -53,7 +51,7 @@ final class OtpViewController: UIViewController {
 
     private lazy var otpTextField: AppTextFieldController = {
         let field = AppTextFieldController(
-            placeholder: "6 rəqəmli kod",
+            placeholder: AppStrings.otpPlaceholder.letters,
             backgroundColor: .lightGray
         )
         field.textField.keyboardType = .numberPad
@@ -62,7 +60,7 @@ final class OtpViewController: UIViewController {
 
     private lazy var verifyButton: AppButton = {
         let button = AppButton(
-            title: "TƏSDİQLƏ",
+            title: AppStrings.verifyButtonTitle.letters,
             backgroundColor: .accent,
             titleColor: .buttonTitle
         )
@@ -73,7 +71,7 @@ final class OtpViewController: UIViewController {
     private lazy var resendButton: UIButton = {
         let button = UIButton()
         let attributed = NSAttributedString(
-            string: "Kodu yenidən göndər",
+            string: AppStrings.resendCodeButtonTitle.letters,
             attributes: [
                 .foregroundColor: AssetColors.accent.color,
                 .font: AppFonts.body.font
@@ -84,7 +82,6 @@ final class OtpViewController: UIViewController {
         return button
     }()
 
-   
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .backgroundSecondary
@@ -95,10 +92,14 @@ final class OtpViewController: UIViewController {
 
     private func bindViewModel() {
         viewModel.onStateChange = { [weak self] in
-            self?.render()
+            DispatchQueue.main.async {
+                self?.render()
+            }
         }
         viewModel.onVerifySucceeded = { [weak self] userName in
-            self?.coordinator?.getStarted(name: userName)
+            DispatchQueue.main.async {
+                self?.coordinator?.getStarted(name: userName)
+            }
         }
     }
 
@@ -113,7 +114,7 @@ final class OtpViewController: UIViewController {
             showAlert(message: message)
         case .verifyFailed(let appError):
             verifyButton.isUserInteractionEnabled = true
-            showAlert(message: appError.errorDescription ?? "Naməlum xəta baş verdi.")
+            showAlert(message: appError.errorDescription ?? AppStrings.unknownErrorAlert.letters)
         case .resending:
             resendButton.isUserInteractionEnabled = false
         case .resendSucceeded(let message):
@@ -121,7 +122,7 @@ final class OtpViewController: UIViewController {
             showAlert(message: message)
         case .resendFailed(let appError):
             resendButton.isUserInteractionEnabled = true
-            showAlert(message: appError.errorDescription ?? "Naməlum xəta baş verdi.")
+            showAlert(message: appError.errorDescription ?? AppStrings.unknownErrorAlert.letters)
         }
     }
 
@@ -158,7 +159,6 @@ final class OtpViewController: UIViewController {
     }
 
     private func verifyTapped() {
-        // AppTextFieldController daxilindəki textField.text götürülür
         viewModel.otp = otpTextField.textField.text ?? ""
         viewModel.verify()
     }
@@ -169,7 +169,7 @@ final class OtpViewController: UIViewController {
 
     private func showAlert(message: String) {
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        alert.addAction(UIAlertAction(title: AppStrings.okAlertTitle.letters, style: .default))
         present(alert, animated: true)
     }
 }

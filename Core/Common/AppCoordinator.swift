@@ -7,6 +7,7 @@
 
 import UIKit
 import SilentMoonNetwork
+import SilentMoonDomain
 
 final class AppCoordinator: Coordinator {
     var childCoordinators: [Coordinator] = []
@@ -25,17 +26,39 @@ final class AppCoordinator: Coordinator {
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
 
-        if diContainer.tokenStore.isLoggedIn {
-            showMainTabBarFlow()
-        } else {
-            showAuthFlow()
+        showBootstrapLoading()
+    }
+
+    private func showBootstrapLoading() {
+        let loadingViewModel = LoadingViewModel { [weak self] in
+            guard let self, self.diContainer.tokenStore.isLoggedIn else {
+                return .success(())
+            }
+            return await self.diContainer.repository.refreshToken().map { _ in () }
         }
+
+        loadingViewModel.onError = { [weak self] _ in
+            self?.diContainer.tokenStore.clear()
+            self?.showAuthFlow()
+            return true
+        }
+
+        let loadingController = LoadingViewController(viewModel: loadingViewModel)
+        loadingController.onFinished = { [weak self] in
+            guard let self else { return }
+            if self.diContainer.tokenStore.isLoggedIn {
+                self.showMainTabBarFlow()
+            } else {
+                self.showAuthFlow()
+            }
+        }
+        navigationController.setViewControllers([loadingController], animated: false)
     }
 
     private func showAuthFlow() {
         let authCoordinator = AuthCoordinator(
             navigationController: navigationController,
-            repository: diContainer.repository
+            usecases: diContainer.usecases
         )
         authCoordinator.onFlowFinished = { [weak self] in
             self?.showMainTabBarFlow()

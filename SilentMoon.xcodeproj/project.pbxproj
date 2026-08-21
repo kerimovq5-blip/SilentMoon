@@ -16,7 +16,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		F218C94B2FED5735002251F7 /* Exceptions for "SilentMoon" folder in "SilentMoon" target */ = {
+		F2ADD2A7303846E700ECCB11 /* Exceptions for "SilentMoon" folder in "SilentMoon" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -26,32 +26,9 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		F218C93B2FED5734002251F7 /* SilentMoon */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				F218C94B2FED5735002251F7 /* Exceptions for "SilentMoon" folder in "SilentMoon" target */,
-			);
-			path = SilentMoon;
-			sourceTree = "<group>";
-		};
 		F26071EC2FEEDE4F00F5F017 /* StartFolder */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = StartFolder;
-			sourceTree = "<group>";
-		};
-		F26071F52FEEDE6300F5F017 /* Common */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Common;
-			sourceTree = "<group>";
-		};
-		F26071F92FEEDE6A00F5F017 /* Utils */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Utils;
-			sourceTree = "<group>";
-		};
-		F26071FE2FEEDE7100F5F017 /* Resuable */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Resuable;
 			sourceTree = "<group>";
 		};
 		F295DB8430229949007D6F6D /* SignUpFolder */ = {
@@ -89,6 +66,19 @@
 			path = Core;
 			sourceTree = "<group>";
 		};
+		F2ADD1993034FED400ECCB11 /* LoadingFolder */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = LoadingFolder;
+			sourceTree = "<group>";
+		};
+		F2ADD2A2303846E600ECCB11 /* SilentMoon */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				F2ADD2A7303846E700ECCB11 /* Exceptions for "SilentMoon" folder in "SilentMoon" target */,
+			);
+			path = SilentMoon;
+			sourceTree = "<group>";
+		};
 		F2CC69712FF3FDA000A76DC5 /* TabbarControllerView */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = TabbarControllerView;
@@ -112,6 +102,7 @@
 		F218C9302FED5734002251F7 = {
 			isa = PBXGroup;
 			children = (
+				F2ADD1993034FED400ECCB11 /* LoadingFolder */,
 				F2ADCFF6302B68EF00ECCB11 /* Core */,
 				F295DB9A3023DA22007D6F6D /* Validator */,
 				F295DB9130238388007D6F6D /* ReminderViewFolder */,
@@ -120,13 +111,9 @@
 				F295DB8830229B1C007D6F6D /* LoginViewFolder */,
 				F295DB8430229949007D6F6D /* SignUpFolder */,
 				F2CC69712FF3FDA000A76DC5 /* TabbarControllerView */,
-				F26071FE2FEEDE7100F5F017 /* Resuable */,
-				F26071F92FEEDE6A00F5F017 /* Utils */,
-				F26071F52FEEDE6300F5F017 /* Common */,
 				F26071EC2FEEDE4F00F5F017 /* StartFolder */,
-				F218C93B2FED5734002251F7 /* SilentMoon */,
-				F2ADD01A303122FD00ECCB11 /* Frameworks */,
 				F218C93A2FED5734002251F7 /* Products */,
+				F2ADD2A2303846E600ECCB11 /* SilentMoon */,
 			);
 			sourceTree = "<group>";
 		};
@@ -136,13 +123,6 @@
 				F218C9392FED5734002251F7 /* SilentMoon.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		F2ADD01A303122FD00ECCB11 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -161,11 +141,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				F218C93B2FED5734002251F7 /* SilentMoon */,
 				F26071EC2FEEDE4F00F5F017 /* StartFolder */,
-				F26071F52FEEDE6300F5F017 /* Common */,
-				F26071F92FEEDE6A00F5F017 /* Utils */,
-				F26071FE2FEEDE7100F5F017 /* Resuable */,
 				F295DB8430229949007D6F6D /* SignUpFolder */,
 				F295DB8830229B1C007D6F6D /* LoginViewFolder */,
 				F295DB8C30229DD3007D6F6D /* OtpViewFolder */,
@@ -173,6 +149,8 @@
 				F295DB9130238388007D6F6D /* ReminderViewFolder */,
 				F295DB9A3023DA22007D6F6D /* Validator */,
 				F2ADCFF6302B68EF00ECCB11 /* Core */,
+				F2ADD1993034FED400ECCB11 /* LoadingFolder */,
+				F2ADD2A2303846E600ECCB11 /* SilentMoon */,
 				F2CC69712FF3FDA000A76DC5 /* TabbarControllerView */,
 			);
 			name = SilentMoon;

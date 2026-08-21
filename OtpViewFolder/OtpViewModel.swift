@@ -27,7 +27,7 @@ public final class OtpViewModel {
     public var userName: String
     public var otp: String = ""
 
-    private let repository: SilentMoonRepository
+    private let usecases: SilentMoonUseCases
 
     public private(set) var state: OtpViewModelState = .idle {
         didSet { onStateChange?() }
@@ -37,11 +37,11 @@ public final class OtpViewModel {
     public var onVerifySucceeded: ((_ userName: String) -> Void)?
 
     public init(
-        repository: SilentMoonRepository,
+        usecases: SilentMoonUseCases,
         email: String = "",
         userName: String = ""
     ) {
-        self.repository = repository
+        self.usecases = usecases
         self.email = email
         self.userName = userName
     }
@@ -57,7 +57,7 @@ public final class OtpViewModel {
         Task { [weak self] in
             guard let self else { return }
 
-            let result = await self.repository.verifyEmail(email: self.email, otp: self.otp)
+            let result = await self.usecases.verifyEmail(email: self.email, otp: self.otp)
 
             switch result {
             case .success:
@@ -75,7 +75,7 @@ public final class OtpViewModel {
         Task { [weak self] in
             guard let self else { return }
 
-            let result = await self.repository.resendOtp(email: self.email)
+            let result = await self.usecases.resendOtp(email: self.email)
 
             switch result {
             case .success(let response):

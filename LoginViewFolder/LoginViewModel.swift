@@ -28,10 +28,10 @@ final class LoginViewModel {
 
     var onEmailNotVerified: ((_ email: String) -> Void)?
 
-    private let repository: SilentMoonRepository
+    private let usecases: SilentMoonUseCases
 
-    init(repository: SilentMoonRepository ) {
-        self.repository = repository
+    init(usecases: SilentMoonUseCases ) {
+        self.usecases = usecases
     }
    
 
@@ -47,7 +47,7 @@ final class LoginViewModel {
         
         Task {[weak self ] in
         guard let self  else { return}
-            let result = await repository.login(email: self.email, password: self.password)
+            let result = await usecases.login(email: self.email, password: self.password)
             
             switch result {
             case .success:

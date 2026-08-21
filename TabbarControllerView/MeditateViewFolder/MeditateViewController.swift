@@ -17,14 +17,14 @@ final class MeditateViewController: UIViewController {
     private lazy var meditateLabel: UILabel = {
         let label = UILabel()
         let attributed = NSMutableAttributedString(
-            string: "Meditate\n",
+            string: "\(AppStrings.tabMeditateTitle.letters)\n",
             attributes: [
                 .foregroundColor: AssetColors.textPrimary.color,
                 .font: AppFonts.title.font
             ]
         )
         attributed.append(NSAttributedString(
-            string: "\nwe can learn how to recognize when our minds\n are doing their normal everyday acrobatics.",
+            string: "\n\(AppStrings.meditateSubtitle.letters)",
             attributes: [
                 .foregroundColor: AssetColors.textSecondary.color,
                 .font: AppFonts.body.font
@@ -61,14 +61,14 @@ final class MeditateViewController: UIViewController {
     private lazy var dailyTitle: UILabel = {
         let label = UILabel()
         let attributed = NSMutableAttributedString(
-            string: "Daily Calm\n",
+            string: "\(AppStrings.dailyCalmTitle.letters)\n",
             attributes: [
                 .foregroundColor: AssetColors.textPrimary.color,
                 .font: AppFonts.semiBold.font
             ]
         )
         attributed.append(NSAttributedString(
-            string: "APR 30 • PAUSE PRACTICE.",
+            string: AppStrings.dailyCalmSubtitle.letters,
             attributes: [
                 .foregroundColor: AssetColors.textPrimary.color,
                 .font: AppFonts.litletitle.font
@@ -91,14 +91,12 @@ final class MeditateViewController: UIViewController {
     }()
     
     private lazy var mainStackView: UIStackView = {
-            let stack = UIStackView(arrangedSubviews: [dailyTitle, dailyPlayButton])
-            stack.axis = .horizontal
-            stack.alignment = .center
-        
-            stack.distribution = .equalSpacing
-            return stack
-        }()
-    
+        let stack = UIStackView(arrangedSubviews: [dailyTitle, dailyPlayButton])
+        stack.axis = .horizontal
+        stack.alignment = .center
+        stack.distribution = .equalSpacing
+        return stack
+    }()
     
     private lazy var collectionView: UICollectionView = {
         let controller = UICollectionView(
@@ -125,31 +123,31 @@ final class MeditateViewController: UIViewController {
     private func setupView() {
         view.backgroundColor = .white
         view.addSubviews(
-            meditateLabel ,
-            sectionCollectionView ,
-            dailyCalmView ,
-            collectionView)
+            meditateLabel,
+            sectionCollectionView,
+            dailyCalmView,
+            collectionView
+        )
         
         dailyCalmView.addSubviews(mainStackView)
-                         
     }
     
     private func setupConstraints() {
         meditateLabel
-            .bottom(view.safeAreaLayoutGuide.topAnchor ,AppLayout.xLargeSpacing.value).0
+            .bottom(view.safeAreaLayoutGuide.topAnchor, AppLayout.xLargeSpacing.value).0
             .centerX(view.centerXAnchor)
         
         sectionCollectionView
-            .top(meditateLabel.bottomAnchor , AppLayout.spacing.value).0
+            .top(meditateLabel.bottomAnchor, AppLayout.spacing.value).0
             .leading(view.leadingAnchor).0
             .trailing(view.trailingAnchor).0
             .height(100)
         
         dailyCalmView
             .top(sectionCollectionView.bottomAnchor, AppLayout.spacing.value).0
-                .leading(view.leadingAnchor, AppLayout.spacing.value).0
-                .trailing(view.trailingAnchor, -AppLayout.spacing.value).0
-                .height(95)
+            .leading(view.leadingAnchor, AppLayout.spacing.value).0
+            .trailing(view.trailingAnchor, -AppLayout.spacing.value).0
+            .height(95)
         
         dailyPlayButton
             .height(40).0
@@ -168,7 +166,6 @@ final class MeditateViewController: UIViewController {
             .bottom(view.bottomAnchor, -AppLayout.spacing.value)
     }
 
-    
     private func isBigCard(at index: Int) -> Bool {
         (index % 4 == 0) || (index % 4 == 3)
     }
@@ -201,13 +198,14 @@ extension MeditateViewController: UICollectionViewDelegate {
         if selectedIndexes.contains(indexPath.item) { return }
         
         let previouslySelected = selectedIndexes
-       selectedIndexes = [indexPath.item]
-      let indexPathsToReload = previouslySelected.union(selectedIndexes).map {
-          IndexPath(item: $0, section: 0)
-      }
+        selectedIndexes = [indexPath.item]
+        let indexPathsToReload = previouslySelected.union(selectedIndexes).map {
+            IndexPath(item: $0, section: 0)
+        }
         collectionView.reloadItems(at: indexPathsToReload)
     }
 }
+
 extension MeditateViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == sectionCollectionView {
@@ -216,7 +214,6 @@ extension MeditateViewController: UICollectionViewDataSource {
             return collectionViews.count
         }
     }
-    
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == sectionCollectionView {
@@ -247,7 +244,6 @@ extension MeditateViewController: UICollectionViewDataSource {
         }
     }
 }
-
 
 extension MeditateViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(

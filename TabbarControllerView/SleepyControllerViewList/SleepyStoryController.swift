@@ -9,13 +9,12 @@ import UIKit
 
 final class SleepyStoryController: UIViewController {
     
-    var coordinator : ContentNavigating?
+    var coordinator: ContentNavigating?
     
     private let sectionViews = MeditateSectionModels.dummyData
     private let collectionViews = SleepyStoryModels.storyData
     
     private var selectedIndexes: Set<Int> = []
-    
     
     private lazy var scrollView: UIScrollView = {
         let scroll = UIScrollView()
@@ -30,21 +29,22 @@ final class SleepyStoryController: UIViewController {
     
     private lazy var sleepmodeImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named : "sleepymode")?.withRenderingMode(.alwaysOriginal)
+        imageView.image = UIImage(named: "sleepymode")?.withRenderingMode(.alwaysOriginal)
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
+    
     private lazy var sleepyStoryLabel: UILabel = {
         let label = UILabel()
         let attributed = NSMutableAttributedString(
-            string: "Sleep Stories\n",
+            string: AppStrings.sleepStoriesTitle.letters,
             attributes: [
                 .foregroundColor: AssetColors.buttonTitle.color,
                 .font: AppFonts.title.font
             ]
         )
         attributed.append(NSAttributedString(
-            string: "\nSoothing bedtime stories to help you fall\ninto a deep and natural sleep",
+            string: AppStrings.sleepStoriesSubtitle.letters,
             attributes: [
                 .foregroundColor: AssetColors.textSecondary.color,
                 .font: AppFonts.body.font
@@ -56,7 +56,7 @@ final class SleepyStoryController: UIViewController {
         return label
     }()
     
-    private lazy var sectionCollectionView : UICollectionView = {
+    private lazy var sectionCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         layout.scrollDirection = .horizontal
@@ -69,7 +69,7 @@ final class SleepyStoryController: UIViewController {
         return collectionView
     }()
     
-    private lazy var theOceanMoon : UIImageView = {
+    private lazy var theOceanMoon: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
         view.clipsToBounds = true
@@ -82,14 +82,14 @@ final class SleepyStoryController: UIViewController {
     private lazy var theOceanTitle: UILabel = {
         let label = UILabel()
         let attributed = NSMutableAttributedString(
-            string: "The Ocean Moon\n",
+            string: AppStrings.theOceanMoonTitle.letters,
             attributes: [
                 .foregroundColor: AssetColors.buttonTitle.color,
                 .font: AppFonts.title.font
             ]
         )
         attributed.append(NSAttributedString(
-            string: "Non-stop 8- hour mixes of our\nmost popular sleep audio",
+            string: AppStrings.theOceanMoonSubtitle.letters,
             attributes: [
                 .foregroundColor: AssetColors.buttonTitle.color,
                 .font: AppFonts.litletitle.font
@@ -103,7 +103,7 @@ final class SleepyStoryController: UIViewController {
     
     private lazy var oceanStartButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("START", for: .normal)
+        button.setTitle(AppStrings.startButtonTitle.letters, for: .normal)
         button.titleLabel?.font = AppFonts.litletitle.font
         button.titleLabel?.textAlignment = .center
         button.layer.cornerRadius = AppFonts.AppRaduis.buttonRadiusSmall
@@ -140,18 +140,19 @@ final class SleepyStoryController: UIViewController {
         )
         return controller
     }()
+
     override func viewWillAppear(_ animated: Bool) {
-           super.viewWillAppear(animated)
-           tabBarController?.tabBar.isHidden = false
-       }
+        super.viewWillAppear(animated)
+        tabBarController?.tabBar.isHidden = false
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
     }
     
-    
-    @objc  private func openOceanMoonStory() {
+    @objc private func openOceanMoonStory() {
         coordinator?.playOptionPage()
     }
     
@@ -160,16 +161,15 @@ final class SleepyStoryController: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
             
-    contentView.addSubviews(
-                sleepmodeImage,
-                sleepyStoryLabel,
-                sectionCollectionView,
-                theOceanMoon,
-                collectionView
-            )
+        contentView.addSubviews(
+            sleepmodeImage,
+            sleepyStoryLabel,
+            sectionCollectionView,
+            theOceanMoon,
+            collectionView
+        )
         
         theOceanMoon.addSubviews(mainStackView)
-        
     }
     
     private func setupConstraints() {
@@ -185,13 +185,14 @@ final class SleepyStoryController: UIViewController {
             .trailing(scrollView.trailingAnchor).0
             .bottom(scrollView.bottomAnchor).0
             .width(scrollView.widthAnchor)
+
         sleepmodeImage
             .top(view.topAnchor).0
             .leading(contentView.leadingAnchor).0
             .trailing(contentView.trailingAnchor)
         
         sleepyStoryLabel
-            .bottom(contentView.safeAreaLayoutGuide.topAnchor ,AppLayout.xLargeSpacing.value).0
+            .bottom(contentView.safeAreaLayoutGuide.topAnchor, AppLayout.xLargeSpacing.value).0
             .centerX(contentView.centerXAnchor)
         
         sectionCollectionView
@@ -222,6 +223,7 @@ final class SleepyStoryController: UIViewController {
             .trailing(contentView.trailingAnchor, -AppLayout.spacing.value).0
             .bottom(contentView.bottomAnchor, -AppLayout.spacing.value)
     }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         let height = collectionView.collectionViewLayout.collectionViewContentSize.height
@@ -232,113 +234,110 @@ final class SleepyStoryController: UIViewController {
 }
 
 extension SleepyStoryController: UICollectionViewDelegate {
-        func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            if collectionView == sectionCollectionView {
-                if selectedIndexes.contains(indexPath.item) { return }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView == sectionCollectionView {
+            if selectedIndexes.contains(indexPath.item) { return }
 
-                let previouslySelected = selectedIndexes
-                selectedIndexes = [indexPath.item]
-                let indexPathsToReload = previouslySelected.union(selectedIndexes).map {
-                    IndexPath(item: $0, section: 0)
-                }
-                collectionView.reloadItems(at: indexPathsToReload)
-            } else {
-                collectionView.deselectItem(at: indexPath, animated: true)
-                let story = collectionViews[indexPath.item]
-                coordinator?.showMusicPage2(item: story.title)
+            let previouslySelected = selectedIndexes
+            selectedIndexes = [indexPath.item]
+            let indexPathsToReload = previouslySelected.union(selectedIndexes).map {
+                IndexPath(item: $0, section: 0)
             }
+            collectionView.reloadItems(at: indexPathsToReload)
+        } else {
+            collectionView.deselectItem(at: indexPath, animated: true)
+            let story = collectionViews[indexPath.item]
+            coordinator?.showMusicPage2(item: story.title)
         }
     }
+}
 
-    extension SleepyStoryController: UICollectionViewDataSource {
-        func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-            if collectionView == sectionCollectionView {
-                return sectionViews.count
-            } else {
-                return collectionViews.count
-            }
+extension SleepyStoryController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if collectionView == sectionCollectionView {
+            return sectionViews.count
+        } else {
+            return collectionViews.count
         }
-                
-        func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-            if collectionView == sectionCollectionView {
-                guard let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: MeditateSectionCell.identifier,
-                    for: indexPath
-                ) as? MeditateSectionCell
-                else {
-                    return UICollectionViewCell()
-                }
-                var model = sectionViews[indexPath.item]
-                
-                model.isSelected = selectedIndexes.contains(indexPath.item)
-                
-                cell.configure(data: model)
-                return cell
-            } else {
-                guard let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: "cell",
-                    for: indexPath
-                ) as? SleepyStoryCell
-                else {
-                    return UICollectionViewCell()
-                }
-                let model = collectionViews[indexPath.item]
-                cell.configure(with: model)
-                return cell
+    }
+            
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if collectionView == sectionCollectionView {
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: MeditateSectionCell.identifier,
+                for: indexPath
+            ) as? MeditateSectionCell
+            else {
+                return UICollectionViewCell()
             }
+            var model = sectionViews[indexPath.item]
+            model.isSelected = selectedIndexes.contains(indexPath.item)
+            cell.configure(data: model)
+            return cell
+        } else {
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "cell",
+                for: indexPath
+            ) as? SleepyStoryCell
+            else {
+                return UICollectionViewCell()
+            }
+            let model = collectionViews[indexPath.item]
+            cell.configure(with: model)
+            return cell
+        }
+    }
+}
+
+extension SleepyStoryController: UICollectionViewDelegateFlowLayout {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
+        if collectionView == sectionCollectionView {
+            let collectionViewWidth = collectionView.bounds.width
+            let sectionWidth = collectionViewWidth * 0.16
+            let sectionHeight: CGFloat = 100
+            return CGSizeMake(sectionWidth, sectionHeight)
+        } else {
+            let spacing = AppLayout.spacing.value
+            let itemWidth = (collectionView.bounds.width - spacing) / 2
+            let itemHeight: CGFloat = 170
+            return CGSize(width: itemWidth, height: itemHeight)
         }
     }
     
-
-    extension SleepyStoryController: UICollectionViewDelegateFlowLayout {
-        func collectionView(
-            _ collectionView: UICollectionView,
-            layout collectionViewLayout: UICollectionViewLayout,
-            sizeForItemAt indexPath: IndexPath
-        ) -> CGSize {
-            if collectionView == sectionCollectionView {
-                let collectionViewWidth = collectionView.bounds.width
-                let sectionWidth = collectionViewWidth * 0.16
-                let sectionHeight: CGFloat = 100
-                return CGSizeMake(sectionWidth, sectionHeight)
-            } else {
-                let spacing = AppLayout.spacing.value
-                let itemWidth = (collectionView.bounds.width - spacing) / 2
-                let itemHeight: CGFloat = 170
-                return CGSize(width: itemWidth, height: itemHeight)
-            }
-        }
-        
-        func collectionView(
-            _ collectionView: UICollectionView,
-            layout collectionViewLayout: UICollectionViewLayout,
-            minimumInteritemSpacingForSectionAt section: Int
-        ) -> CGFloat {
-            AppLayout.spacing.value
-        }
-        
-        func collectionView(
-            _ collectionView: UICollectionView,
-            layout collectionViewLayout: UICollectionViewLayout,
-            minimumLineSpacingForSectionAt section: Int
-        ) -> CGFloat {
-            AppLayout.spacing.value
-        }
-        
-        func collectionView(
-            _ collectionView: UICollectionView,
-            layout collectionViewLayout: UICollectionViewLayout,
-            insetForSectionAt section: Int
-        ) -> UIEdgeInsets {
-            if collectionView == sectionCollectionView {
-                return UIEdgeInsets(
-                    top: 0,
-                    left: 10,
-                    bottom: 0,
-                    right: AppLayout.spacing.value
-                )
-            } else {
-                return .zero
-            }
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumInteritemSpacingForSectionAt section: Int
+    ) -> CGFloat {
+        AppLayout.spacing.value
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumLineSpacingForSectionAt section: Int
+    ) -> CGFloat {
+        AppLayout.spacing.value
+    }
+    
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        insetForSectionAt section: Int
+    ) -> UIEdgeInsets {
+        if collectionView == sectionCollectionView {
+            return UIEdgeInsets(
+                top: 0,
+                left: 10,
+                bottom: 0,
+                right: AppLayout.spacing.value
+            )
+        } else {
+            return .zero
         }
     }
+}

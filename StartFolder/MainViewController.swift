@@ -4,23 +4,22 @@ final class ViewController: UIViewController {
     var coordinator: AuthCoordinator?
     private let silentMoonTopInset: CGFloat = 160
     
-    
     private lazy var logoLabel: UILabel = {
         let label = UILabel()
         
         let silent = NSAttributedString(
-            string: "Silent ",
+            string: AppStrings.logoSilent.letters,
             attributes: [.font: AppFonts.body.font]
         )
         
         let attachment = NSTextAttachment()
-        attachment.image = UIImage(named: "logo")?
+        attachment.image = UIImage(named: AppStrings.logoImageName.letters)?
             .withRenderingMode(.alwaysOriginal)
         attachment.bounds = CGRect(x: 0, y: -6, width: 30, height: 30)
         let logo = NSAttributedString(attachment: attachment)
         
         let moon = NSAttributedString(
-            string: " Moon",
+            string: AppStrings.logoMoon.letters,
             attributes: [.font: AppFonts.body.font]
         )
         
@@ -33,9 +32,10 @@ final class ViewController: UIViewController {
         label.textAlignment = .center
         return label
     }()
+    
     private lazy var silentMoonFrame: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "SilentMoonFrame")
+        imageView.image = UIImage(named: AppStrings.frameImageName.letters)
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         return imageView
@@ -43,7 +43,7 @@ final class ViewController: UIViewController {
     
     private lazy var silentMoonView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "SilentMoon")
+        imageView.image = UIImage(named: AppStrings.illustrationImageName.letters)
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -51,14 +51,14 @@ final class ViewController: UIViewController {
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         let attributed = NSMutableAttributedString(
-            string: "We are what we do  ",
+            string: AppStrings.titleText.letters,
             attributes: [
                 .foregroundColor: AssetColors.textPrimary.color,
                 .font: AppFonts.title.font
             ]
         )
         attributed.append(NSAttributedString(
-            string: "\n\nThousands of people are using Silent Moon\nfor daily meditation",
+            string: AppStrings.subtitleText.letters,
             attributes: [
                 .foregroundColor: AssetColors.textSecondary.color,
                 .font: AppFonts.body.font
@@ -71,7 +71,7 @@ final class ViewController: UIViewController {
     }()
     
     private lazy var signUpButton: AppButton = {
-        let button = AppButton(title: "SIGN UP")
+        let button = AppButton(title: AppStrings.signUpButton.letters)
         button.onTap = { [weak self] in self?.coordinator?.showSignUp() }
         return button
     }()
@@ -79,14 +79,14 @@ final class ViewController: UIViewController {
     private lazy var logInButton: UIButton = {
         let button = UIButton()
         let attributed = NSMutableAttributedString(
-            string: "ALREADY HAVE AN ACCOUNT? ",
+            string: AppStrings.alreadyHaveAccount.letters,
             attributes: [
                 .foregroundColor: AssetColors.textSecondary.color,
                 .font: AppFonts.body.font
             ]
         )
         attributed.append(NSAttributedString(
-            string: "LOG IN",
+            string: AppStrings.logInButton.letters,
             attributes: [
                 .foregroundColor: AssetColors.accent.color,
                 .font: AppFonts.body.font
@@ -97,23 +97,21 @@ final class ViewController: UIViewController {
         return button
     }()
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupHierarchy()
         setupLayout()
     }
     
-    
     private func setupHierarchy() {
         view.backgroundColor = .white
-        view.addSubviews(silentMoonFrame,
-                         logoLabel,
-                         silentMoonView,
-                         descriptionLabel,
-                         signUpButton,
-                         logInButton
+        view.addSubviews(
+            silentMoonFrame,
+            logoLabel,
+            silentMoonView,
+            descriptionLabel,
+            signUpButton,
+            logInButton
         )
     }
     
@@ -126,10 +124,12 @@ final class ViewController: UIViewController {
         silentMoonFrame.heightAnchor.constraint(
             equalTo: view.heightAnchor, multiplier: 0.55
         ).isActive = true
+        
         logoLabel
             .bottom(view.safeAreaLayoutGuide.topAnchor).0
             .centerX(view.centerXAnchor).0
             .height(50)
+            
         silentMoonView
             .top(silentMoonFrame.topAnchor, silentMoonTopInset).0
             .leading(silentMoonFrame.leadingAnchor, AppLayout.xLargeSpacing.value).0
@@ -154,8 +154,6 @@ final class ViewController: UIViewController {
             .trailing(view.trailingAnchor, -AppLayout.spacing.value).0
             .height(40)
     }
-    
-    
     
     @objc private func logInTapped() {
         coordinator?.showLogin()

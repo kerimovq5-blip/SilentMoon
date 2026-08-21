@@ -16,15 +16,15 @@ final class SignUpViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private  var (scrollView, contentView) = AppBuilders.scrollableForm()
-    private lazy var titleLabel = AppBuilders.titleLabel("Create your account")
+    private var (scrollView, contentView) = AppBuilders.scrollableForm()
+    private lazy var titleLabel = AppBuilders.titleLabel(AppStrings.createAccountTitle.letters)
     private lazy var facebookButton = AuthBuilders.facebookButton()
     private lazy var googleButton = AuthBuilders.googleButton()
-    private lazy var dividerLabel = AppBuilders.dividerLabel("OR SIGN UP WITH EMAIL")
+    private lazy var dividerLabel = AppBuilders.dividerLabel(AppStrings.signUpWithEmailDivider.letters)
 
     private lazy var accountTextField: AppTextFieldController = {
         AppTextFieldController(
-            placeholder: "Account name",
+            placeholder: AppStrings.accountNamePlaceholder.letters,
             backgroundColor: .lightGray
         )
     }()
@@ -39,14 +39,14 @@ final class SignUpViewController: UIViewController {
 
     private lazy var emailTextField: AppTextFieldController = {
         AppTextFieldController(
-            placeholder: "Email address",
+            placeholder: AppStrings.emailAddressPlaceholder.letters,
             backgroundColor: .lightGray
         )
     }()
 
     private lazy var eyeButton: UIButton = {
         let button = UIButton(type: .custom)
-        button.setImage(UIImage(named: "EyeVector"), for: .normal)
+        button.setImage(UIImage(named: AppStrings.eyeVectorImageName.letters), for: .normal)
         button.tintColor = AssetColors.textSecondary.color
         button.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
         return button
@@ -54,7 +54,7 @@ final class SignUpViewController: UIViewController {
 
     private lazy var passwordTextField: AppTextFieldController = {
         AppTextFieldController(
-            placeholder: "Password",
+            placeholder: AppStrings.passwordPlaceholder.letters,
             isSecure: true,
             backgroundColor: .lightGray,
             rightView: eyeButton
@@ -80,7 +80,7 @@ final class SignUpViewController: UIViewController {
         label.isUserInteractionEnabled = true
         
         let text = NSMutableAttributedString(
-            string: "I have read the ",
+            string: AppStrings.readPrivacyPolicyText.letters,
             attributes: [
                 .foregroundColor: AssetColors.textSecondary.color,
                 .font: AppFonts.body.font
@@ -88,7 +88,7 @@ final class SignUpViewController: UIViewController {
         )
         text.append(
             NSAttributedString(
-                string: "Privacy Policy",
+                string: AppStrings.privacyPolicyText.letters,
                 attributes: [
                     .foregroundColor: AssetColors.accent.color,
                     .font: AppFonts.body.font
@@ -110,9 +110,14 @@ final class SignUpViewController: UIViewController {
         stack.alignment = .center
         return stack
     }()
-
+    
     private lazy var getStartedButton: AppButton = {
-        let button = AppButton(title: "GET STARTED")
+        let button = AppButton(
+            title: AppStrings.getStartedButton.letters,
+            backgroundColor: .accent,
+            titleColor: .buttonTitle
+        )
+        
         button.onTap = { [weak self] in self?.getStartedTapped() }
         return button
     }()
@@ -120,14 +125,14 @@ final class SignUpViewController: UIViewController {
     private lazy var logInButton: UIButton = {
         let button = UIButton()
         let attributed = NSMutableAttributedString(
-            string: "ALREADY HAVE AN ACCOUNT? ",
+            string: AppStrings.alreadyHaveAccount.letters,
             attributes: [
                 .foregroundColor: AssetColors.textSecondary.color,
                 .font: AppFonts.body.font
             ]
         )
         attributed.append(NSAttributedString(
-            string: "LOG IN",
+            string: AppStrings.logInButton.letters,
             attributes: [
                 .foregroundColor: AssetColors.accent.color,
                 .font: AppFonts.body.font
@@ -173,24 +178,22 @@ final class SignUpViewController: UIViewController {
     private func render() {
         switch viewModel.state {
         case .idle:
-            setLoading(false)
-            
+            hideBlurLoading()
         case .loading:
-            setLoading(true)
-            
+            showBlurLoading()
         case .success:
-            setLoading(false)
+            hideBlurLoading()
             
         case .invalidInput(let message):
-            setLoading(false)
+            hideBlurLoading()
             showAlert(message: message)
             
         case .requestFailed(let appError):
-            setLoading(false)
-            showAlert(message: appError.errorDescription ?? "Naməlum xəta baş verdi.")
+            hideBlurLoading()
+            showAlert(message: appError.errorDescription ?? AppStrings.unknownErrorAlert.letters)
         }
     }
-
+    
     private func getStartedTapped() {
         emailValidation.markSubmitAttempt()
         passwordValidation.markSubmitAttempt()
@@ -227,7 +230,6 @@ final class SignUpViewController: UIViewController {
             : AssetColors.textSecondary.color
     }
 
-    // MARK: - Layout Setup
     private func setupHierarchy() {
         view.backgroundColor = .backgroundSecondary
         view.addSubviews(scrollView)
@@ -334,14 +336,9 @@ final class SignUpViewController: UIViewController {
         )
     }
 
-    private func setLoading(_ isLoading: Bool) {
-        getStartedButton.isUserInteractionEnabled = !isLoading
-        getStartedButton.alpha = isLoading ? 0.6 : 1.0
-    }
-
     private func showAlert(message: String) {
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        alert.addAction(UIAlertAction(title: AppStrings.okAlertTitle.letters, style: .default))
         present(alert, animated: true)
     }
 

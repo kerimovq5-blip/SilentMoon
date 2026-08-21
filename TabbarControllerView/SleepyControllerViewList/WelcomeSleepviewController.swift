@@ -21,25 +21,25 @@ final class WelcomeSleepyiewController: UIViewController {
     
     private lazy var getStartedButton: AppButton = {
         let button = AppButton(
-            title: "GET STARTED",
+            title: AppStrings.getStartedButton.letters,
             backgroundColor: .colorIndigo,
             titleColor: .buttonTitle
         )
-        button.onTap = {
-            [weak self] in self?.getStartedSleepyStory()
+        button.onTap = { [weak self] in
+            self?.getStartedSleepyStory()
         }
         return button
     }()
     
     override func viewWillAppear(_ animated: Bool) {
-           super.viewWillAppear(animated)
-           tabBarController?.tabBar.isHidden = true
-       }
+        super.viewWillAppear(animated)
+        tabBarController?.tabBar.isHidden = true
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupHierarchy()
         setupLayout()
-        
     }
     
     private func makeWelcomeLabel() -> UILabel {
@@ -47,14 +47,14 @@ final class WelcomeSleepyiewController: UIViewController {
         label.numberOfLines = 0
         label.textAlignment = .center
         let hi = NSAttributedString(
-            string: "Wecome to Sleep\n",
+            string: AppStrings.welcomeSleepTitle.letters,
             attributes: [
                 .font: AppFonts.title.font,
                 .foregroundColor: AssetColors.buttonTitle.color
             ]
         )
         let welcome = NSAttributedString(
-            string: "\nExplore the new king of sleep.It uses sound\nand vesualization to create perfect conditions\n for refleshing sleep",
+            string: AppStrings.welcomeSleepSubtitle.letters,
             attributes: [
                 .foregroundColor: AssetColors.textSecondary.color,
                 .font: AppFonts.body.font
@@ -66,7 +66,6 @@ final class WelcomeSleepyiewController: UIViewController {
         label.attributedText = full
         return label
     }
-    
     
     private func setupHierarchy() {
         view.backgroundColor = AssetColors.sleepModeColor.color
@@ -84,7 +83,6 @@ final class WelcomeSleepyiewController: UIViewController {
     }
     
     private func setupLayout() {
-        
         frameImageGroup
             .top(view.topAnchor).0
             .bottom(view.bottomAnchor).0
@@ -96,9 +94,9 @@ final class WelcomeSleepyiewController: UIViewController {
             .leading(view.leadingAnchor, AppLayout.spacing.value).0
             .trailing(view.trailingAnchor, -AppLayout.spacing.value).0
             .height(AppLayout.textFieldHeight.value)
-        
     }
-       @objc private func getStartedSleepyStory() {
+
+    @objc private func getStartedSleepyStory() {
         coordinator?.showSleepyStory()
     }
 }

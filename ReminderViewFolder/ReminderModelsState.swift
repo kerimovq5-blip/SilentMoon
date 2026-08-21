@@ -10,7 +10,7 @@ import SilentMoonNetwork
 import SilentMoonDomain
 
 @MainActor
-enum ReminderModelsState {
+enum ReminderViewModelsState {
     case idle
     case loading
     case success
@@ -20,9 +20,9 @@ enum ReminderModelsState {
 }
 
 @MainActor
-final class ReminderStateModels {
+final class ReminderViewModels {
     
-    private(set) var state: ReminderModelsState = .idle {
+    private(set) var state: ReminderViewModelsState = .idle {
         didSet {
             onStateChange?()
         }
@@ -35,7 +35,7 @@ final class ReminderStateModels {
     var reminderMessage: String = ""
     private(set) var currentReminder: ReminderResponseEntity?
     
-    private let repository: SilentMoonRepository
+    private let usecases: SilentMoonUseCases
     
     private static let timeFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -43,8 +43,8 @@ final class ReminderStateModels {
         return formatter
     }()
     
-    init(repository: SilentMoonRepository) {
-        self.repository = repository
+    init(usecases: SilentMoonUseCases) {
+        self.usecases = usecases
     }
     
     func toggleDays(_ day: Int) {
@@ -57,12 +57,9 @@ final class ReminderStateModels {
 
     func loadReminders() {
         state = .loading
-
         Task { [weak self] in
             guard let self else { return }
-
-            let result = await self.repository.getReminders()
-
+            let result = await self.usecases.getReminders()
             switch result {
             case .success(let reminders):
                 self.currentReminder = reminders.first
@@ -75,23 +72,19 @@ final class ReminderStateModels {
     
     func saveReminder() {
         guard !selectedDays.isEmpty else {
-            state = .invalidInput("Please select at least one day")
+            state = .invalidInput(AppStrings.noDaysSelectedError.letters)
             return
         }
-        
         state = .loading
-        
         Task { [weak self] in
             guard let self else { return }
-
             let formattedTime = Self.timeFormatter.string(from: self.selectedDate)
 
-            let result = await self.repository.setReminder(
+            let result = await self.usecases.setReminder(
                 time: formattedTime,
                 days: Array(self.selectedDays),
                 message: self.reminderMessage
             )
-
             switch result {
             case .success(let reminder):
                 self.currentReminder = reminder
@@ -104,28 +97,23 @@ final class ReminderStateModels {
 
     func updateReminder() {
         guard let id = currentReminder?.id else {
-            state = .invalidInput("Yenilənəcək bir xatırlatma tapılmadı.")
+            state = .invalidInput(AppStrings.reminderNotFoundToUpdateError.letters)
             return
         }
         guard !selectedDays.isEmpty else {
-            state = .invalidInput("Please select at least one day")
+            state = .invalidInput(AppStrings.noDaysSelectedError.letters)
             return
         }
-
         state = .loading
-
         Task { [weak self] in
             guard let self else { return }
-
             let formattedTime = Self.timeFormatter.string(from: self.selectedDate)
-
-            let result = await self.repository.updateReminder(
+            let result = await self.usecases.updateReminder(
                 id: id,
                 time: formattedTime,
                 days: Array(self.selectedDays),
                 message: self.reminderMessage
             )
-
             switch result {
             case .success(let reminder):
                 self.currentReminder = reminder
@@ -138,17 +126,13 @@ final class ReminderStateModels {
 
     func deleteReminder() {
         guard let id = currentReminder?.id else {
-            state = .invalidInput("Silinəcək bir xatırlatma tapılmadı.")
+            state = .invalidInput(AppStrings.reminderNotFoundToDeleteError.letters)
             return
         }
-
         state = .loading
-
         Task { [weak self] in
             guard let self else { return }
-
-            let result = await self.repository.deleteReminder(id: id)
-
+            let result = await self.usecases.deleteReminder(id: id)
             switch result {
             case .success:
                 self.currentReminder = nil

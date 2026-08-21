@@ -21,14 +21,14 @@ final class PlayOptionViewController: UIViewController {
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         let attributed = NSMutableAttributedString(
-            string: "Night Island",
+            string: AppStrings.nightIslandTitle.letters,
             attributes: [
                 .foregroundColor: AssetColors.buttonTitle.color,
                 .font: AppFonts.title.font
             ]
         )
         attributed.append(NSAttributedString(
-            string: "\n\n45 MIN•SLEEP MUSIC\n",
+            string: AppStrings.nightIslandSubtitle.letters,
             attributes: [
                 .foregroundColor: AssetColors.textSecondary.color,
                 .font: AppFonts.body.font
@@ -36,7 +36,7 @@ final class PlayOptionViewController: UIViewController {
         ))
         
         attributed.append(NSAttributedString(
-            string: "\nEase the mind into a restful night’s sleep with these deep, amblent tones.",
+            string: AppStrings.nightIslandDescription.letters,
             attributes: [
                 .foregroundColor: AssetColors.textSecondary.color,
                 .font: AppFonts.body.font
@@ -58,7 +58,7 @@ final class PlayOptionViewController: UIViewController {
     
     private lazy var favoritelabel: UILabel = {
         let label = UILabel()
-        label.text = "24.234 Favorits"
+        label.text = AppStrings.favoritesCount.letters
         label.font = AppFonts.body.font
         label.textColor = AssetColors.buttonTitle.color
         return label
@@ -82,7 +82,7 @@ final class PlayOptionViewController: UIViewController {
     
     private lazy var headPhonesLabel: UILabel = {
         let label = UILabel()
-        label.text = "34.234 Listening"
+        label.text = AppStrings.listeningCount.letters
         label.font = AppFonts.body.font
         label.textColor = AssetColors.buttonTitle.color
         return label
@@ -218,7 +218,7 @@ extension PlayOptionViewController: UICollectionViewDataSource, UICollectionView
             ) as? RelatedHeaderCell
         else { return UICollectionReusableView() }
    
-        header.configure(title: "Related")
+        header.configure(title: AppStrings.relatedTitle.letters)
         return header
     }
 }

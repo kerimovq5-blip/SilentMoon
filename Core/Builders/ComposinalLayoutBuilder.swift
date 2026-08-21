@@ -4,15 +4,10 @@
 //
 //  Created by Kerimov Qehreman on 11.08.26.
 //
-
-
-
 import UIKit
-
 
 enum ComposinalLayoutBuilder {
 
-   
     static func twoColumnMasonry(
         itemCount: Int,
         spacing: CGFloat = AppLayout.spacing.value,

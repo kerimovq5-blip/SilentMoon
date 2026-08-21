@@ -1,42 +1,48 @@
+//
+//  CourseViewModels.swift
+//  SilentMoon
+//
+//  Created by Kerimov Qehreman on 19.08.26.
+//
+
 import Foundation
 import SilentMoonDomain
 import SilentMoonNetwork
-
 @MainActor
-enum ChooseTopicViewModelState {
+enum CourseViewModelsState {
     case idle
     case loading
     case success
-    case invalidInput(String)
+    case loaded
     case requestFailed(AppError<ApiErrorEnvelope>)
-}
-
-final class ChooseTopicViewModel {
     
-    private(set) var state: ChooseTopicViewModelState = .idle {
+}
+@MainActor
+final class CourseViewModels {
+    
+    private var state: CourseViewModelsState = .idle {
         didSet {
             onStateChange?()
         }
     }
-    
+    private(set) var coursesList: [CourseEntity] = []
     var onStateChange: (() -> Void)?
     
-    private let usecases: SilentMoonUseCases
+    private let repository: SilentMoonRepository
     
-    init(usecases: SilentMoonUseCases) {
-        self.usecases = usecases
+    init(repository: SilentMoonRepository) {
+        self.repository = repository
     }
     
-    func choose(topicIds: [Int]) {
-        
-        guard !topicIds.isEmpty else {
-            state = .invalidInput(AppStrings.emptyTopicSelectionError.letters)
-            return
-        }
-        state = .loading
-        Task {  [weak self] in
+    public func fetchCourses (page : Int , limit : Int) {
+       
+        Task { [weak self] in
             guard let self else { return }
-            let result = await self.usecases.updateTopics(topicIds: topicIds)
+            let result = await self.repository.getCourses(
+                page: page,
+                limit: limit
+            )
+            
             switch result {
             case .success:
                 self.state = .success
@@ -46,7 +52,6 @@ final class ChooseTopicViewModel {
             }
         }
     }
-    
     private func asAppError(_ error: Error) -> AppError<ApiErrorEnvelope> {
         (error as? AppError<ApiErrorEnvelope>) ?? .unknown(error)
     }

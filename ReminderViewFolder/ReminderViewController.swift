@@ -9,11 +9,11 @@ import UIKit
 
 final class ReminderViewController: UIViewController {
     var coordinator: AuthCoordinator?
-    private let stateModel: ReminderStateModels
+    private let stateModel: ReminderViewModels
     private let weekLabels = ReminderDayItem.weeknames
     private var selectedIndexes: Set<Int> = []
 
-    init(stateModel: ReminderStateModels) {
+    init(stateModel: ReminderViewModels) {
         self.stateModel = stateModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -25,14 +25,14 @@ final class ReminderViewController: UIViewController {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         let attributed = NSMutableAttributedString(
-            string: "What time would you like to meditate?\n",
+            string: AppStrings.reminderTimeTitle.letters,
             attributes: [
                 .foregroundColor: AssetColors.textPrimary.color,
                 .font: AppFonts.titleBold.font
             ]
         )
         attributed.append(NSAttributedString(
-            string: "\nAny time you can choose but We recommend first thing in th morning.",
+            string: AppStrings.reminderTimeSubtitle.letters,
             attributes: [
                 .foregroundColor: AssetColors.textSecondary.color,
                 .font: AppFonts.body.font
@@ -57,14 +57,14 @@ final class ReminderViewController: UIViewController {
     private lazy var subtitleLabel: UILabel = {
         let label = UILabel()
         let attributed = NSMutableAttributedString(
-            string: "Which day would you like to meditate?\n",
+            string: AppStrings.reminderDayTitle.letters,
             attributes: [
                 .foregroundColor: AssetColors.textPrimary.color,
                 .font: AppFonts.titleBold.font
             ]
         )
         attributed.append(NSAttributedString(
-            string: "\nEveryday is best, but we recommend picking at least five.",
+            string: AppStrings.reminderDaySubtitle.letters,
             attributes: [
                 .foregroundColor: AssetColors.textSecondary.color,
                 .font: AppFonts.body.font
@@ -91,20 +91,18 @@ final class ReminderViewController: UIViewController {
     }()
 
     private lazy var saveButton: AppButton = {
-        let button = AppButton(title: "Save")
+        let button = AppButton(
+            title: AppStrings.saveButtonTitle.letters,
+            backgroundColor: .accent,
+            titleColor: .buttonTitle
+        )
         button.onTap = { [weak self] in self?.saveTapped() }
         return button
     }()
 
-    private lazy var loadingIndicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .medium)
-        indicator.hidesWhenStopped = true
-        return indicator
-    }()
-
     private lazy var thankslabel: UILabel = {
         let label = UILabel()
-        label.text = "NO THANKS"
+        label.text = AppStrings.noThanksTitle.letters
         label.textColor = .black
         label.textAlignment = .center
         label.isUserInteractionEnabled = true
@@ -142,19 +140,23 @@ final class ReminderViewController: UIViewController {
             showAlert(message: message)
         case .requestFailed(let appError):
             setLoading(false)
-            showAlert(message: appError.errorDescription ?? "Naməlum xəta baş verdi.")
+            showAlert(message: appError.errorDescription ?? AppStrings.unknownErrorAlert.letters)
         }
     }
 
     private func setLoading(_ isLoading: Bool) {
-        saveButton.isUserInteractionEnabled = !isLoading
-        saveButton.alpha = isLoading ? 0.6 : 1.0
-        isLoading ? loadingIndicator.startAnimating() : loadingIndicator.stopAnimating()
+        saveButton.setLoading(isLoading)
     }
 
     private func showAlert(message: String) {
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        alert
+            .addAction(
+                UIAlertAction(
+                    title: AppStrings.okAlertTitle.letters,
+                    style: .default
+                )
+            )
         present(alert, animated: true)
     }
 
@@ -166,7 +168,6 @@ final class ReminderViewController: UIViewController {
             subtitleLabel,
             weekCollection,
             saveButton,
-            loadingIndicator,
             thankslabel
         )
     }
@@ -190,7 +191,7 @@ final class ReminderViewController: UIViewController {
 
         weekCollection
             .top(subtitleLabel.bottomAnchor, AppLayout.spacing.value).0
-            .leading(view.leadingAnchor ).0
+            .leading(view.leadingAnchor).0
             .trailing(view.trailingAnchor).0
             .height(AppLayout.buttonHeight.value)
 
@@ -200,19 +201,13 @@ final class ReminderViewController: UIViewController {
             .trailing(view.trailingAnchor, -AppLayout.spacing.value).0
             .height(AppLayout.textFieldHeight.value)
 
-        loadingIndicator
-            .centerX(saveButton.centerXAnchor).0
-            .centerY(saveButton.centerYAnchor)
-
         thankslabel
-            .top(saveButton.bottomAnchor , AppLayout.spacing.value).0
+            .top(saveButton.bottomAnchor, AppLayout.spacing.value).0
             .centerX(view.centerXAnchor)
     }
 
     private func saveTapped() {
         stateModel.selectedDate = datePicker.date
-        // ReminderDayItem.weeknames[0] == Sunday → Foundation's DateComponents.weekday
-        // convention is 1...7 with Sunday = 1, so the stored day is (index + 1).
         stateModel.selectedDays = Set(selectedIndexes.map { $0 + 1 })
         stateModel.saveReminder()
     }
@@ -221,8 +216,6 @@ final class ReminderViewController: UIViewController {
         coordinator?.finishAuth()
     }
 }
-
-
 
 extension ReminderViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -246,7 +239,6 @@ extension ReminderViewController: UICollectionViewDataSource {
     }
 }
 
-
 extension ReminderViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if selectedIndexes.contains(indexPath.item) {
@@ -257,7 +249,6 @@ extension ReminderViewController: UICollectionViewDelegate {
         collectionView.reloadItems(at: [indexPath])
     }
 }
-
 
 extension ReminderViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(

@@ -9,25 +9,24 @@ import UIKit
 
 enum AuthBuilders {
 
-       static func facebookButton() -> AppButton {
-           AppButton(
-               title: "CONTINUE WITH FACEBOOK",
-               backgroundColor: .accent,
-               titleColor: .buttonTitle,
-               image: UIImage(named: "Vector"),
-               imagePosition: .leading
-           )
-       }
+    static func facebookButton() -> AppButton {
+        AppButton(
+            title: AppStrings.continueWithFacebook.letters,
+            backgroundColor: .accent,
+            titleColor: .buttonTitle,
+            image: UIImage(named: "Vector"),
+            imagePosition: .leading
+        )
+    }
 
-       static func googleButton() -> AppButton {
-           AppButton(
-               title: "CONTINUE WITH GOOGLE",
-               backgroundColor: .backgroundSecondary,
-               titleColor: .textPrimary,
-               image: UIImage(named: "google"),
-               imagePosition: .leading,
-               borderColor: .textSecondary
-           )
-       }
-   
-   }
+    static func googleButton() -> AppButton {
+        AppButton(
+            title: AppStrings.continueWithGoogle.letters,
+            backgroundColor: .backgroundSecondary,
+            titleColor: .textPrimary,
+            image: UIImage(named: "google"),
+            imagePosition: .leading,
+            borderColor: .textSecondary
+        )
+    }
+}

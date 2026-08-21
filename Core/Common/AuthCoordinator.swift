@@ -1,18 +1,19 @@
 import UIKit
 import SilentMoonDomain
+import SilentMoonNetwork
 final class AuthCoordinator: Coordinator, ContentNavigating {
 
     var navigationController: UINavigationController
     var onFlowFinished: (() -> Void)?
 
-    private let repository: SilentMoonRepository
+    private let usecases: SilentMoonUseCases
 
     init(
         navigationController: UINavigationController,
-        repository: SilentMoonRepository
+        usecases: SilentMoonUseCases
     ) {
         self.navigationController = navigationController
-        self.repository = repository
+        self.usecases = usecases
     }
 
     func start() {
@@ -22,14 +23,14 @@ final class AuthCoordinator: Coordinator, ContentNavigating {
     }
 
     func showLogin() {
-        let viewModel = LoginViewModel(repository: repository)
+        let viewModel = LoginViewModel(usecases: usecases)
         let controller = LogInViewController(viewModel: viewModel)
         controller.coordinator = self
         navigationController.pushViewController(controller, animated: true)
     }
 
     func showSignUp() {
-        let viewModel = SignUpViewModel(repository: repository)
+        let viewModel = SignUpViewModel(usecases: usecases)
         let controller = SignUpViewController(viewModel: viewModel)
         controller.coordinator = self
         navigationController.pushViewController(controller, animated: true)
@@ -43,7 +44,7 @@ final class AuthCoordinator: Coordinator, ContentNavigating {
     }
 
     func showOtpVerification(email: String, name: String = "") {
-        let viewModel = OtpViewModel(repository: repository)
+        let viewModel = OtpViewModel(usecases: usecases)
         let controller = OtpViewController(viewModel: viewModel)
         controller.email = email
         controller.userName = name
@@ -53,7 +54,7 @@ final class AuthCoordinator: Coordinator, ContentNavigating {
 
     func showTopics() {
         let viewModel = ChooseTopicViewModel(
-            service: repository
+            usecases: usecases
         )
         let controller = ChooseTopicViewController(viewModel: viewModel)
         controller.coordinator = self
@@ -64,7 +65,7 @@ final class AuthCoordinator: Coordinator, ContentNavigating {
         )
     }
     func showReminder() {
-          let stateModel = ReminderStateModels(repository: repository)
+          let stateModel = ReminderViewModels(usecases: usecases)
           let controller = ReminderViewController(stateModel: stateModel)
           controller.coordinator = self
           navigationController.pushViewController(controller, animated: true)
@@ -105,7 +106,8 @@ final class AuthCoordinator: Coordinator, ContentNavigating {
     }
 
     func showSearchPage() {
-        let controller = SearchPageController(repository: repository)
+        let viewModel = SearchViewModel(usecases: usecases)
+        let controller = SearchPageController(viewModel: viewModel)
         controller.coordinator = self
         navigationController.pushViewController(controller, animated: true)
     }

@@ -21,7 +21,7 @@ enum AssetColors : String{
     case background = "Background"
     case backgroundSecondary = "BackgroundSecondary"
     case textPrimary = "TextPrimary"
-    case textSecondary = "TextSecondary"
+    case textSecondary  = "TextSecondary"
     case accent = "Accent"
     case buttonTitle = "ButtonTitle"
     case lightGray = "Lightgray"
@@ -35,8 +35,7 @@ enum AssetColors : String{
     case sleepModeColor = "SleepModeColor"
     case darksleepmusic = "darksleepmusic"
     case iceBlueColor = "IceBlueColor"
-   // case searchBackground = "Lightgray"
-   // case searchcolor = "TextSecondary"
+   
     
     var color : UIColor {
         return UIColor(named: self.rawValue) ?? .clear

@@ -1,4 +1,6 @@
 import UIKit
+import SilentMoonDomain
+import SilentMoonNetwork
 
 final class LogInViewController: UIViewController {
 
@@ -21,8 +23,8 @@ final class LogInViewController: UIViewController {
 
     private lazy var googleButton = AuthBuilders.googleButton()
     private lazy var facebookButton = AuthBuilders.facebookButton()
-    private lazy var titleLabel = AppBuilders.titleLabel("Log in")
-    private lazy var dividerLabel = AppBuilders.dividerLabel("OR LOG IN WITH EMAIL")
+    private lazy var titleLabel = AppBuilders.titleLabel(AppStrings.welcomeLogInTitle.letters)
+    private lazy var dividerLabel = AppBuilders.dividerLabel(AppStrings.logInWithEmailDivider.letters)
 
     private lazy var emailValidation: FieldValidationController = {
         .email(textField: emailTextField.textField)
@@ -34,14 +36,14 @@ final class LogInViewController: UIViewController {
 
     private lazy var emailTextField: AppTextFieldController = {
         AppTextFieldController(
-            placeholder: "Email address",
+            placeholder: AppStrings.emailAddressPlaceholder.letters,
             backgroundColor: .lightGray
         )
     }()
 
     private lazy var eyeButton: UIButton = {
         let button = UIButton(type: .custom)
-        button.setImage(UIImage(named: "EyeVector"), for: .normal)
+        button.setImage(UIImage(named: AppStrings.eyeVectorImageName.letters), for: .normal)
         button.tintColor = AssetColors.textSecondary.color
         button.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
         return button
@@ -49,7 +51,7 @@ final class LogInViewController: UIViewController {
 
     private lazy var passwordTextField: AppTextFieldController = {
         AppTextFieldController(
-            placeholder: "Password",
+            placeholder: AppStrings.passwordPlaceholder.letters,
             isSecure: true,
             backgroundColor: .lightGray,
             rightView: eyeButton
@@ -58,7 +60,7 @@ final class LogInViewController: UIViewController {
 
     private lazy var logInButton: AppButton = {
         let button = AppButton(
-            title: "LOG IN",
+            title: AppStrings.logInButtonTitle.letters,
             backgroundColor: .accent,
             titleColor: .buttonTitle
         )
@@ -68,7 +70,7 @@ final class LogInViewController: UIViewController {
 
     private lazy var forgotLabel: UILabel = {
         let label = UILabel()
-        label.text = "Forgot Password?"
+        label.text = AppStrings.forgotPasswordText.letters
         label.font = AppFonts.body.font
         label.textColor = .textPrimary
         label.textAlignment = .center
@@ -82,14 +84,14 @@ final class LogInViewController: UIViewController {
     private lazy var signUpButton: UIButton = {
         let button = UIButton()
         let attributed = NSMutableAttributedString(
-            string: "DON'T HAVE AN ACCOUNT? ",
+            string: AppStrings.dontHaveAccountText.letters,
             attributes: [
                 .foregroundColor: AssetColors.textSecondary.color,
                 .font: AppFonts.body.font
             ]
         )
         attributed.append(NSAttributedString(
-            string: "SIGN UP",
+            string: AppStrings.signUpButton.letters,
             attributes: [
                 .foregroundColor: AssetColors.accent.color,
                 .font: AppFonts.body.font
@@ -135,18 +137,18 @@ final class LogInViewController: UIViewController {
     private func render() {
         switch viewModel.state {
         case .idle:
-            setLoading(false)
+            hideBlurLoading()
         case .loading:
-            setLoading(true)
+            showBlurLoading()
         case .success:
-            setLoading(false)
+            hideBlurLoading()
             coordinator?.finishAuth()
         case .invalidInput(let message):
-            setLoading(false)
+            hideBlurLoading()
             showAlert(message: message)
         case .requestFailed(let appError):
-            setLoading(false)
-            showAlert(message: appError.errorDescription ?? "Naməlum xəta baş verdi.")
+            hideBlurLoading()
+            showAlert(message: appError.errorDescription ?? AppStrings.unknownErrorAlert.letters)
         }
     }
 
@@ -271,14 +273,9 @@ final class LogInViewController: UIViewController {
         )
     }
 
-    private func setLoading(_ isLoading: Bool) {
-        logInButton.isUserInteractionEnabled = !isLoading
-        logInButton.alpha = isLoading ? 0.6 : 1.0
-    }
-
     private func showAlert(message: String) {
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        alert.addAction(UIAlertAction(title: AppStrings.okAlertTitle.letters, style: .default))
         present(alert, animated: true)
     }
 

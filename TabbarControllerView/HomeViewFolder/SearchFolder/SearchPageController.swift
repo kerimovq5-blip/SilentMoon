@@ -6,40 +6,19 @@
 //
 
 import UIKit
-import SilentMoonNetwork
 import SilentMoonDomain
-
 final class SearchPageController: UIViewController {
     var coordinator: ContentNavigating?
 
-    private let repository: SilentMoonRepository
+    private let viewModel: SearchViewModel
 
-    init(repository: SilentMoonRepository) {
-        self.repository = repository
+    init(viewModel: SearchViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    private var searchDebounceTimer: Timer?
-    private var currentRequestID = 0
-
-    private var results: [CourseSummaryEntity] = [] {
-        didSet { tableView.reloadData() }
-    }
-
-    private enum State {
-        case idle
-        case loading
-        case loaded
-        case empty
-        case error(String)
-    }
-
-    private var state: State = .idle {
-        didSet { updateUI(for: state) }
     }
 
     private lazy var searchTextField: UITextField = {
@@ -144,9 +123,20 @@ final class SearchPageController: UIViewController {
         view.backgroundColor = .systemBackground
         setupHierarchy()
         setupLayout()
+        bindViewModel()
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
+    }
+
+    private func bindViewModel() {
+        viewModel.onStateChange = { [weak self] in
+            guard let self else { return }
+            self.updateUI(for: self.viewModel.state)
+        }
+        viewModel.onResultsChange = { [weak self] in
+            self?.tableView.reloadData()
+        }
     }
 
     private func setupHierarchy() {
@@ -193,57 +183,10 @@ final class SearchPageController: UIViewController {
     }
 
     private func searchDidChange() {
-        let query = searchTextField.text ?? ""
-
-        searchDebounceTimer?.invalidate()
-
-        guard query.trimmingCharacters(in: .whitespaces).count >= 2 else {
-            currentRequestID += 1
-            results = []
-            state = .idle
-            return
-        }
-
-        searchDebounceTimer = Timer.scheduledTimer(withTimeInterval: 0.4, repeats: false) {
-            [weak self] _ in
-            self?.performSearch(query: query)
-        }
+        viewModel.search(query: searchTextField.text ?? "")
     }
 
-    private func performSearch(query: String) {
-        currentRequestID += 1
-        let requestID = currentRequestID
-        state = .loading
-
-        Task { [weak self] in
-            guard let self else { return }
-            let result = await self.repository.search(
-                query: query,
-                type: nil,
-                page: 1,
-                limit: 20
-            )
-            guard requestID == self.currentRequestID else { return }
-            switch result {
-            case .success(let response):
-                self.results = response.data
-                self.state = response.data.isEmpty ? .empty : .loaded
-            case .failure(let error):
-                self.results = []
-                self.state = .error(self.message(for: error))
-            }
-        }
-    }
-
-    private func message(for error: Error) -> String {
-        if let appError = error as? AppError<ApiErrorEnvelope> {
-            return appError.errorDescription ?? "Naməlum xəta baş verdi."
-        }
-        return error.localizedDescription
-    }
-
-
-    private func updateUI(for state: State) {
+    private func updateUI(for state: SearchViewModelState) {
         switch state {
         case .idle:
             loadingIndicator.stopAnimating()
@@ -267,10 +210,10 @@ final class SearchPageController: UIViewController {
             emptyStateStack.isHidden = false
             silentMoonFrame.isHidden = false
             tableView.isHidden = true
-        case .error(let message):
+        case .requestFailed(let appError):
             loadingIndicator.stopAnimating()
             emptyStateTitleLabel.text = "Something went wrong"
-            emptyStateSubtitleLabel.text = message
+            emptyStateSubtitleLabel.text = appError.errorDescription ?? "Naməlum xəta baş verdi."
             emptyStateStack.isHidden = false
             silentMoonFrame.isHidden = true
             tableView.isHidden = true
@@ -284,12 +227,12 @@ final class SearchPageController: UIViewController {
 
 extension SearchPageController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        results.count
+        viewModel.results.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "resultCell", for: indexPath)
-        let item = results[indexPath.row]
+        let item = viewModel.results[indexPath.row]
 
         var content = cell.defaultContentConfiguration()
         content.text = item.title
@@ -305,7 +248,7 @@ extension SearchPageController: UITableViewDataSource {
 extension SearchPageController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let item = results[indexPath.row]
+        let item = viewModel.results[indexPath.row]
 
         print("Seçilən kurs: \(item.title) (id: \(item.id))")
     }

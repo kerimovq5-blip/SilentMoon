@@ -7,6 +7,7 @@
 
 import UIKit
 import SilentMoonDomain
+import SilentMoonData
 
 @MainActor
 final class MainTabBarCoordinator: Coordinator {
@@ -43,7 +44,7 @@ final class MainTabBarCoordinator: Coordinator {
         homeController.coordinator = self
         let navigation = UINavigationController(rootViewController: homeController)
         navigation.tabBarItem = UITabBarItem(
-            title: "Home",
+            title: AppStrings.tabHomeTitle.letters,
             image: UIImage(named: "Home")?.withRenderingMode(.alwaysOriginal),
             tag: 0
         )
@@ -56,7 +57,7 @@ final class MainTabBarCoordinator: Coordinator {
         sleepController.coordinator = self
         let navigation = UINavigationController(rootViewController: sleepController)
         navigation.tabBarItem = UITabBarItem(
-            title: "Sleep",
+            title: AppStrings.tabSleepTitle.letters,
             image: UIImage(named: "sleep")?.withRenderingMode(.alwaysOriginal),
             tag: 1
         )
@@ -66,7 +67,7 @@ final class MainTabBarCoordinator: Coordinator {
     private func makeMeditateTab() -> UINavigationController {
         let navigation = UINavigationController(rootViewController: MeditateViewController())
         navigation.tabBarItem = UITabBarItem(
-            title: "Meditate",
+            title: AppStrings.tabMeditateTitle.letters,
             image: UIImage(named: "brain")?.withRenderingMode(.alwaysOriginal),
             tag: 2
         )
@@ -79,7 +80,7 @@ final class MainTabBarCoordinator: Coordinator {
 
         let navigation = UINavigationController(rootViewController: musicController)
         navigation.tabBarItem = UITabBarItem(
-            title: "Music",
+            title: AppStrings.tabMusicTitle.letters,
             image: UIImage(named: "music")?.withRenderingMode(.alwaysOriginal),
             tag: 3
         )
@@ -94,7 +95,7 @@ final class MainTabBarCoordinator: Coordinator {
 
         let navigation = UINavigationController(rootViewController: controller)
         navigation.tabBarItem = UITabBarItem(
-            title: "Account",
+            title: AppStrings.tabAccountTitle.letters,
             image: UIImage(named: "user")?.withRenderingMode(.alwaysOriginal),
             tag: 4
         )
@@ -131,7 +132,8 @@ extension MainTabBarCoordinator: ContentNavigating {
     }
 
     func showSearchPage() {
-        let controller = SearchPageController(repository: repository)
+        let viewModel = SearchViewModel(usecases: UseCasesImplemantation(repository: repository))
+        let controller = SearchPageController(viewModel: viewModel)
         controller.coordinator = self
         activeNavigationController?.pushViewController(controller, animated: true)
     }

@@ -9,21 +9,24 @@ final class GetStartedController: UIViewController {
         let label = UILabel()
         
         let silent = NSAttributedString(
-            string: "Silent ",
-            attributes: [.font: AppFonts.body.font ,
-                         .foregroundColor: AssetColors.buttonTitle.color]
+            string: AppStrings.logoSilent.letters,
+            attributes: [
+                .font: AppFonts.body.font,
+                .foregroundColor: AssetColors.buttonTitle.color
+            ]
         )
         
         let attachment = NSTextAttachment()
-        attachment.image = UIImage(named: "logo")?
-            .withRenderingMode(.alwaysOriginal)
+        attachment.image = UIImage(named: "logo")?.withRenderingMode(.alwaysOriginal)
         attachment.bounds = CGRect(x: 0, y: -6, width: 30, height: 30)
         let logo = NSAttributedString(attachment: attachment)
         
         let moon = NSAttributedString(
-            string: " Moon",
-            attributes: [.font: AppFonts.body.font,
-                         .foregroundColor: AssetColors.buttonTitle.color]
+            string: AppStrings.logoMoon.letters,
+            attributes: [
+                .font: AppFonts.body.font,
+                .foregroundColor: AssetColors.buttonTitle.color
+            ]
         )
         
         let full = NSMutableAttributedString()
@@ -39,7 +42,7 @@ final class GetStartedController: UIViewController {
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         let attributed = NSMutableAttributedString(
-            string: "Explore the app, Find some peace of mind to prepare for meditation.",
+            string: AppStrings.getStartedDescription.letters,
             attributes: [
                 .foregroundColor: AssetColors.buttonTitle.color,
                 .font: AppFonts.body.font
@@ -61,28 +64,25 @@ final class GetStartedController: UIViewController {
     
     private lazy var getStartedButton: AppButton = {
         let button = AppButton(
-            title: "GET STARTED",
+            title: AppStrings.getStartedButton.letters,
             backgroundColor: .backgroundSecondary,
             titleColor: .textPrimary
         )
-        button.onTap = {
-            [weak self] in self?.getStartedTapped()
+        button.onTap = { [weak self] in
+            self?.getStartedTapped()
         }
         return button
     }()
     
     private var logOutButton: UIBarButtonItem {
-        
         let button = UIButton()
-        
-        button.setImage(UIImage(systemName: "door.right.hand.open" ), for: .normal)
+        button.setImage(UIImage(systemName: "door.right.hand.open"), for: .normal)
         button.tintColor = .black
         button.backgroundColor = .clear
         button.addTarget(self, action: #selector(logOutTapped), for: .touchUpInside)
-        let barItem = UIBarButtonItem(customView: button)
-        return barItem
-        
+        return UIBarButtonItem(customView: button)
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationItem.rightBarButtonItem = logOutButton
@@ -92,28 +92,30 @@ final class GetStartedController: UIViewController {
         super.viewDidLoad()
         setupHierarchy()
         setupLayout()
-        
     }
-    
     
     private func makeWelcomeLabel() -> UILabel {
         let label = UILabel()
         label.numberOfLines = 0
         label.textAlignment = .center
+        
+        let greetingText = String(format: AppStrings.hiGreetingFormat.letters, userName)
         let hi = NSAttributedString(
-            string: "Hi \(userName),\n",
+            string: greetingText,
             attributes: [
                 .font: AppFonts.title.font,
                 .foregroundColor: UIColor.white
             ]
         )
+        
         let welcome = NSAttributedString(
-            string: "Welcome to Silent Moon",
+            string: AppStrings.welcomeToAppName.letters,
             attributes: [
                 .font: AppFonts.titleRegular.font,
                 .foregroundColor: UIColor.white
             ]
         )
+        
         let full = NSMutableAttributedString()
         full.append(hi)
         full.append(welcome)
@@ -121,19 +123,17 @@ final class GetStartedController: UIViewController {
         return label
     }
     
-    
     private func setupHierarchy() {
         view.backgroundColor = .colorIndigo
         let welcomeLabel = makeWelcomeLabel()
-        view
-            .addSubviews(
-                frameImageGroup,
-                logoLabel,
-                descriptionLabel,
-                welcomeLabel,
-                getStartedButton,
-                
-            )
+        
+        view.addSubviews(
+            frameImageGroup,
+            logoLabel,
+            descriptionLabel,
+            welcomeLabel,
+            getStartedButton
+        )
         
         welcomeLabel
             .bottom(descriptionLabel.topAnchor, -AppLayout.spacing.value).0
@@ -143,16 +143,15 @@ final class GetStartedController: UIViewController {
     }
     
     private func setupLayout() {
-        
         logoLabel
             .bottom(view.safeAreaLayoutGuide.topAnchor).0
             .centerX(view.centerXAnchor).0
             .height(AppLayout.buttonHeight2.value)
         
         descriptionLabel
-            .bottom(frameImageGroup.topAnchor , -AppLayout.largeSpacing.value).0
+            .bottom(frameImageGroup.topAnchor, -AppLayout.largeSpacing.value).0
             .centerX(view.centerXAnchor).0
-            .leading(view.leadingAnchor , AppLayout.xLargeSpacing.value).0
+            .leading(view.leadingAnchor, AppLayout.xLargeSpacing.value).0
             .trailing(view.trailingAnchor, -AppLayout.xLargeSpacing.value)
         
         frameImageGroup
@@ -170,10 +169,8 @@ final class GetStartedController: UIViewController {
             .leading(view.leadingAnchor, AppLayout.spacing.value).0
             .trailing(view.trailingAnchor, -AppLayout.spacing.value).0
             .height(AppLayout.textFieldHeight.value)
-        
-        
-        
     }
+    
     @objc private func logOutTapped() {
         coordinator?.backToMain()
     }

@@ -6,7 +6,7 @@ final class ChooseTopicViewController: UIViewController {
     var coordinator: AuthCoordinator?
     private let viewModel: ChooseTopicViewModel
     private let topics = ChooseTopicModel.all
-    private var selectedTopicIds: Set<String> = []
+    private var selectedTopicIds: Set<Int> = []
     
     init(viewModel: ChooseTopicViewModel) {
         self.viewModel = viewModel
@@ -17,7 +17,7 @@ final class ChooseTopicViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private lazy var unionview :UIImageView = {
+    private lazy var unionview: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "Union")?.withRenderingMode(.alwaysOriginal)
         imageView.contentMode = .scaleAspectFit
@@ -27,14 +27,14 @@ final class ChooseTopicViewController: UIViewController {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         let attributed = NSMutableAttributedString(
-            string: "What Brings you",
+            string: AppStrings.whatBringsYouTitle.letters,
             attributes: [
                 .foregroundColor: AssetColors.textPrimary.color,
                 .font: AppFonts.title.font
             ]
         )
         attributed.append(NSAttributedString(
-            string: "\nto Silent Moon?",
+            string: AppStrings.toSilentMoonSubtitle.letters,
             attributes: [
                 .foregroundColor: AssetColors.textPrimary.color,
                 .font: AppFonts.titleRegular.font
@@ -48,7 +48,7 @@ final class ChooseTopicViewController: UIViewController {
     
     private lazy var subtitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Choose a topic to focus on:"
+        label.text = AppStrings.chooseTopicSubtitle.letters
         label.font = AppFonts.body.font
         label.textColor = AssetColors.textSecondary.color
         label.textAlignment = .left
@@ -71,24 +71,9 @@ final class ChooseTopicViewController: UIViewController {
         )
         return controller
     }()
+
     private lazy var continueButton = AppBuilders.continueButton()
 
-//    private lazy var continueButton: AppButton = {
-//        let button = AppButton(
-//            title: "CONTINUE",
-//            backgroundColor: .accent,
-//            titleColor: .buttonTitle
-//        )
-//        button.onTap = { [weak self] in self?.continueTapped() }
-//        return button
-//    }()
-
-    private lazy var loadingIndicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .medium)
-        indicator.hidesWhenStopped = true
-        return indicator
-    }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupHierarchy()
@@ -96,7 +81,7 @@ final class ChooseTopicViewController: UIViewController {
         bindViewModel()
         updateContinueButton()
         continueButton.onTap = { [weak self] in self?.continueTapped() }
-           }
+    }
 
     private func bindViewModel() {
         viewModel.onStateChange = { [weak self] in
@@ -118,25 +103,35 @@ final class ChooseTopicViewController: UIViewController {
             showAlert(message: message)
         case .requestFailed(let appError):
             setLoading(false)
-            showAlert(message: appError.errorDescription ?? "Naməlum xəta baş verdi.")
+            showAlert(
+                message: appError.errorDescription ?? AppStrings.unknownErrorAlert.letters
+            )
         }
     }
 
     private func setLoading(_ isLoading: Bool) {
-        continueButton.isUserInteractionEnabled = !isLoading
-        continueButton.alpha = isLoading ? 0.6 : 1.0
-        isLoading ? loadingIndicator.startAnimating() : loadingIndicator.stopAnimating()
+        continueButton.setLoading(isLoading)
     }
 
     private func updateContinueButton() {
         let count = selectedTopicIds.count
-        continueButton.setTitle(count > 0 ? "CONTINUE (\(count))" : "CONTINUE")
+        let title = count > 0
+            ? String(format: AppStrings.continueWithCountFormat.letters, count)
+            : AppStrings.continueButtonTitle.letters
+        
+        continueButton.setTitle(title)
         continueButton.setIsEnabled(count > 0)
     }
 
     private func showAlert(message: String) {
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        alert
+            .addAction(
+                UIAlertAction(
+                    title: AppStrings.okAlertTitle.letters,
+                    style: .default
+                )
+            )
         present(alert, animated: true)
     }
 
@@ -149,15 +144,13 @@ final class ChooseTopicViewController: UIViewController {
         view.addSubviews(
             titleLabel,
             subtitleLabel,
-            unionview ,
+            unionview,
             collectionView,
-            continueButton,
-            loadingIndicator
+            continueButton
         )
     }
     
     private func setupLayout() {
-        
         titleLabel
             .top(view.safeAreaLayoutGuide.topAnchor, 10).0
             .leading(view.leadingAnchor, AppLayout.spacing.value).0
@@ -169,7 +162,7 @@ final class ChooseTopicViewController: UIViewController {
             .trailing(view.trailingAnchor, -AppLayout.spacing.value)
         
         unionview
-            .top(titleLabel.bottomAnchor ).0
+            .top(titleLabel.bottomAnchor).0
             .leading(view.leadingAnchor).0
             .trailing(view.trailingAnchor)
         
@@ -184,11 +177,6 @@ final class ChooseTopicViewController: UIViewController {
             .leading(view.leadingAnchor, AppLayout.spacing.value).0
             .trailing(view.trailingAnchor, -AppLayout.spacing.value).0
             .height(AppLayout.textFieldHeight.value)
-
-        loadingIndicator
-            .centerX(continueButton.centerXAnchor).0
-            .centerY(continueButton.centerYAnchor)
-        
     }
     
     private func isBigCard(at index: Int) -> Bool {
@@ -231,12 +219,12 @@ extension ChooseTopicViewController: UICollectionViewDataSource {
 
 extension ChooseTopicViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        selectedTopicIds.insert(topics[indexPath.item].id)
+        selectedTopicIds.insert(topics[indexPath.item].backendId)
         updateContinueButton()
     }
 
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        selectedTopicIds.remove(topics[indexPath.item].id)
+        selectedTopicIds.remove(topics[indexPath.item].backendId)
         updateContinueButton()
     }
 }
