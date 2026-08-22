@@ -32,6 +32,7 @@ enum AppStrings : String {
     case eyeVectorImageName = "EyeVector"
     case unknownErrorAlert = "Naməlum xəta baş verdi."
     case okAlertTitle = "OK"
+    case loadingAccessibilityLabel = "Yüklənir"
     
     case acceptPrivacyPolicyAlert = "Davam etmək üçün Privacy Policy-ni qəbul edin."
     case passwordFieldName = "Şifrə"
@@ -86,7 +87,7 @@ enum AppStrings : String {
     
     case nightIslandTitle = "Night Island\n\n"
     case nightIslandSubtitle = "45 MIN•SLEEP MUSIC\n\n"
-    case nightIslandDescription = "Ease the mind into a restful night’s sleep with these deep, amblent tones."
+    case nightIslandDescription = "Ease the mind into a restful night's sleep with these deep, amblent tones."
     case favoritesCount = "24.234 Favorits"
     case listeningCount = "34.234 Listening"
     case relatedTitle = "Related"

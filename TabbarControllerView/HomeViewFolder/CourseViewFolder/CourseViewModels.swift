@@ -28,17 +28,17 @@ final class CourseViewModels {
     private(set) var coursesList: [CourseEntity] = []
     var onStateChange: (() -> Void)?
     
-    private let repository: SilentMoonRepository
+    private let usecases: SilentMoonUseCases
     
-    init(repository: SilentMoonRepository) {
-        self.repository = repository
+    init(usecases: SilentMoonUseCases) {
+        self.usecases = usecases
     }
     
     public func fetchCourses (page : Int , limit : Int) {
        
         Task { [weak self] in
             guard let self else { return }
-            let result = await self.repository.getCourses(
+            let result = await self.usecases.getCourses(
                 page: page,
                 limit: limit
             )

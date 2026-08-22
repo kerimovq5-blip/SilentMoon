@@ -38,13 +38,18 @@ extension UIViewController {
         return created
     }
 
-    func showBlurLoading() {
+    var isBlurLoadingActive: Bool {
+        loadingState.refCount > 0
+    }
+
+    func showBlurLoading(message: String? = nil) {
+        dispatchPrecondition(condition: .onQueue(.main))
+
         loadingState.refCount += 1
         guard loadingState.refCount == 1 else { return }
 
-        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
 
-        
         loadingState.wasBackButtonHidden = navigationItem.hidesBackButton
         loadingState.wasLeftBarItemEnabled = navigationItem.leftBarButtonItem?.isEnabled ?? true
         loadingState.wasPopGestureEnabled = navigationController?.interactivePopGestureRecognizer?.isEnabled ?? true
@@ -55,11 +60,11 @@ extension UIViewController {
         overlayView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         overlayView.alpha = 0
         overlayView.isAccessibilityElement = true
-        overlayView.accessibilityLabel = "Loading"
+        overlayView.accessibilityLabel = message ?? AppStrings.loadingAccessibilityLabel.letters
         overlayView.accessibilityTraits = .updatesFrequently
 
         if UIAccessibility.isReduceTransparencyEnabled {
-            overlayView.backgroundColor = UIColor.black.withAlphaComponent(0.55)
+            overlayView.backgroundColor = UIColor.black
         } else {
             let blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
             blurEffectView.frame = overlayView.bounds
@@ -68,11 +73,11 @@ extension UIViewController {
         }
 
         let card = UIView()
-        card.backgroundColor = UIColor.white.withAlphaComponent(0.12)
+        card.backgroundColor = UIColor.lightGray
         card.layer.cornerRadius = LoadingOverlayMetrics.cardCornerRadius
 
         let activityIndicator = UIActivityIndicatorView(style: .large)
-        activityIndicator.color = .white
+        activityIndicator.color = .gray
         if !UIAccessibility.isReduceMotionEnabled {
             activityIndicator.transform = CGAffineTransform(
                 scaleX: LoadingOverlayMetrics.spinnerScale,
@@ -111,11 +116,14 @@ extension UIViewController {
     }
 
     func hideBlurLoading() {
+        dispatchPrecondition(condition: .onQueue(.main))
+
         guard loadingState.refCount > 0 else { return }
         loadingState.refCount -= 1
         guard loadingState.refCount == 0 else { return }
 
         view.accessibilityElementsHidden = false
+        UIAccessibility.post(notification: .screenChanged, argument: view)
 
         guard let loadingOverlay = view.viewWithTag(loadingOverlayTag) else { return }
 
