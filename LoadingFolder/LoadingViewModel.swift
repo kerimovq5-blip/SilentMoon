@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SilentMoonDomain
 import SilentMoonNetwork
 
 enum LoadingViewModelState {
