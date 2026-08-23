@@ -6,11 +6,11 @@
 //
 import UIKit
 import Foundation
-
+@MainActor
 protocol Coordinator: AnyObject {
     func start()
 }
-
+@MainActor
 protocol ContentNavigating: AnyObject {
     func showMorning()
     func showMusicPage(item : String)

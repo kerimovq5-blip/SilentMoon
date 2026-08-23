@@ -5,14 +5,10 @@
 //  Created by Kerimov Qehreman on 28.07.26.
 //
 
-
-
-
 import UIKit
 
 struct SleepyStoryModels : MeditateSectionData {
-    
-    
+  
     var image: UIImage?
     var title: String
     var durationItem : String

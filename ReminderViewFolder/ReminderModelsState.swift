@@ -1,10 +1,3 @@
-//
-//  ReminderModelsState.swift
-//  SilentMoon
-//
-//  Created by Kerimov Qehreman on 14.08.26.
-//
-
 import Foundation
 import SilentMoonNetwork
 import SilentMoonDomain
@@ -23,9 +16,7 @@ enum ReminderViewModelsState {
 final class ReminderViewModels {
     
     private(set) var state: ReminderViewModelsState = .idle {
-        didSet {
-            onStateChange?()
-        }
+        didSet { onStateChange?() }
     }
     
     var onStateChange: (() -> Void)?
@@ -54,44 +45,28 @@ final class ReminderViewModels {
             selectedDays.insert(day)
         }
     }
-
+    
     func loadReminders() {
         state = .loading
         Task { [weak self] in
             guard let self else { return }
             let result = await self.usecases.getReminders()
-            switch result {
-            case .success(let reminders):
-                self.currentReminder = reminders.first
-                self.state = .success
-            case .failure(let error):
-                self.state = .requestFailed(self.asAppError(error))
-            }
+            self.handleLoadReminderResult(result)
         }
     }
     
     func saveReminder() {
-        guard !selectedDays.isEmpty else {
-            state = .invalidInput(AppStrings.noDaysSelectedError.letters)
-            return
-        }
+        guard validateInput() else { return }
         state = .loading
         Task { [weak self] in
             guard let self else { return }
             let formattedTime = Self.timeFormatter.string(from: self.selectedDate)
-
             let result = await self.usecases.setReminder(
                 time: formattedTime,
                 days: Array(self.selectedDays),
                 message: self.reminderMessage
             )
-            switch result {
-            case .success(let reminder):
-                self.currentReminder = reminder
-                self.state = .success
-            case .failure(let error):
-                self.state = .requestFailed(self.asAppError(error))
-            }
+            self.handleSaveOrUpdateResult(result)
         }
     }
 
@@ -100,10 +75,7 @@ final class ReminderViewModels {
             state = .invalidInput(AppStrings.reminderNotFoundToUpdateError.letters)
             return
         }
-        guard !selectedDays.isEmpty else {
-            state = .invalidInput(AppStrings.noDaysSelectedError.letters)
-            return
-        }
+        guard validateInput() else { return }
         state = .loading
         Task { [weak self] in
             guard let self else { return }
@@ -114,13 +86,7 @@ final class ReminderViewModels {
                 days: Array(self.selectedDays),
                 message: self.reminderMessage
             )
-            switch result {
-            case .success(let reminder):
-                self.currentReminder = reminder
-                self.state = .success
-            case .failure(let error):
-                self.state = .requestFailed(self.asAppError(error))
-            }
+            self.handleSaveOrUpdateResult(result)
         }
     }
 
@@ -133,16 +99,48 @@ final class ReminderViewModels {
         Task { [weak self] in
             guard let self else { return }
             let result = await self.usecases.deleteReminder(id: id)
-            switch result {
-            case .success:
-                self.currentReminder = nil
-                self.state = .deleted
-            case .failure(let error):
-                self.state = .requestFailed(self.asAppError(error))
-            }
+            self.handleDeleteResult(result)
         }
     }
     
+    private func handleLoadReminderResult(_ result: Result<[ReminderResponseEntity], Error>) {
+        switch result {
+        case .success(let reminders):
+            self.currentReminder = reminders.first
+            self.state = .success
+        case .failure(let error):
+            self.state = .requestFailed(self.asAppError(error))
+        }
+    }
+    
+    private func handleSaveOrUpdateResult(_ result: Result<ReminderResponseEntity, Error>) {
+        switch result {
+        case .success(let reminder):
+            self.currentReminder = reminder
+            self.state = .success
+        case .failure(let error):
+            self.state = .requestFailed(self.asAppError(error))
+        }
+    }
+
+    private func handleDeleteResult(_ result: Result<Void, Error>) {
+        switch result {
+        case .success:
+            self.currentReminder = nil
+            self.state = .deleted
+        case .failure(let error):
+            self.state = .requestFailed(self.asAppError(error))
+        }
+    }
+    
+    private func validateInput() -> Bool {
+        guard !selectedDays.isEmpty else {
+            state = .invalidInput(AppStrings.noDaysSelectedError.letters)
+            return false
+        }
+        return true
+    }
+
     private func asAppError(_ error: Error) -> AppError<ApiErrorEnvelope> {
         (error as? AppError<ApiErrorEnvelope>) ?? .unknown(error)
     }

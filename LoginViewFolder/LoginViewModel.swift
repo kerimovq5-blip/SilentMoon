@@ -17,24 +17,25 @@ enum LoginViewModelState {
     case requestFailed(AppError<ApiErrorEnvelope>)
 }
 
+@MainActor
 final class LoginViewModel {
     var email: String = ""
     var password: String = ""
-
+    
     private(set) var state: LoginViewModelState = .idle {
         didSet { onStateChange?() }
     }
     var onStateChange: (() -> Void)?
-
+    
     var onEmailNotVerified: ((_ email: String) -> Void)?
-
+    
     private let usecases: SilentMoonUseCases
-
+    
     init(usecases: SilentMoonUseCases ) {
         self.usecases = usecases
     }
-   
-
+    
+    
     func login() {
         if let message = FormValidator.validate([
             (email, [EmailRule()]),
@@ -45,24 +46,27 @@ final class LoginViewModel {
         }
         state = .loading
         
-        Task {[weak self ] in
-        guard let self  else { return}
+        Task {
             let result = await usecases.login(email: self.email, password: self.password)
             
-            switch result {
-            case .success:
-                self.state = .success
-            case .failure(let error):
-                let appError = self.asAppError(error)
-                if appError.backendCode == "EMAIL_NOT_VERIFIED" {
-                    self.onEmailNotVerified?(self.email)
-                } else {
-                    self.state = .requestFailed(appError)
-                }
+            handleLogin(result: result)
+        }
+    }
+    private func handleLogin(result: Result<AuthResponseEntity, Error>) {
+        switch result {
+        case .success:
+            self.state = .success
+        case .failure(let error):
+            let appError = self.asAppError(error)
+            if appError.backendCode == "EMAIL_NOT_VERIFIED" {
+                self.onEmailNotVerified?(self.email)
+            } else {
+                self.state = .requestFailed(appError)
+                
             }
         }
     }
-
+    
     private func asAppError(_ error: Error) -> AppError<ApiErrorEnvelope> {
         (error as? AppError<ApiErrorEnvelope>) ?? .unknown(error)
     }

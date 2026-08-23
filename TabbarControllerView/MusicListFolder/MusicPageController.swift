@@ -154,10 +154,17 @@ final class MusicPageController: UIViewController {
         navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         navigationController?.navigationBar.shadowImage = nil
     }
-
-    deinit {
+    
+    private func removeTimeObserver() {
         if let timeObserverToken {
             player?.removeTimeObserver(timeObserverToken)
+        }
+    }
+
+    deinit {
+        Task {
+            @MainActor [weak self] in
+            self?.removeTimeObserver()
         }
     }
 
@@ -273,10 +280,12 @@ final class MusicPageController: UIViewController {
 
         let interval = CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
         timeObserverToken = player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
-            guard let self, !self.isSeeking else { return }
-            let seconds = time.seconds
-            self.progressSlider.value = Float(seconds)
-            self.currentTimeLabel.text = self.formattedTime(seconds)
+            Task { @MainActor [weak self] in
+                guard let self, !self.isSeeking else { return }
+                let seconds = time.seconds
+                self.progressSlider.value = Float(seconds)
+                self.currentTimeLabel.text = self.formattedTime(seconds)
+            }
         }
 
         NotificationCenter.default.addObserver(

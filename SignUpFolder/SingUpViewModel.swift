@@ -17,6 +17,7 @@ enum SignUpViewModelState {
     case requestFailed(AppError<ApiErrorEnvelope>)
 }
 
+@MainActor
 final class SignUpViewModel {
 
     var name: String = ""
@@ -52,16 +53,19 @@ final class SignUpViewModel {
 
         state = .loading
         
-        Task { [weak self] in
-            guard let self else { return }
+        Task {
             let result = await usecases.register(name: self.name, email: self.email, password: self.password)
-            switch result {
-            case .success:
-                self.state = .success
-                self.onRegisterSucceeded?(self.email, self.name)
-            case .failure(let error):
-                self.state = .requestFailed(self.asAppError(error))
-            }
+            handleRegister(result: result)
+        }
+    }
+    
+    private func handleRegister(result: Result<RegisterResponseEntity, any Error>) {
+        switch result {
+        case .success:
+            self.state = .success
+            self.onRegisterSucceeded?(self.email, self.name)
+        case .failure(let error):
+            self.state = .requestFailed(self.asAppError(error))
         }
     }
     

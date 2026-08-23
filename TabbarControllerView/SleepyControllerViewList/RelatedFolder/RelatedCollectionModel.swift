@@ -5,13 +5,9 @@
 //  Created by Kerimov Qehreman on 29.07.26.
 //
 
-
-
-
 import UIKit
 
 struct RelatedCollectionModel : MeditateSectionData {
-    
     
     var image: UIImage?
     var title: String
@@ -21,7 +17,7 @@ struct RelatedCollectionModel : MeditateSectionData {
 }
 
 extension RelatedCollectionModel {
-    static var relatedData : [RelatedCollectionModel] = [
+    static let relatedData : [RelatedCollectionModel] = [
         .init(
             image: nil ,
             title: "Moon Clouds",

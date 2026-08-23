@@ -11,6 +11,7 @@ enum ChooseTopicViewModelState {
     case requestFailed(AppError<ApiErrorEnvelope>)
 }
 
+@MainActor
 final class ChooseTopicViewModel {
     
     private(set) var state: ChooseTopicViewModelState = .idle {
@@ -34,16 +35,19 @@ final class ChooseTopicViewModel {
             return
         }
         state = .loading
-        Task {  [weak self] in
-            guard let self else { return }
-            let result = await self.usecases.updateTopics(topicIds: topicIds)
-            switch result {
-            case .success:
-                self.state = .success
-            case .failure(let error):
-                let appError = self.asAppError(error)
-                self.state = .requestFailed(appError)
-            }
+        Task {
+            let result = await usecases.updateTopics(topicIds: topicIds)
+            handleChooseTopic(result: result)
+        }
+    }
+    
+    private func handleChooseTopic(result: Result<[ChooseTopicEntity], any Error>) {
+        switch result {
+        case .success:
+            self.state = .success
+        case .failure(let error):
+            let appError = self.asAppError(error)
+            self.state = .requestFailed(appError)
         }
     }
     

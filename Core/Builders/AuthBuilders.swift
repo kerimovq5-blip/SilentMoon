@@ -7,6 +7,7 @@
 
 import UIKit
 
+@MainActor
 enum AuthBuilders {
 
     static func facebookButton() -> AppButton {

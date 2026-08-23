@@ -51,7 +51,7 @@ final class SearchViewModel {
         }
 
         searchDebounceTimer = Timer.scheduledTimer(withTimeInterval: 0.4, repeats: false) { [weak self] _ in
-            Task { @MainActor in
+            Task { @MainActor [weak self] in
                 self?.performSearch(query: query)
             }
         }
@@ -62,10 +62,8 @@ final class SearchViewModel {
         let requestID = currentRequestID
         state = .loading
 
-        Task { [weak self] in
-            guard let self else { return }
-
-            let result = await self.usecases.search(
+        Task {
+            let result = await usecases.search(
                 query: query,
                 type: nil,
                 page: 1,
@@ -84,7 +82,7 @@ final class SearchViewModel {
             }
         }
     }
-
+    
     private func asAppError(_ error: Error) -> AppError<ApiErrorEnvelope> {
         (error as? AppError<ApiErrorEnvelope>) ?? .unknown(error)
     }

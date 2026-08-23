@@ -51,14 +51,16 @@ public final class OtpViewModel {
             state = .invalidInput("Zəhmət olmasa 6 rəqəmli kodu daxil edin.")
             return
         }
-
+        
         state = .verifying
         
-        Task { [weak self] in
-            guard let self else { return }
-
-            let result = await self.usecases.verifyEmail(email: self.email, otp: self.otp)
-
+        Task {
+            let result = await usecases.verifyEmail(email: email, otp: otp)
+            handleverify(result: result)
+            
+        }
+    }
+        private func handleverify(result: Result<AuthResponseEntity, Error>) {
             switch result {
             case .success:
                 self.state = .verifySucceeded
@@ -67,26 +69,27 @@ public final class OtpViewModel {
                 self.state = .verifyFailed(self.asAppError(error))
             }
         }
-    }
+    
+    
 
     public func resendOtp() {
         state = .resending
-        
-        Task { [weak self] in
-            guard let self else { return }
-
-            let result = await self.usecases.resendOtp(email: self.email)
-
-            switch result {
-            case .success(let response):
-                let message = response.message
-                self.state = .resendSucceeded(message)
-            case .failure(let error):
-                self.state = .resendFailed(self.asAppError(error))
-            }
+        Task {
+           
+            let result = await usecases.resendOtp(email: email)
+            handleResend(result: result)
+           
         }
     }
-
+private func handleResend(result: Result<ResendOtpResponseEntity, Error>) {
+    switch result {
+    case .success(let response):
+        let message = response.message
+        self.state = .resendSucceeded(message)
+    case .failure(let error):
+        self.state = .resendFailed(self.asAppError(error))
+    }
+}
     private func asAppError(_ error: Error) -> AppError<ApiErrorEnvelope> {
         (error as? AppError<ApiErrorEnvelope>) ?? .unknown(error)
     }

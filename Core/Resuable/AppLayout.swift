@@ -6,9 +6,9 @@
 //
 
 import CoreGraphics
+
+
 enum AppLayout: CGFloat {
- 
-    
  
     case smallSpacing  = 8
     case mediumSpacing = 16

@@ -11,32 +11,30 @@ enum Validator {
     }
 }
 
-final class FieldValidationController: NSObject {
+@MainActor
+final class FieldValidationController {
 
-    private weak var textField: UITextField?
+    private let textField: UITextField
     private let validator: (String) -> Bool
 
-    private lazy var checkButton: UIButton = {
+    private let checkButton: UIButton = {
         let button = UIButton(type: .custom)
         button.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
         return button
     }()
 
     var isValid: Bool {
-        guard let text = textField?.text else { return false }
+        guard let text = textField.text else { return false }
         return validator(text)
     }
 
     init(textField: UITextField, validator: @escaping (String) -> Bool) {
         self.textField = textField
         self.validator = validator
-        super.init()
         configure()
     }
 
     private func configure() {
-        guard let textField else { return }
-
         textField.layer.borderWidth = 2
         textField.layer.borderColor = AssetColors.lightGray.color.cgColor
 
@@ -50,14 +48,12 @@ final class FieldValidationController: NSObject {
     }
 
     func markSubmitAttempt() {
-        guard let textField else { return }
         textField.layer.borderColor = isValid
             ? UIColor.clear.cgColor
             : AssetColors.errorColor.color.cgColor
     }
 
     @objc private func textChanged() {
-        guard let textField else { return }
         let text = textField.text ?? ""
 
         guard !text.isEmpty else {
@@ -78,7 +74,6 @@ final class FieldValidationController: NSObject {
     }
 }
 
-@MainActor
 extension FieldValidationController {
 
     static func email(textField: UITextField) -> FieldValidationController {

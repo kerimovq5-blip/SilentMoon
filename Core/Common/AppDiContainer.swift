@@ -10,31 +10,30 @@ import SilentMoonData
 
 final public class AppDiContainer {
     public let networkManager: NetworkManager<ApiErrorEnvelope>
+    public let tokenStore: TokenStore
     public let repository: SilentMoonRepository
     public let usecases: SilentMoonUseCases
-    public let tokenStore: TokenStore
 
     public init(
         networkManager: NetworkManager<ApiErrorEnvelope>,
-        repository: SilentMoonRepository,
-        usecases: SilentMoonUseCases,
         tokenStore: TokenStore
     ) {
         self.networkManager = networkManager
-        self.repository = repository
-        self.usecases = usecases
         self.tokenStore = tokenStore
+
+        let repository = SilentMoonRepositoryImpl(
+            networkManager: networkManager,
+            tokenStore: tokenStore
+        )
+        self.repository = repository
+        self.usecases = UseCasesImplemantation(repository: repository)
     }
 
     public static func make() -> AppDiContainer {
         let dependencies = NetworkFactory.make()
-        let usecases = UseCasesImplemantation(repository: dependencies.apiService)
         return AppDiContainer(
             networkManager: dependencies.networkManager,
-            repository: dependencies.apiService ,
-            usecases: usecases,
             tokenStore: dependencies.tokenStore
         )
     }
-    
 }

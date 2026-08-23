@@ -10,7 +10,6 @@ import UIKit
 
 struct MeditateCollectionModels : MeditateSectionData {
     
-    
     var image: UIImage?
     var title: String
     var isSelected: Bool
@@ -18,7 +17,7 @@ struct MeditateCollectionModels : MeditateSectionData {
 }
 
 extension MeditateCollectionModels {
-    static var meditateData : [MeditateCollectionModels] = [
+    static let meditateData : [MeditateCollectionModels] = [
         .init(
             image: nil ,
             title: "7 Days of Calm",

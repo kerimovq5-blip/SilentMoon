@@ -7,7 +7,7 @@
       "location" : "https://github.com/kerimovq5-blip/SilentMoonData",
       "state" : {
         "branch" : "main",
-        "revision" : "37807cc58054fc4ec3b4ce126cd0283dff0eec2d"
+        "revision" : "af43a95a18bf926c686ceb828a38b0fc3a351657"
       }
     },
     {
@@ -16,7 +16,7 @@
       "location" : "https://github.com/kerimovq5-blip/SilentMoonDomain",
       "state" : {
         "branch" : "main",
-        "revision" : "ed86794bb09adf79f16a316b031cf650ce3a244b"
+        "revision" : "53a01f528e97b74cb31fd4f44c94d0ed4938c1dd"
       }
     },
     {

@@ -35,20 +35,22 @@ final class LoadingViewModel {
     func load() {
         loadTask?.cancel()
         state = .loading
-        loadTask = Task { [weak self] in
-            guard let self else { return }
+        loadTask = Task {
             let result = await self.action()
             guard !Task.isCancelled else { return }
-            switch result {
-            case .success:
-                self.state = .loaded
-            case .failure(let error):
-                let appError = self.asAppError(error)
-                if self.onError?(appError) == true {
-                    self.state = .idle
-                } else {
-                    self.state = .requestFailed(appError)
-                }
+            handleLoad(result: result)
+        }
+    }
+    private func handleLoad(result: Result<Void, Error>) {
+        switch result {
+        case .success:
+            self.state = .loaded
+        case .failure(let error):
+            let appError = self.asAppError(error)
+            if self.onError?(appError) == true {
+                self.state = .idle
+            } else {
+                self.state = .requestFailed(appError)
             }
         }
     }

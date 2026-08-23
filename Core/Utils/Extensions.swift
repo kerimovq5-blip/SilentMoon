@@ -10,7 +10,9 @@ import UIKit
 
 extension UIView {
     func addSubviews(_ views: UIView...) {
-        views.forEach(addSubview)
+   for v in views {
+            addSubview(v)
+        }
     }
     
     @discardableResult

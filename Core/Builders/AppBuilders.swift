@@ -7,6 +7,7 @@
 
 import UIKit
 
+@MainActor
 public enum AppBuilders {
     
     static func scrollableForm() -> (scrollView: UIScrollView, contentView: UIView) {
@@ -33,7 +34,7 @@ public enum AppBuilders {
         AppButton(
             title: AppStrings.saveButtonTitle.letters,
             backgroundColor: .accent,
-            titleColor: .buttonTitle,
+            titleColor: .buttonTitle
            
         )
     }
@@ -41,7 +42,7 @@ public enum AppBuilders {
         AppButton(
             title: AppStrings.continueButtonTitle.letters,
             backgroundColor: .accent,
-            titleColor: .buttonTitle,
+            titleColor: .buttonTitle
             
         )
     }
