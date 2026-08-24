@@ -8,12 +8,12 @@
 import UIKit
 
 final class SleepyStoryCell: UICollectionViewCell {
-    static let identifier: String = "SleepyStoryCell"
+    static let identifier = String(describing: SleepyStoryCell.self)
 
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = AppFonts.AppRaduis.buttonRadiusSmall
+        imageView.layer.cornerRadius = AppRadius.buttonRadiusSmall.radius
         imageView.clipsToBounds = true
         imageView.backgroundColor = .colorIndigo
         return imageView
@@ -22,18 +22,17 @@ final class SleepyStoryCell: UICollectionViewCell {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = AppFonts.semiBold.font
-        label.textColor = .buttonTitle
+        label.textColor = AssetColors.buttonTitle.color
         return label
     }()
 
     private lazy var durationItem: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .regular)
-        label.textColor = .textSecondary
+        label.font = AppFonts.regularBody.font
+        label.textColor = AssetColors.textSecondary.color
         label.numberOfLines = 1
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.8
-        
         return label
     }()
 
@@ -55,7 +54,6 @@ final class SleepyStoryCell: UICollectionViewCell {
     }
 
     private func setup() {
-        
         contentView.addSubviews(
             imageView,
             titleLabel,
@@ -65,21 +63,21 @@ final class SleepyStoryCell: UICollectionViewCell {
 
     private func setConstraint() {
         imageView
-                .top(contentView.topAnchor).0
-                .leading(contentView.leadingAnchor).0
-                .trailing(contentView.trailingAnchor).0
-                .height(120)
+            .top(contentView.topAnchor).0
+            .leading(contentView.leadingAnchor).0
+            .trailing(contentView.trailingAnchor).0
+            .height(AppLayout.storyCellImageHeight.value)
 
-            titleLabel
-                .top(imageView.bottomAnchor, 10).0
-                .leading(contentView.leadingAnchor).0
-                .trailing(contentView.trailingAnchor, -12)
+        titleLabel
+            .top(imageView.bottomAnchor, AppLayout.cellTitleTopSpacing.value).0
+            .leading(contentView.leadingAnchor).0
+            .trailing(contentView.trailingAnchor, -AppLayout.mediumSpacing.value)
 
         durationItem
-            .top(titleLabel.bottomAnchor, 4).0
-            .leading(contentView.leadingAnchor, 2).0
+            .top(titleLabel.bottomAnchor, AppLayout.cellSubtitleTopSpacing.value).0
+            .leading(contentView.leadingAnchor, AppLayout.cellSmallMargin.value).0
             .trailing(contentView.trailingAnchor).0
-            .bottom(contentView.bottomAnchor, -4)
+            .bottom(contentView.bottomAnchor, -AppLayout.cellSubtitleTopSpacing.value)
     }
 
     func configure(with item: SleepyStoryModels) {

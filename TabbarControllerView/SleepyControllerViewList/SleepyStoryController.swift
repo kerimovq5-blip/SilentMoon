@@ -73,7 +73,7 @@ final class SleepyStoryController: UIViewController {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
         view.clipsToBounds = true
-        view.layer.cornerRadius = AppFonts.AppRaduis.buttonRadiusSmall
+        view.layer.cornerRadius = AppRadius.buttonRadiusSmall.radius
         view.backgroundColor = .colorIndigo
         view.isUserInteractionEnabled = true
         return view
@@ -106,7 +106,7 @@ final class SleepyStoryController: UIViewController {
         button.setTitle(AppStrings.startButtonTitle.letters, for: .normal)
         button.titleLabel?.font = AppFonts.litletitle.font
         button.titleLabel?.textAlignment = .center
-        button.layer.cornerRadius = AppFonts.AppRaduis.buttonRadiusSmall
+        button.layer.cornerRadius = AppRadius.buttonRadiusSmall.radius
         button.backgroundColor = .white
         button.tintColor = .black
         button.addAction(UIAction { [weak self] _ in
@@ -199,17 +199,17 @@ final class SleepyStoryController: UIViewController {
             .top(sleepyStoryLabel.bottomAnchor, AppLayout.spacing.value).0
             .leading(contentView.leadingAnchor).0
             .trailing(contentView.trailingAnchor).0
-            .height(100)
+            .height(AppLayout.sectionCollectionViewHeight.value)
             
         oceanStartButton
-            .height(35).0
-            .width(70)
+            .height(AppLayout.oceanButtonHeight.value).0
+            .width(AppLayout.oceanButtonWidth.value)
             
         theOceanMoon
             .top(sectionCollectionView.bottomAnchor, AppLayout.spacing.value).0
             .leading(contentView.leadingAnchor, AppLayout.spacing.value).0
             .trailing(contentView.trailingAnchor, -AppLayout.spacing.value).0
-            .height(235)
+            .height(AppLayout.oceanMoonHeight.value)
         
         mainStackView
             .top(theOceanMoon.topAnchor, AppLayout.spacing.value).0
@@ -222,6 +222,7 @@ final class SleepyStoryController: UIViewController {
             .leading(contentView.leadingAnchor, AppLayout.spacing.value).0
             .trailing(contentView.trailingAnchor, -AppLayout.spacing.value).0
             .bottom(contentView.bottomAnchor, -AppLayout.spacing.value)
+            
     }
 
     override func viewDidLayoutSubviews() {

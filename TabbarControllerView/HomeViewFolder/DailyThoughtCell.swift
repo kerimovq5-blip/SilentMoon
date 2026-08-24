@@ -34,7 +34,7 @@ private lazy var imageView: UIImageView = {
         let button = UIButton(type: .system)
         button.backgroundColor = .white
         button.tintColor = .textPrimary
-        button.layer.cornerRadius = AppFonts.AppRaduis.buttonRadiusMedium
+        button.layer.cornerRadius = AppRadius.buttonRadiusMedium.radius
         button.setImage(UIImage(systemName: "play.fill"), for: .normal)
         button.isUserInteractionEnabled = false
         return button
@@ -61,7 +61,7 @@ private lazy var imageView: UIImageView = {
 
     private func setupHierarchy() {
         contentView.clipsToBounds = true
-        contentView.layer.cornerRadius = AppFonts.AppRaduis.buttonRadiusSmall
+        contentView.layer.cornerRadius = AppRadius.buttonRadiusSmall.radius
         
         
         contentView.addSubviews(

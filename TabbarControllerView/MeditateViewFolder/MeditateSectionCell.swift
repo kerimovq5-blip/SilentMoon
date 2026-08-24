@@ -22,7 +22,7 @@ final class MeditateSectionCell: UICollectionViewCell {
         let view = UIImageView()
         view.contentMode = .center
         view.clipsToBounds = true
-        view.layer.cornerRadius = AppFonts.AppRaduis.buttonRadiusLarge
+        view.layer.cornerRadius = AppRadius.buttonRadiusLarge.radius
         return view
     }()
     

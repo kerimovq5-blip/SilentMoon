@@ -16,7 +16,7 @@ final class MeditateCollectionCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = AppFonts.AppRaduis.buttonRadiusSmall
+        imageView.layer.cornerRadius = AppRadius.buttonRadiusSmall.radius
         imageView.backgroundColor = .colorIndigo
         return imageView
     }()
@@ -33,7 +33,7 @@ final class MeditateCollectionCell: UICollectionViewCell {
         let view = UIView()
         view.isUserInteractionEnabled = false
         view.backgroundColor = .clear
-        view.layer.cornerRadius = AppFonts.AppRaduis.buttonRadiusSmall
+        view.layer.cornerRadius = AppRadius.buttonRadiusSmall.radius
         view.layer.borderWidth = 3
         view.layer.borderColor = UIColor.clear.cgColor
         return view

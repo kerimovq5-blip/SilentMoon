@@ -7,7 +7,7 @@ final class AppButton: UIView {
     private enum Layout {
         static let imageSpacing: CGFloat = 8
         static let borderWidth: CGFloat = 1
-        static let cornerRadius = AppFonts.AppRaduis.buttonRadius
+        static let cornerRadius = AppRadius.buttonRadius.radius
     }
 
     private lazy var mainButton: UIButton = {

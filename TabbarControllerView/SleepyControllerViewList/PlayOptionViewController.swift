@@ -56,7 +56,7 @@ final class PlayOptionViewController: UIViewController {
         return view
     }()
     
-    private lazy var favoritelabel: UILabel = {
+    private lazy var favoriteLabel: UILabel = {
         let label = UILabel()
         label.text = AppStrings.favoritesCount.letters
         label.font = AppFonts.body.font
@@ -64,10 +64,10 @@ final class PlayOptionViewController: UIViewController {
         return label
     }()
     
-    private lazy var leftstackView: UIStackView = {
-        let leftStack = UIStackView(arrangedSubviews: [favoriteImageView, favoritelabel])
+    private lazy var leftStackView: UIStackView = {
+        let leftStack = UIStackView(arrangedSubviews: [favoriteImageView, favoriteLabel])
         leftStack.axis = .horizontal
-        leftStack.spacing = 10
+        leftStack.spacing = AppLayout.stackSpacing.value
         leftStack.alignment = .center
         return leftStack
     }()
@@ -91,7 +91,7 @@ final class PlayOptionViewController: UIViewController {
     private lazy var rightStackView: UIStackView = {
         let rightStack = UIStackView(arrangedSubviews: [headPhonesView, headPhonesLabel])
         rightStack.axis = .horizontal
-        rightStack.spacing = 10
+        rightStack.spacing = AppLayout.stackSpacing.value
         rightStack.alignment = .center
         return rightStack
     }()
@@ -134,7 +134,7 @@ final class PlayOptionViewController: UIViewController {
         view.addSubviews(
             playOptionView,
             descriptionLabel,
-            leftstackView,
+            leftStackView,
             rightStackView,
             tabSeparatorLine,
             collectionView
@@ -146,26 +146,26 @@ final class PlayOptionViewController: UIViewController {
             .top(view.topAnchor).0
             .leading(view.leadingAnchor).0
             .trailing(view.trailingAnchor).0
-            .height(300)
+            .height(AppLayout.playOptionHeaderHeight.value)
         
         descriptionLabel
             .top(playOptionView.bottomAnchor, AppLayout.spacing.value).0
             .leading(view.leadingAnchor, AppLayout.spacing.value).0
             .trailing(view.trailingAnchor, -AppLayout.spacing.value)
         
-        leftstackView
+        leftStackView
             .top(descriptionLabel.bottomAnchor, AppLayout.xLargeSpacing.value).0
             .leading(view.leadingAnchor, AppLayout.spacing.value)
         
         rightStackView
             .top(descriptionLabel.bottomAnchor, AppLayout.xLargeSpacing.value).0
-            .leading(leftstackView.trailingAnchor, AppLayout.largeSpacing.value)
+            .leading(leftStackView.trailingAnchor, AppLayout.largeSpacing.value)
         
         tabSeparatorLine
             .top(rightStackView.bottomAnchor, AppLayout.spacing.value).0
             .leading(view.leadingAnchor).0
             .trailing(view.trailingAnchor).0
-            .height(1)
+            .height(AppLayout.separatorHeight.value)
             
         collectionView
             .top(tabSeparatorLine.bottomAnchor, AppLayout.spacing.value).0
@@ -177,14 +177,13 @@ final class PlayOptionViewController: UIViewController {
     private func makeLayout() -> UICollectionViewCompositionalLayout {
         return UICollectionViewCompositionalLayout { _, _ in
             ComposinalLayoutBuilder.horizontalCarousel(
-                itemSize: CGSize(width: 165, height: 170),
+                itemSize: CGSize(
+                    width: AppLayout.relatedCardWidth.value,
+                    height: AppLayout.rightCardHeight.value
+                ),
                 hasHeader: true
             )
         }
-    }
-    
-    private func openMusicPage(for item: CourseSessionItem) {
-        coordinator?.showMusicPage(item: item.title)
     }
 }
 
@@ -202,6 +201,12 @@ extension PlayOptionViewController: UICollectionViewDataSource, UICollectionView
         }
         cell.configure(with: relatedData[indexPath.item])
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        let item = relatedData[indexPath.item]
+        coordinator?.showMusicPage(item: item.title)
     }
     
     func collectionView(

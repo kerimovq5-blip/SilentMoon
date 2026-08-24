@@ -139,7 +139,7 @@ final class GetStartedController: UIViewController {
             .bottom(descriptionLabel.topAnchor, -AppLayout.spacing.value).0
             .leading(view.leadingAnchor, AppLayout.largeSpacing.value).0
             .trailing(view.trailingAnchor, -AppLayout.largeSpacing.value).0
-            .height(AppLayout.labelHeight.rawValue)
+            .height(AppLayout.labelHeight.value)
     }
     
     private func setupLayout() {

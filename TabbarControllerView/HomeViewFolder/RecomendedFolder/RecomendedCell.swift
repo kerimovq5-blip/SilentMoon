@@ -13,7 +13,7 @@ final class RecomendedCell: UICollectionViewCell {
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = AppFonts.AppRaduis.buttonRadiusLarge
+        imageView.layer.cornerRadius = AppRadius.buttonRadiusLarge.radius
         imageView.clipsToBounds = true
         imageView.backgroundColor = .colorIndigo
         return imageView

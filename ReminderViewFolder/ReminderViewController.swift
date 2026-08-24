@@ -49,7 +49,7 @@ final class ReminderViewController: UIViewController {
         datePicker.datePickerMode = .time
         datePicker.preferredDatePickerStyle = .wheels
         datePicker.backgroundColor = .datepicker
-        datePicker.layer.cornerRadius = AppFonts.AppRaduis.buttonRadiusMedium
+        datePicker.layer.cornerRadius = AppRadius.buttonRadiusMedium.radius
         datePicker.clipsToBounds = true
         return datePicker
     }()

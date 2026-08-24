@@ -40,7 +40,7 @@ final class CoursesCardCell: UICollectionViewCell {
         let button = UIButton(type: .system)
         button.setTitle("START", for: .normal)
         button.titleLabel?.font = AppFonts.litletitle.font
-        button.layer.cornerRadius = AppFonts.AppRaduis.buttonRadiusSmall
+        button.layer.cornerRadius = AppRadius.buttonRadiusSmall.radius
         button.titleLabel?.textAlignment = .center
         button.addTarget(self, action: #selector(didTapStartButton), for: .touchUpInside)
         return button
@@ -66,7 +66,7 @@ final class CoursesCardCell: UICollectionViewCell {
     }
 
     private func setupHierarchy() {
-        contentView.layer.cornerRadius = AppFonts.AppRaduis.buttonRadiusMedium
+        contentView.layer.cornerRadius = AppRadius.buttonRadiusMedium.radius
         contentView.clipsToBounds = true
         contentView.addSubviews(
             illustrationView,

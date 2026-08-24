@@ -13,7 +13,7 @@ final class MusicListViewCell: UITableViewCell {
     internal  lazy var imageview: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = AppFonts.AppRaduis.buttonRadius
+        imageView.layer.cornerRadius = AppRadius.buttonRadius.radius
         imageView.clipsToBounds = true
         imageView.backgroundColor = .colorIndigo
         return imageView

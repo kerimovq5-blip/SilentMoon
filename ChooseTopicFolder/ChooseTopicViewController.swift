@@ -1,7 +1,6 @@
 import UIKit
 
 final class ChooseTopicViewController: UIViewController {
-    private let topicItemHeight: CGFloat = 260
     
     var coordinator: AuthCoordinator?
     private let viewModel: ChooseTopicViewModel

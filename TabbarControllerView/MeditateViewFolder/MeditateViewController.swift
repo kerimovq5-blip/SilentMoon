@@ -53,7 +53,7 @@ final class MeditateViewController: UIViewController {
         view.contentMode = .scaleAspectFit
        // view.image = UIImage(named: "daily-calm")
         view.clipsToBounds = true
-        view.layer.cornerRadius = AppFonts.AppRaduis.buttonRadiusSmall
+        view.layer.cornerRadius = AppRadius.buttonRadiusSmall.radius
         view.backgroundColor = .colorIndigo
         return view
     }()
