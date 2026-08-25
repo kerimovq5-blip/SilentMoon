@@ -68,18 +68,21 @@ final class RecomendedCell: UICollectionViewCell {
                 .top(contentView.topAnchor).0
                 .leading(contentView.leadingAnchor).0
                 .trailing(contentView.trailingAnchor).0
-                .height(120)
+                .height(AppLayout.storyCellImageHeight.value)
 
             titleLabel
-                .top(imageView.bottomAnchor, 10).0
+            .top(imageView.bottomAnchor, AppLayout.cellTitleTopSpacing.value).0
                 .leading(contentView.leadingAnchor).0
                 .trailing(contentView.trailingAnchor, -12)
 
             durationLabel
-            .top(titleLabel.bottomAnchor, 4).0
-            .leading(contentView.leadingAnchor, 2).0
-            .trailing(contentView.trailingAnchor, -2).0
-            .bottom(contentView.bottomAnchor, -4)
+            .top(titleLabel.bottomAnchor, AppLayout.cellSubtitleTopSpacing.value).0
+            .leading(contentView.leadingAnchor, AppLayout.cellSmallMargin.value).0
+                .trailing(
+                    contentView.trailingAnchor,
+                    -AppLayout.cellSmallMargin.value
+                ).0
+            .bottom(contentView.bottomAnchor, -AppLayout.cellSubtitleTopSpacing.value)
     }
 
     func configure(with item: RecommendedItem) {

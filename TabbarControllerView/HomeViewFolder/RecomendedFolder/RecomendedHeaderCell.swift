@@ -26,7 +26,7 @@ final class SectionHeaderCell: UICollectionReusableView {
                 .top(topAnchor).0
                 .leading(leadingAnchor).0
                 .trailing(trailingAnchor).0
-                .bottom(bottomAnchor , -10)
+                .bottom(bottomAnchor , -AppLayout.cellTitleTopSpacing.value)
         }
      
         required init?(coder: NSCoder) {

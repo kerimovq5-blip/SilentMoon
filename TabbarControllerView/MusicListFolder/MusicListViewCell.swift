@@ -28,7 +28,7 @@ final class MusicListViewCell: UITableViewCell {
 
     private lazy var durationItem: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .regular)
+        label.font = AppFonts.regularBody.font
         label.textColor = .textSecondary
         label.numberOfLines = 0
         label.adjustsFontSizeToFitWidth = true

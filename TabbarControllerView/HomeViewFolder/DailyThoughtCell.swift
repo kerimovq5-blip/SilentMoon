@@ -83,15 +83,18 @@ private lazy var imageView: UIImageView = {
             .centerY(imageView.centerYAnchor).0
             .trailing(imageView.trailingAnchor, -AppLayout.spacing.value).0
             .width(40).0
-            .height(40)
+            .height(AppLayout.secondaryButtonHeight.value)
 
         titleLabel
             .leading(imageView.leadingAnchor, AppLayout.spacing.value).0
             .trailing(playButton.leadingAnchor, -AppLayout.spacing.value).0
-            .centerY(imageView.centerYAnchor, -10)
+            .centerY(
+                imageView.centerYAnchor,
+                -AppLayout.cellTitleTopSpacing.value
+            )
 
         descriptionLabel
-            .top(titleLabel.bottomAnchor, 2).0
+            .top(titleLabel.bottomAnchor, AppLayout.cellSmallMargin.value).0
             .leading(imageView.leadingAnchor, AppLayout.spacing.value)
     }
 

@@ -86,8 +86,8 @@ final class CoursesCardCell: UICollectionViewCell {
         startButton
             .bottom(contentView.bottomAnchor, -AppLayout.spacing.value).0
             .trailing(contentView.trailingAnchor, -AppLayout.spacing.value).0
-            .height(35).0
-            .width(70)
+            .height(AppLayout.oceanButtonHeight.value).0
+            .width(AppLayout.oceanButtonWidth.value)
 
         durationLabel
             .centerY(startButton.centerYAnchor).0
@@ -99,7 +99,7 @@ final class CoursesCardCell: UICollectionViewCell {
             .trailing(contentView.trailingAnchor, -AppLayout.spacing.value)
 
         categoryLabel
-            .top(titleLabel.bottomAnchor, 2).0
+            .top(titleLabel.bottomAnchor, AppLayout.cellSmallMargin.value).0
             .leading(contentView.leadingAnchor, AppLayout.spacing.value).0
             .trailing(contentView.trailingAnchor, -AppLayout.spacing.value)
     }

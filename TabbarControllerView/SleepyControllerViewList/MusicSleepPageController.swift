@@ -131,7 +131,7 @@ final class MusicSleepPageController: UIViewController {
 
     private lazy var currentTimeLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: AppLayout.timeLabelFontSize.value, weight: .medium)
+        label.font = AppFonts.mediumTitle.font
         label.textColor = AssetColors.buttonTitle.color
         label.text = "00:00"
         return label
@@ -139,7 +139,7 @@ final class MusicSleepPageController: UIViewController {
 
     private lazy var totalTimeLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: AppLayout.timeLabelFontSize.value, weight: .medium)
+        label.font = AppFonts.mediumTitle.font
         label.textColor = AssetColors.buttonTitle.color
         label.text = formattedTime(totalDuration)
         return label

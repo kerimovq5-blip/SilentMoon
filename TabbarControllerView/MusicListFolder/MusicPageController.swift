@@ -32,11 +32,15 @@ final class MusicPageController: UIViewController {
 
     private lazy var closeButton: UIBarButtonItem = {
         let button = UIButton(type: .system)
-        button.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
+        button.frame = CGRect(
+            x: 0,
+            y: 0,
+            width: AppLayout.actionButtonSize.value,
+            height: AppLayout.actionButtonSize.value
+        )
         button.setImage(UIImage(systemName: "xmark"), for: .normal)
         button.tintColor = AssetColors.textPrimary.color
-        button.backgroundColor = .white
-        button.layer.cornerRadius = 22
+        button.layer.cornerRadius = AppLayout.actionButtonRadius.value
         button.addAction(UIAction { [weak self] _ in
             self?.closeTapped()
         }, for: .touchUpInside)
@@ -45,20 +49,29 @@ final class MusicPageController: UIViewController {
 
     private lazy var favoriteButton: UIBarButtonItem = {
         let button = UIButton(type: .system)
-        button.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
+        button.frame = CGRect(
+            x: 0,
+            y: 0,
+            width: AppLayout.actionButtonSize.value,
+            height: AppLayout.actionButtonSize.value
+        )
         button.setImage(UIImage(systemName: "heart"), for: .normal)
         button.tintColor = AssetColors.textSecondary.color
-        button.backgroundColor = UIColor.textSecondary.withAlphaComponent(0.15)
-        button.layer.cornerRadius = 22
+        button.layer.cornerRadius = AppLayout.actionButtonRadius.value
         button.addAction(UIAction { [weak self] _ in
             self?.favoriteTapped()
         }, for: .touchUpInside)
         return UIBarButtonItem(customView: button)
     }()
 
+
     private lazy var downloadButton: UIBarButtonItem = {
         let button = UIButton(type: .system)
-        button.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
+        button.frame = CGRect(
+            x: 0,
+            y: 0,
+            width: AppLayout.actionButtonSize.value,
+            height: AppLayout.actionButtonSize.value)
         button.setImage(UIImage(systemName: "arrow.down.to.line"), for: .normal)
         button.tintColor = AssetColors.textSecondary.color
         button.backgroundColor = UIColor.textSecondary.withAlphaComponent(0.15)
@@ -73,7 +86,7 @@ final class MusicPageController: UIViewController {
         button.setImage(UIImage(systemName: "gobackward.15"), for: .normal)
         button.tintColor = AssetColors.textSecondary.color
         button.addAction(UIAction { [weak self] _ in
-            self?.seek(by: -15)
+            self?.seek(by: -AppLayout.seekInterval.value)
         }, for: .touchUpInside)
         return button
     }()
@@ -83,7 +96,7 @@ final class MusicPageController: UIViewController {
         button.setImage(UIImage(systemName: "goforward.15"), for: .normal)
         button.tintColor = AssetColors.textSecondary.color
         button.addAction(UIAction { [weak self] _ in
-            self?.seek(by: 15)
+            self?.seek(by: AppLayout.seekInterval.value)
         }, for: .touchUpInside)
         return button
     }()
@@ -91,9 +104,9 @@ final class MusicPageController: UIViewController {
     private lazy var playPauseButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "play.fill"), for: .normal)
-        button.tintColor = .white
-        button.backgroundColor = AssetColors.textPrimary.color
-        button.layer.cornerRadius = 40
+        button.tintColor = AssetColors.textPrimary.color
+        button.backgroundColor = AssetColors.buttonTitle.color
+        button.layer.cornerRadius = AppLayout.playButtonRadius.value
         button.addAction(UIAction { [weak self] _ in
             self?.playPauseTapped()
         }, for: .touchUpInside)
@@ -120,7 +133,7 @@ final class MusicPageController: UIViewController {
 
     private lazy var currentTimeLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 13, weight: .medium)
+        label.font = AppFonts.mediumTitle.font
         label.textColor = AssetColors.textPrimary.color
         label.text = "00:00"
         return label
@@ -128,7 +141,7 @@ final class MusicPageController: UIViewController {
 
     private lazy var totalTimeLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 13, weight: .medium)
+        label.font = AppFonts.mediumTitle.font
         label.textColor = AssetColors.textPrimary.color
         label.text = formattedTime(totalDuration)
         return label
@@ -220,39 +233,39 @@ final class MusicPageController: UIViewController {
         daysLabel
             .centerX(view.centerXAnchor).0
             .centerY(view.centerYAnchor).0
-            .leading(view.leadingAnchor, 20).0
-            .trailing(view.trailingAnchor, -20)
+            .leading(view.leadingAnchor, AppLayout.spacing.value).0
+            .trailing(view.trailingAnchor, -AppLayout.spacing.value)
 
         controlsStack
-            .bottom(progressSlider.topAnchor, -60).0
+            .bottom(progressSlider.topAnchor, -AppLayout.controlsBottomSpacing.value).0
             .centerX(view.centerXAnchor).0
-            .leading(view.leadingAnchor, 40).0
-            .trailing(view.trailingAnchor, -40)
+            .leading(view.leadingAnchor, AppLayout.xLargeSpacing.value).0
+            .trailing(view.trailingAnchor, -AppLayout.xLargeSpacing.value)
 
         playPauseButton
-            .width(80).0
-            .height(80)
+            .width(AppLayout.playButtonSize.value).0
+            .height(AppLayout.playButtonSize.value)
 
         back15Button
-            .width(44).0
-            .height(44)
+            .width(AppLayout.actionButtonSize.value).0
+            .height(AppLayout.actionButtonSize.value)
 
         forward15Button
-            .width(44).0
-            .height(44)
+            .width(AppLayout.actionButtonSize.value).0
+            .height(AppLayout.actionButtonSize.value)
 
         progressSlider
-            .bottom(currentTimeLabel.topAnchor, -8).0
-            .leading(view.leadingAnchor, 20).0
-            .trailing(view.trailingAnchor, -20)
+            .bottom(currentTimeLabel.topAnchor, -AppLayout.smallSpacing.value).0
+            .leading(view.leadingAnchor, AppLayout.spacing.value).0
+            .trailing(view.trailingAnchor, -AppLayout.spacing.value)
 
         currentTimeLabel
-            .bottom(view.safeAreaLayoutGuide.bottomAnchor, -24).0
-            .leading(view.leadingAnchor, 20)
+            .bottom(view.safeAreaLayoutGuide.bottomAnchor, -AppLayout.defaultPadding.value).0
+            .leading(view.leadingAnchor, AppLayout.spacing.value)
 
         totalTimeLabel
-            .bottom(view.safeAreaLayoutGuide.bottomAnchor, -24).0
-            .trailing(view.trailingAnchor, -20)
+            .bottom(view.safeAreaLayoutGuide.bottomAnchor, -AppLayout.defaultPadding.value).0
+            .trailing(view.trailingAnchor, -AppLayout.spacing.value)
     }
 
     private func configurePlayer() {

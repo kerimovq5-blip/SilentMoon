@@ -71,7 +71,7 @@ final class CoursesDetailViewController: UIViewController {
     }()
     private lazy var favoritelabel : UILabel = {
         let label = UILabel()
-        label.text = "24.234 Favorits"
+        label.text = AppStrings.favoritesCount.letters
         label.font = AppFonts.body.font
         label.textColor = AssetColors.textSecondary.color
         return label
@@ -79,7 +79,7 @@ final class CoursesDetailViewController: UIViewController {
     private lazy var leftstackView : UIStackView = {
         let leftStack = UIStackView(arrangedSubviews: [favoriteImageView,favoritelabel])
         leftStack.axis = .horizontal
-        leftStack.spacing = 10
+        leftStack.spacing = AppLayout.stackSpacing.value
         leftStack.alignment = .center
         return leftStack
     }()
@@ -92,7 +92,7 @@ final class CoursesDetailViewController: UIViewController {
     }()
     private lazy var headPhonesLabel : UILabel = {
         let label = UILabel()
-        label.text = "34.234 Listening"
+        label.text = AppStrings.listeningCount.letters
         label.font = AppFonts.body.font
         label.textColor = AssetColors.textSecondary.color
         return label
@@ -100,7 +100,7 @@ final class CoursesDetailViewController: UIViewController {
     private lazy var rightStackView : UIStackView = {
         let rightStack = UIStackView(arrangedSubviews: [headPhonesView,headPhonesLabel])
         rightStack.axis = .horizontal
-        rightStack.spacing = 10
+        rightStack.spacing = AppLayout.stackSpacing.value
         rightStack.alignment = .center
         return rightStack
     }()

@@ -59,6 +59,7 @@ enum AppFonts {
     case regularBody
     case litletitle
     case semiBold
+    case mediumTitle
     var font: UIFont {
         switch self {
         case .title:
@@ -75,6 +76,8 @@ enum AppFonts {
             return UIFont.systemFont(ofSize: 12, weight: .regular)
         case .semiBold:
             return UIFont.systemFont(ofSize: 18, weight: .semibold)
+        case .mediumTitle :
+            return UIFont.systemFont(ofSize: 13, weight: .medium)
         }
     }
 }
@@ -83,6 +86,7 @@ enum AppRadius{
         case buttonRadiusSmall
         case buttonRadiusMedium
         case buttonRadiusLarge
+        case sessionPlayButtonRadius
         var radius: CGFloat {
             
             switch self {
@@ -92,7 +96,7 @@ enum AppRadius{
                 return 16
             case .buttonRadiusMedium:
                 return 20
-            case .buttonRadiusLarge:
+            case .buttonRadiusLarge , .sessionPlayButtonRadius:
                 return 25
             }
         }

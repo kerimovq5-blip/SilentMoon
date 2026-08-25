@@ -135,7 +135,7 @@ final class MusicListViewController: UIViewController {
             .leading(headerContainerView.leadingAnchor, AppLayout.spacing.value).0
             .trailing(headerContainerView.trailingAnchor, -AppLayout.spacing.value).0
             .bottom(headerContainerView.bottomAnchor, -AppLayout.spacing.value).0
-            .height(40)
+            .height(AppLayout.secondaryButtonHeight.value)
 
         headerContainerView.setNeedsLayout()
         headerContainerView.layoutIfNeeded()

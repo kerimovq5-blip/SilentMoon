@@ -46,19 +46,27 @@ enum AppLayout {
     case seekInterval
     case defaultPadding
     
+    case heroHeaderHeight
+    case sessionPlayButtonSize
+    case sessionIconSize
+    case sessionDurationFontSize
+    case tabHeight
+    case thinDividerHeight
+    case sessionTextSpacing
+    
     var value: CGFloat {
         switch self {
         case .smallSpacing: return 8
-        case .mediumSpacing: return 16
+        case .mediumSpacing , .sessionIconSize: return 16
         case .spacing: return 20
         case .largeSpacing: return 30
         case .xLargeSpacing , .playButtonRadius , .secondaryButtonHeight: return 40
         case .cellTitleTopSpacing , .stackSpacing : return 10
-        case .cellSubtitleTopSpacing: return 4
+        case .cellSubtitleTopSpacing , .sessionTextSpacing: return 4
         case .cellSmallMargin: return 2
         case .textFieldHeight: return 65
         case .buttonHeight , .controlsBottomSpacing: return 60
-        case .buttonHeight2, .logoHeight: return 50
+        case .buttonHeight2, .logoHeight , .sessionPlayButtonSize: return 50
         case .labelHeight: return 102
         case .titleHeight: return 110
         case .leftCardHeight: return 210
@@ -73,9 +81,9 @@ enum AppLayout {
         case .oceanButtonWidth: return 70
         case .sectionInsetLeft: return 10
         case .storyCellImageHeight: return 120
-        case .playOptionHeaderHeight: return 300
+        case .playOptionHeaderHeight , .heroHeaderHeight: return 300
         case .relatedCardWidth: return 165
-        case .separatorHeight: return 1
+        case .separatorHeight , .thinDividerHeight: return 1
             
         case .playButtonSize: return 80
         case .actionButtonSize: return 44
@@ -83,6 +91,9 @@ enum AppLayout {
         case .timeLabelFontSize: return 13
         case .seekInterval: return 15
         case .defaultPadding: return 24
+        case .sessionDurationFontSize: return 14
+        case .tabHeight:
+            return 30
         }
     }
 }
