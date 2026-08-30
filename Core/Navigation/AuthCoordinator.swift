@@ -6,11 +6,11 @@ final class AuthCoordinator: Coordinator, ContentNavigating {
     var navigationController: UINavigationController
     var onFlowFinished: (() -> Void)?
 
-    private let usecases: SilentMoonUseCases
+    private let usecases: AuthUseCases
 
     init(
         navigationController: UINavigationController,
-        usecases: SilentMoonUseCases
+        usecases: AuthUseCases
     ) {
         self.navigationController = navigationController
         self.usecases = usecases
@@ -54,7 +54,7 @@ final class AuthCoordinator: Coordinator, ContentNavigating {
 
     func showTopics() {
         let viewModel = ChooseTopicViewModel(
-            usecases: usecases
+            usecases: usecases as! TopicsUseCases
         )
         let controller = ChooseTopicViewController(viewModel: viewModel)
         controller.coordinator = self
@@ -65,7 +65,9 @@ final class AuthCoordinator: Coordinator, ContentNavigating {
         )
     }
     func showReminder() {
-          let stateModel = ReminderViewModels(usecases: usecases)
+        let stateModel = ReminderViewModels(
+            usecases: usecases as! ReminderUseCases
+        )
           let controller = ReminderViewController(stateModel: stateModel)
           controller.coordinator = self
           navigationController.pushViewController(controller, animated: true)
@@ -106,7 +108,7 @@ final class AuthCoordinator: Coordinator, ContentNavigating {
     }
 
     func showSearchPage() {
-        let viewModel = SearchViewModel(usecases: usecases)
+        let viewModel = SearchViewModel(usecases: usecases as! SearchUseCases)
         let controller = SearchPageController(viewModel: viewModel)
         controller.coordinator = self
         navigationController.pushViewController(controller, animated: true)

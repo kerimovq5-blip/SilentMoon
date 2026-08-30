@@ -132,7 +132,9 @@ extension MainTabBarCoordinator: ContentNavigating {
     }
 
     func showSearchPage() {
-        let viewModel = SearchViewModel(usecases: UseCasesImplemantation(repository: repository))
+        let viewModel = SearchViewModel(
+            usecases: SearchUseCaseImpl(repository: repository)
+        )
         let controller = SearchPageController(viewModel: viewModel)
         controller.coordinator = self
         activeNavigationController?.pushViewController(controller, animated: true)

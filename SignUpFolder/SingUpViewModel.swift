@@ -28,12 +28,13 @@ final class SignUpViewModel {
     private(set) var state: SignUpViewModelState = .idle {
         didSet { onStateChange?() }
     }
+    
     var onStateChange: (() -> Void)?
     var onRegisterSucceeded: ((_ email: String, _ name: String) -> Void)?
 
-    private let usecases: SilentMoonUseCases
+    private let usecases: AuthUseCases
 
-    init(usecases: SilentMoonUseCases) {
+    init (usecases: AuthUseCases) {
         self.usecases = usecases
     }
 

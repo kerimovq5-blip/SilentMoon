@@ -32,11 +32,11 @@ final class SearchViewModel {
     var onStateChange: (() -> Void)?
     var onResultsChange: (() -> Void)?
 
-    private let usecases: SilentMoonUseCases
+    private let usecases: SearchUseCases
     private var currentRequestID = 0
     private var searchDebounceTimer: Timer?
 
-    init(usecases: SilentMoonUseCases) {
+    init(usecases: SearchUseCases) {
         self.usecases = usecases
     }
 

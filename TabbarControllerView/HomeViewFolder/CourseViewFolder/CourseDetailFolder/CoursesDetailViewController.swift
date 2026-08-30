@@ -189,7 +189,7 @@ final class CoursesDetailViewController: UIViewController {
             .top(view.topAnchor).0
             .leading(view.leadingAnchor).0
             .trailing(view.trailingAnchor).0
-            .height(300)
+            .height(AppLayout.heroHeaderHeight.value)
         
         descriptionLabel
             .top(sunShineView.bottomAnchor, AppLayout.spacing.value).0

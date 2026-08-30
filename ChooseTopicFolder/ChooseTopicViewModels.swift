@@ -22,9 +22,9 @@ final class ChooseTopicViewModel {
     
     var onStateChange: (() -> Void)?
     
-    private let usecases: SilentMoonUseCases
+    private let usecases: TopicsUseCases
     
-    init(usecases: SilentMoonUseCases) {
+    init(usecases: TopicsUseCases) {
         self.usecases = usecases
     }
     

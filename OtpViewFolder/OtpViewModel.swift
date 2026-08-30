@@ -27,7 +27,7 @@ public final class OtpViewModel {
     public var userName: String
     public var otp: String = ""
 
-    private let usecases: SilentMoonUseCases
+    private let usecases: AuthUseCases
 
     public private(set) var state: OtpViewModelState = .idle {
         didSet { onStateChange?() }
@@ -37,7 +37,7 @@ public final class OtpViewModel {
     public var onVerifySucceeded: ((_ userName: String) -> Void)?
 
     public init(
-        usecases: SilentMoonUseCases,
+        usecases: AuthUseCases,
         email: String = "",
         userName: String = ""
     ) {

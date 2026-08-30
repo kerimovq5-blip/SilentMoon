@@ -26,7 +26,7 @@ final class ReminderViewModels {
     var reminderMessage: String = ""
     private(set) var currentReminder: ReminderResponseEntity?
     
-    private let usecases: SilentMoonUseCases
+    private let usecases: ReminderUseCases
     
     private static let timeFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -34,7 +34,7 @@ final class ReminderViewModels {
         return formatter
     }()
     
-    init(usecases: SilentMoonUseCases) {
+    init(usecases: ReminderUseCases) {
         self.usecases = usecases
     }
     

@@ -12,7 +12,7 @@ final public class AppDiContainer {
     public let networkManager: NetworkManager<ApiErrorEnvelope>
     public let tokenStore: TokenStore
     public let repository: SilentMoonRepository
-    public let usecases: SilentMoonUseCases
+    public let usecases: AuthUseCases
 
     public init(
         networkManager: NetworkManager<ApiErrorEnvelope>,
@@ -26,7 +26,7 @@ final public class AppDiContainer {
             tokenStore: tokenStore
         )
         self.repository = repository
-        self.usecases = UseCasesImplemantation(repository: repository)
+        self.usecases = AuthUseCasesImpl(repository: repository)
     }
 
     public static func make() -> AppDiContainer {

@@ -28,9 +28,9 @@ final class CourseViewModels {
     private(set) var coursesList: [CourseEntity] = []
     var onStateChange: (() -> Void)?
     
-    private let usecases: SilentMoonUseCases
+    private let usecases: CoursesUseCases
     
-    init(usecases: SilentMoonUseCases) {
+    init(usecases: CoursesUseCases) {
         self.usecases = usecases
     }
     
