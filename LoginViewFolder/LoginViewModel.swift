@@ -29,9 +29,9 @@ final class LoginViewModel {
     
     var onEmailNotVerified: ((_ email: String) -> Void)?
     
-    private let usecases: AuthUseCases
+    private let usecases: LogInUseCase
     
-    init(usecases: AuthUseCases ) {
+    init(usecases: LogInUseCase ) {
         self.usecases = usecases
     }
     

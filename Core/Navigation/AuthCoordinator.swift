@@ -23,7 +23,7 @@ final class AuthCoordinator: Coordinator, ContentNavigating {
     }
 
     func showLogin() {
-        let viewModel = LoginViewModel(usecases: usecases)
+        let viewModel = LoginViewModel(usecases: usecases as! LogInUseCase)
         let controller = LogInViewController(viewModel: viewModel)
         controller.coordinator = self
         navigationController.pushViewController(controller, animated: true)
