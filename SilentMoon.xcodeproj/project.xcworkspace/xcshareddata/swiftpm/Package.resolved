@@ -1,6 +1,15 @@
 {
-  "originHash" : "96ad58e261e5bc4203ff37272f879583698fc9eb3d198f2806ca57291c4e635e",
+  "originHash" : "531199e9f084254960b70be746fcd16c8349f66c1c16e6787ad3aa43e7077ba2",
   "pins" : [
+    {
+      "identity" : "presentationlayer",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kerimovq5-blip/PresentationLayer.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "eaaa26a04ec437daa09ec09844e151da5438c9ee"
+      }
+    },
     {
       "identity" : "silentmoondata",
       "kind" : "remoteSourceControl",

@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F2ADD142303205A600ECCB11 /* SilentMoonData in Frameworks */ = {isa = PBXBuildFile; productRef = F2ADD141303205A600ECCB11 /* SilentMoonData */; };
-		F2ADD14430335A9300ECCB11 /* SilentMoonNetwork in Frameworks */ = {isa = PBXBuildFile; productRef = F2ADD14330335A9300ECCB11 /* SilentMoonNetwork */; };
+		F232BE0B304CC1A50025B635 /* PresentationLayer in Frameworks */ = {isa = PBXBuildFile; productRef = F232BE0A304CC1A50025B635 /* PresentationLayer */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,62 +25,12 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		F26071EC2FEEDE4F00F5F017 /* StartFolder */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = StartFolder;
-			sourceTree = "<group>";
-		};
-		F295DB8430229949007D6F6D /* SignUpFolder */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = SignUpFolder;
-			sourceTree = "<group>";
-		};
-		F295DB8830229B1C007D6F6D /* LoginViewFolder */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = LoginViewFolder;
-			sourceTree = "<group>";
-		};
-		F295DB8C30229DD3007D6F6D /* OtpViewFolder */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = OtpViewFolder;
-			sourceTree = "<group>";
-		};
-		F295DB9030238318007D6F6D /* ChooseTopicFolder */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ChooseTopicFolder;
-			sourceTree = "<group>";
-		};
-		F295DB9130238388007D6F6D /* ReminderViewFolder */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ReminderViewFolder;
-			sourceTree = "<group>";
-		};
-		F295DB9A3023DA22007D6F6D /* Validator */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Validator;
-			sourceTree = "<group>";
-		};
-		F2ADCFF6302B68EF00ECCB11 /* Core */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Core;
-			sourceTree = "<group>";
-		};
-		F2ADD1993034FED400ECCB11 /* LoadingFolder */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = LoadingFolder;
-			sourceTree = "<group>";
-		};
 		F2ADD2A2303846E600ECCB11 /* SilentMoon */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				F2ADD2A7303846E700ECCB11 /* Exceptions for "SilentMoon" folder in "SilentMoon" target */,
 			);
 			path = SilentMoon;
-			sourceTree = "<group>";
-		};
-		F2CC69712FF3FDA000A76DC5 /* TabbarControllerView */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = TabbarControllerView;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -91,8 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F2ADD142303205A600ECCB11 /* SilentMoonData in Frameworks */,
-				F2ADD14430335A9300ECCB11 /* SilentMoonNetwork in Frameworks */,
+				F232BE0B304CC1A50025B635 /* PresentationLayer in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,16 +50,6 @@
 		F218C9302FED5734002251F7 = {
 			isa = PBXGroup;
 			children = (
-				F2ADD1993034FED400ECCB11 /* LoadingFolder */,
-				F2ADCFF6302B68EF00ECCB11 /* Core */,
-				F295DB9A3023DA22007D6F6D /* Validator */,
-				F295DB9130238388007D6F6D /* ReminderViewFolder */,
-				F295DB9030238318007D6F6D /* ChooseTopicFolder */,
-				F295DB8C30229DD3007D6F6D /* OtpViewFolder */,
-				F295DB8830229B1C007D6F6D /* LoginViewFolder */,
-				F295DB8430229949007D6F6D /* SignUpFolder */,
-				F2CC69712FF3FDA000A76DC5 /* TabbarControllerView */,
-				F26071EC2FEEDE4F00F5F017 /* StartFolder */,
 				F218C93A2FED5734002251F7 /* Products */,
 				F2ADD2A2303846E600ECCB11 /* SilentMoon */,
 			);
@@ -141,22 +79,11 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				F26071EC2FEEDE4F00F5F017 /* StartFolder */,
-				F295DB8430229949007D6F6D /* SignUpFolder */,
-				F295DB8830229B1C007D6F6D /* LoginViewFolder */,
-				F295DB8C30229DD3007D6F6D /* OtpViewFolder */,
-				F295DB9030238318007D6F6D /* ChooseTopicFolder */,
-				F295DB9130238388007D6F6D /* ReminderViewFolder */,
-				F295DB9A3023DA22007D6F6D /* Validator */,
-				F2ADCFF6302B68EF00ECCB11 /* Core */,
-				F2ADD1993034FED400ECCB11 /* LoadingFolder */,
 				F2ADD2A2303846E600ECCB11 /* SilentMoon */,
-				F2CC69712FF3FDA000A76DC5 /* TabbarControllerView */,
 			);
 			name = SilentMoon;
 			packageProductDependencies = (
-				F2ADD141303205A600ECCB11 /* SilentMoonData */,
-				F2ADD14330335A9300ECCB11 /* SilentMoonNetwork */,
+				F232BE0A304CC1A50025B635 /* PresentationLayer */,
 			);
 			productName = SilentMoon;
 			productReference = F218C9392FED5734002251F7 /* SilentMoon.app */;
@@ -187,8 +114,7 @@
 			mainGroup = F218C9302FED5734002251F7;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				F2ADD13D3032057B00ECCB11 /* XCRemoteSwiftPackageReference "SilentMoonNetwork" */,
-				F2ADD140303205A600ECCB11 /* XCRemoteSwiftPackageReference "SilentMoonData" */,
+				F232BE09304CC1A50025B635 /* XCRemoteSwiftPackageReference "PresentationLayer" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F218C93A2FED5734002251F7 /* Products */;
@@ -438,17 +364,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		F2ADD13D3032057B00ECCB11 /* XCRemoteSwiftPackageReference "SilentMoonNetwork" */ = {
+		F232BE09304CC1A50025B635 /* XCRemoteSwiftPackageReference "PresentationLayer" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/kerimovq5-blip/SilentMoonNetwork";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
-		F2ADD140303205A600ECCB11 /* XCRemoteSwiftPackageReference "SilentMoonData" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/kerimovq5-blip/SilentMoonData";
+			repositoryURL = "https://github.com/kerimovq5-blip/PresentationLayer.git";
 			requirement = {
 				branch = main;
 				kind = branch;
@@ -457,15 +375,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		F2ADD141303205A600ECCB11 /* SilentMoonData */ = {
+		F232BE0A304CC1A50025B635 /* PresentationLayer */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F2ADD140303205A600ECCB11 /* XCRemoteSwiftPackageReference "SilentMoonData" */;
-			productName = SilentMoonData;
-		};
-		F2ADD14330335A9300ECCB11 /* SilentMoonNetwork */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F2ADD13D3032057B00ECCB11 /* XCRemoteSwiftPackageReference "SilentMoonNetwork" */;
-			productName = SilentMoonNetwork;
+			package = F232BE09304CC1A50025B635 /* XCRemoteSwiftPackageReference "PresentationLayer" */;
+			productName = PresentationLayer;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
