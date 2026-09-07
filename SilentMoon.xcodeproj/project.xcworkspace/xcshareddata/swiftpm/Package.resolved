@@ -1,13 +1,22 @@
 {
-  "originHash" : "531199e9f084254960b70be746fcd16c8349f66c1c16e6787ad3aa43e7077ba2",
+  "originHash" : "dfdc7e6939361592e0b933f957300bc114a3cd69270626ff17be7878e0f5c141",
   "pins" : [
+    {
+      "identity" : "applicationlayer",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kerimovq5-blip/ApplicationLayer.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "6510c90eb8c25345dc6b0c5c405a2fb93c130a4d"
+      }
+    },
     {
       "identity" : "presentationlayer",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/kerimovq5-blip/PresentationLayer.git",
+      "location" : "https://github.com/kerimovq5-blip/PresentationLayer",
       "state" : {
         "branch" : "main",
-        "revision" : "eaaa26a04ec437daa09ec09844e151da5438c9ee"
+        "revision" : "5c4c0284a540f4faebebde8dd40d71fb7dcd97cb"
       }
     },
     {
@@ -25,7 +34,7 @@
       "location" : "https://github.com/kerimovq5-blip/SilentMoonDomain",
       "state" : {
         "branch" : "main",
-        "revision" : "dc502722dde7bf3a7afe58e7090fb6a46ee380ce"
+        "revision" : "f9a56905ce95463cbc7e89ead826ecfeecd85e34"
       }
     },
     {
@@ -34,7 +43,7 @@
       "location" : "https://github.com/kerimovq5-blip/SilentMoonNetwork",
       "state" : {
         "branch" : "main",
-        "revision" : "a828a4496d1e87884ced1a3800582d53da497010"
+        "revision" : "c5c9b7d7b8229e5321fc7586384a084732caac77"
       }
     }
   ],

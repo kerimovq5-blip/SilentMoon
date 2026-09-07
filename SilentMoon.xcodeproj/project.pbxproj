@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F232BE0B304CC1A50025B635 /* PresentationLayer in Frameworks */ = {isa = PBXBuildFile; productRef = F232BE0A304CC1A50025B635 /* PresentationLayer */; };
+		F232BE31304DAED00025B635 /* ApplicationLayer in Frameworks */ = {isa = PBXBuildFile; productRef = F232BE30304DAED00025B635 /* ApplicationLayer */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,7 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F232BE0B304CC1A50025B635 /* PresentationLayer in Frameworks */,
+				F232BE31304DAED00025B635 /* ApplicationLayer in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,7 +83,7 @@
 			);
 			name = SilentMoon;
 			packageProductDependencies = (
-				F232BE0A304CC1A50025B635 /* PresentationLayer */,
+				F232BE30304DAED00025B635 /* ApplicationLayer */,
 			);
 			productName = SilentMoon;
 			productReference = F218C9392FED5734002251F7 /* SilentMoon.app */;
@@ -114,7 +114,7 @@
 			mainGroup = F218C9302FED5734002251F7;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				F232BE09304CC1A50025B635 /* XCRemoteSwiftPackageReference "PresentationLayer" */,
+				F232BE2F304DAED00025B635 /* XCRemoteSwiftPackageReference "ApplicationLayer" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F218C93A2FED5734002251F7 /* Products */;
@@ -364,9 +364,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		F232BE09304CC1A50025B635 /* XCRemoteSwiftPackageReference "PresentationLayer" */ = {
+		F232BE2F304DAED00025B635 /* XCRemoteSwiftPackageReference "ApplicationLayer" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/kerimovq5-blip/PresentationLayer.git";
+			repositoryURL = "https://github.com/kerimovq5-blip/ApplicationLayer.git";
 			requirement = {
 				branch = main;
 				kind = branch;
@@ -375,10 +375,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		F232BE0A304CC1A50025B635 /* PresentationLayer */ = {
+		F232BE30304DAED00025B635 /* ApplicationLayer */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F232BE09304CC1A50025B635 /* XCRemoteSwiftPackageReference "PresentationLayer" */;
-			productName = PresentationLayer;
+			package = F232BE2F304DAED00025B635 /* XCRemoteSwiftPackageReference "ApplicationLayer" */;
+			productName = ApplicationLayer;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
